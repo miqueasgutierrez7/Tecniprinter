@@ -1,42 +1,268 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
+
 <head>
-    <title>Registrar Cliente</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>TECNIPRINTER</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <!-- Estilos CSS -->
+
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/AdminLTE.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/_all-skins.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/jquery.dataTables.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/buttons.dataTables.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/responsive.dataTables.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap-select.min.css' %}" />
+
+    <style>
+        .oculto {
+            display: none;
+        }
+    </style>
 </head>
-<body>
-    <h1>Registrar Cliente</h1>
-    <form method="post">
-        {% csrf_token %}
 
-        <label>ID Área:</label><br>
-        <input type="number" name="idArea" required><br><br>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
 
-        <label>Tipo de Documento:</label><br>
-        <select name="tipoDocumento" required>
-            <option value="DNI">DNI</option>
-            <option value="RUC">RUC</option>
-            <option value="PAS">Pasaporte</option>
-        </select><br><br>
+        <!-- Header -->
+        <header class="main-header">
+            <a href="escritorio.php" class="logo">
+                <span class="logo-mini"><b>SIS</b> V</span>
+                <span class="logo-lg"><b>TECNIPRINTER</b></span>
+            </a>
+            <nav class="navbar navbar-static-top">
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">NAVEGACIÓN</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="hidden-xs">Nombre Usuario</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="user-footer">
+                                    <div class="pull-right">
+                                        <a href="#" class="btn btn-default btn-flat">Salir</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
 
-        <label>Nombre:</label><br>
-        <input type="text" name="nombre" required><br><br>
+        <!-- Sidebar -->
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <ul class="sidebar-menu" data-widget="tree">
+                    <br />
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-wrench"></i> <span>Servicio-Mantenimiento</span>
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="ingresoimpresora.php"><i class="fa fa-print"></i> Impresora</a></li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-print"></i> <span>Reemprimir Recibo</span>
+                                    <span class="pull-right-container"><i
+                                            class="fa fa-angle-left pull-right"></i></span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="reciboentrada.php"><i class="fa fa-circle-o"></i> Listado de
+                                            ingresos</a></li>
+                                    <li><a href="ingresoimpresora.php"><i class="fa fa-circle-o"></i> Nuevo Ingreso</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-print"></i> <span>Reemprimir Recibo</span>
+                                    <span class="pull-right-container"><i
+                                            class="fa fa-angle-left pull-right"></i></span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="reciboentrada.php"><i class="fa fa-circle-o"></i> Entrada</a></li>
+                                    <li><a href="ticketsalida.php"><i class="fa fa-circle-o"></i> Salida</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="categoriaVehiculo.php"><i class="fa fa-circle-o"></i> Categorías</a></li>
+                            <li><a href="recaudos.php"><i class="fa fa-circle-o"></i> Recaudos</a></li>
+                            <li><a href="parqueadero.php"><i class="fa fa-circle-o"></i> Existentes</a></li>
+                            <li><a href="movimientos.php"><i class="fa fa-circle-o"></i> Movimientos</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-shopping-cart"></i> <span>Ventas</span>
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="venta.php"><i class="fa fa-circle-o"></i> Ventas</a></li>
+                            <li><a href="articulo.php"><i class="fa fa-circle-o"></i> Artículos</a></li>
+                            <li><a href="categoriaVenta.php"><i class="fa fa-circle-o"></i> Categoría</a></li>
+                            <li><a href="recaudoventas.php"><i class="fa fa-circle-o"></i> Listado de V</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-th"></i> <span>Gastos</span>
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="gastos.php"><i class="fa fa-circle-o"></i> Ingresos</a></li>
+                            <li><a href="categoriaGastos.php"><i class="fa fa-circle-o"></i> Categoría</a></li>
+                            <li><a href="recaudogastos.php"><i class="fa fa-circle-o"></i> Listado de G</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-users"></i> <span>Usuarios y Estacionamiento</span>
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="usuario.php"><i class="fa fa-circle-o"></i> Usuarios</a></li>
+                            <li><a href="area.php"><i class="fa fa-circle-o"></i> Estacionamiento</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-bar-chart"></i> <span>Consultas</span>
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="caja.php"><i class="fa fa-circle-o"></i> Informe de Caja</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </aside>
 
-        <label>Número de Documento:</label><br>
-        <input type="text" name="numeroDocumento" required><br><br>
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <section class="content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h1 class="box-title text-center">Registro Cliente</h1>
+                            </div>
 
-        <label>Teléfono:</label><br>
-        <input type="text" name="telefono"><br><br>
 
-        <label>Correo:</label><br>
-        <input type="email" name="correo"><br><br>
 
-        <label>Ciudad:</label><br>
-        <input type="text" name="ciudad" required><br><br>
+                            <div class="panel-body " id="formularioregistros">
+                                <form action="" name="formulario" id="formulario" method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
+                                        <label for="">Tipo de Documento</label>
+                                        <select id="tipoDocumento" name="tipoDocumento"
+                                            class="form-control selectpicker" required>
+                                            <option value="CC" selected>CC</option>
+                                            <option value="NIT">NIT</option>
+                                            <option value="CE">CE</option>
+                                            <option value="PS">PS</option>
+                                            <option value="PPT">PPT</option>
+                                        </select>
+                                    </div>
 
-        <label>Dirección:</label><br>
-        <input type="text" name="direccion" required><br><br>
+                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
+                                        <label for="">Numero de Documento</label>
+                                        <input class="form-control" type="number" name="documento" id="documento"
+                                            placeholder="">
+                                    </div>
 
-        <button type="submit">Registrar</button>
-    </form>
+                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
+                                        <label for="">Nombre</label>
+                                        <input class="form-control" type="text" name="nombre" id="nombre"
+                                            placeholder="nombre" required>
+                                    </div>
+                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
+                                        <label for="">Telefono</label>
+                                        <input class="form-control" type="number" name="telefono" id="telefono"
+                                            placeholder="Telefono" required>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                                        <label for="">Correo</label>
+                                        <input class="form-control" type="text" name="correo" id="correo"
+                                            placeholder="correo">
+                                    </div>
+                                    <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                                        <label for="">Ciudad</label>
+
+                                        <select id="ciudadesSelect" name="ciudad" class="form-control selectpicker"
+                                            required>
+
+                                            <option value="Palmira" selected>Palmira</option>
+                                            <option value="Candelaria">Candelaria</option>
+                                            <option value="Florida">Florida</option>
+                                            <option value="Pradera">Pradera</option>
+
+                                            <option value="Buga">Rozo</option>
+                                            <option value="Guacarí">Guacarí</option>
+                                            <option value="El Cerrito">El Cerrito</option>
+                                            <option value="Ginebra">Ginebra</option>
+
+                                        </select>
+
+                                    </div>
+                                    <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                                        <label for="">Direccion</label>
+                                        <input class="form-control" type="text" name="direccion" id="direccion"
+                                            placeholder="Direccion">
+
+                                    </div>
+
+                                    <button type="submit">Registrar</button>
+
+                            </div>
+                            <!-- Buscar y despachar -->
+
+                        </div>
+
+                    </div>
+                </div>
+        </div>
+        </section>
+    </div>
+
+    </div>
+
+    <!-- Scripts JS -->
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/adminlte.min.js' %}"></script>
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'js/buttons.print.min.js' %}"></script>
+
+    <script src="{% static 'js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-select.min.js' %}"></script>
+
+
+    <script>
+        // Función para mostrar por placa (debes implementar la lógica)
+        function mostrarporplaca() {
+            const placa = document.getElementById('placa2').value.trim();
+            if (!placa) {
+                alert('Por favor ingrese el número de recibo');
+                return;
+            }
+            // Aquí va la lógica para mostrar los datos asociados a la placa
+            alert('Buscar y despachar el recibo: ' + placa);
+        }
+    </script>
 </body>
+
 </html>

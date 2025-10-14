@@ -9,7 +9,6 @@ class Cliente(models.Model):
     ]
 
     idCliente = models.AutoField(primary_key=True)
-    idArea = models.IntegerField()  # Este puede ser una ForeignKey si tienes un modelo de Área
     tipoDocumento = models.CharField(max_length=10, choices=TIPO_DOCUMENTO_CHOICES)
     nombre = models.CharField(max_length=100)
     numeroDocumento = models.CharField(max_length=20, unique=True)
