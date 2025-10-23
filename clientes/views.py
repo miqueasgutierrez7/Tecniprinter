@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Cliente
+from django.http import JsonResponse
 
 # Realizamos el Registro
 def registrar_cliente(request):

@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.http import JsonResponse
+
 
 urlpatterns = [
     path('registrar/', views.registrar_cliente, name='registrar_cliente'),
