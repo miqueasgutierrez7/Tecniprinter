@@ -37,8 +37,22 @@ def registrar_cliente(request):
 def validar_cedula(request):
     numeroDocumento = request.GET.get('documento', None)
 
-    if numeroDocumento:
-        existe = Cliente.objects.filter(numeroDocumento=numeroDocumento).exists()
-        return JsonResponse({'existe': existe})
-    else:
+    if not numeroDocumento:
         return JsonResponse({'error': 'No se proporcionó número de documento'}, status=400)
+
+    try:
+        cliente = Cliente.objects.get(numeroDocumento=numeroDocumento)
+        # Si lo encuentra, devolvemos los datos
+        return JsonResponse({
+            'existe': True,
+            'cliente': {
+                'nombre': cliente.nombre,
+                'telefono': cliente.telefono,
+                'correo': cliente.correo,
+                'ciudad': cliente.ciudad,
+                'direccion': cliente.direccion
+            }
+        })
+    except Cliente.DoesNotExist:
+        # Si no existe, devolvemos solo existe=False
+        return JsonResponse({'existe': False})
