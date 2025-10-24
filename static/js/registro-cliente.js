@@ -3,8 +3,11 @@
 const inputCedula = document.getElementById("documento");
 const mensaje = document.getElementById("mensaje");
 
-const nombreInput = document.getElementById('nombre');
-
+const inputNombre = document.getElementById('nombre');
+const inputTelefono = document.getElementById('telefono');
+const inputCorreo = document.getElementById('correo');
+const inputCiudad = document.getElementById('ciudad');
+const inputDireccion = document.getElementById('direccion');
 
 if (inputCedula) {
   inputCedula.addEventListener("input", () => {
@@ -26,11 +29,45 @@ if (inputCedula) {
 
              console.log(data)
 
-            mensaje.textContent = "⚠️ Esta cédula ya está registrada";
+            mensaje.textContent = "⚠️ Este Numero de Documento ya está registrado";
             mensaje.style.color = "red";
             inputCedula.style.border = '2px solid red';
 
-             nombreInput.value = data.cliente.nombre;
+             inputNombre.value = data.cliente.nombre;
+             inputTelefono.value = data.cliente.telefono;
+             inputCorreo.value = data.cliente.correo;
+             inputDireccion.value = data.cliente.direccion;
+
+             // Bloqueamos los campos
+
+             document.getElementById("nombre").disabled = true;
+             document.getElementById("telefono").disabled = true;
+             document.getElementById("correo").disabled = true;
+             document.getElementById("ciudad").disabled = true;
+             document.getElementById("direccion").disabled = true;
+
+
+
+            const ciudadCliente = data.cliente.ciudad;
+            const opcion = Array.from(inputCiudad.options).find(opt => opt.value === ciudadCliente);
+
+            if (opcion) {
+              // Si existe la ciudad en la lista, seleccionarla
+              inputCiudad.value = ciudadCliente;
+
+              if ($(inputCiudad).hasClass('selectpicker')) {
+    $(inputCiudad).selectpicker('refresh');
+  }
+
+            } else {
+              // Si no existe, crear una nueva opción y seleccionarla
+              const nuevaOpcion = new Option(ciudadCliente, ciudadCliente, true, true);
+              inputCiudad.add(nuevaOpcion);
+            }
+
+
+        x
+
 
           } else {
 
