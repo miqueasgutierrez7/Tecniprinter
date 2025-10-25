@@ -13,7 +13,9 @@ if (inputCedula) {
   inputCedula.addEventListener("input", () => {
     const valor = inputCedula.value.trim();
 
-    console.log(valor);
+
+    
+
 
     if (valor.length > 0) {
       fetch(`/validar-cedula/?documento=${valor}`)
@@ -29,6 +31,11 @@ if (inputCedula) {
 
              console.log(data)
 
+
+               document.getElementById('btnRegistrar').style.display = 'none';
+
+
+
             mensaje.textContent = "⚠️ Este Numero de Documento ya está registrado";
             mensaje.style.color = "red";
             inputCedula.style.border = '2px solid red';
@@ -43,7 +50,7 @@ if (inputCedula) {
              document.getElementById("nombre").disabled = true;
              document.getElementById("telefono").disabled = true;
              document.getElementById("correo").disabled = true;
-             document.getElementById("ciudad").disabled = true;
+    
              document.getElementById("direccion").disabled = true;
 
 
@@ -60,6 +67,8 @@ if (inputCedula) {
   }
 
             } else {
+
+              
               // Si no existe, crear una nueva opción y seleccionarla
               const nuevaOpcion = new Option(ciudadCliente, ciudadCliente, true, true);
               inputCiudad.add(nuevaOpcion);
@@ -70,6 +79,20 @@ if (inputCedula) {
 
 
           } else {
+
+
+             inputNombre.value = '';
+             inputTelefono.value = '';
+             inputCorreo.value = '';
+             inputDireccion.value = '';
+
+
+            document.getElementById('btnRegistrar').style.display = '';
+    document.getElementById("nombre").disabled = false;
+    document.getElementById("telefono").disabled = false;
+    document.getElementById("correo").disabled = false;
+    document.getElementById("ciudad").disabled = false;
+    document.getElementById("direccion").disabled = false;
 
             mensaje.textContent ='';
              inputCedula.style.border = ''; 

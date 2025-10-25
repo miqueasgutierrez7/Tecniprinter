@@ -19,7 +19,7 @@ python manage.py runserver
 
 comando para modificar los css del login
 
-pip install django-widget-tweaks
+c
 
 INSTALLED_APPS = [
     ...
@@ -29,3 +29,9 @@ INSTALLED_APPS = [
 
 Para conectar con base de datos posgresql
 pip install psycopg2-binary
+
+
+.\venv\Scripts\activate
+pip install django
+
+deactivate
