@@ -1,4 +1,46 @@
 // --- Validación en tiempo real de la cédula ---
+document.addEventListener("DOMContentLoaded", () => {
+    const formulario = document.getElementById("formulario");
+    const btnRegistrar = document.getElementById("btnRegistrar");
+
+    formulario.addEventListener("submit", async (e) => {
+        e.preventDefault(); // Evita recargar la página
+
+        btnRegistrar.disabled = true;
+        btnRegistrar.textContent = "Enviando...";
+
+        const formData = new FormData(formulario);
+
+        try {
+            const response = await fetch("/registrar/", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                }
+            });
+
+            if (!response.ok) throw new Error("Error de red o servidor");
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert("✅ " + data.message);
+                formulario.reset();
+            } else {
+                alert("⚠️ " + data.message);
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+            alert("❌ Error al enviar el formulario: " + error.message);
+        } finally {
+            btnRegistrar.disabled = false;
+            btnRegistrar.textContent = "Registrar";
+        }
+    });
+});
+
 
 const inputCedula = document.getElementById("documento");
 const mensaje = document.getElementById("mensaje");
@@ -9,13 +51,11 @@ const inputCorreo = document.getElementById('correo');
 const inputCiudad = document.getElementById('ciudad');
 const inputDireccion = document.getElementById('direccion');
 
+
+
 if (inputCedula) {
   inputCedula.addEventListener("input", () => {
     const valor = inputCedula.value.trim();
-
-
-    
-
 
     if (valor.length > 0) {
       fetch(`/validar-cedula/?documento=${valor}`)
