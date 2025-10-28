@@ -1,4 +1,4 @@
-// --- Validación en tiempo real de la cédula ---
+// --- Validación en tiempo real de la cédula --
 document.addEventListener("DOMContentLoaded", () => {
     const formulario = document.getElementById("formulario");
     const btnRegistrar = document.getElementById("btnRegistrar");
@@ -8,8 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         btnRegistrar.disabled = true;
         btnRegistrar.textContent = "Enviando...";
-
         const formData = new FormData(formulario);
+
+        
 
         try {
             const response = await fetch("/registrar/", {
@@ -25,8 +26,22 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
 
             if (data.success) {
-                alert("✅ " + data.message);
+               
+
+                 Swal.fire({
+        title: '¡Registro exitoso!',
+        text: data.message,
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+        timer: 2500,
+        timerProgressBar: true
+    });
+
+
+
                 formulario.reset();
+
             } else {
                 alert("⚠️ " + data.message);
             }
@@ -41,16 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-
 const inputCedula = document.getElementById("documento");
 const mensaje = document.getElementById("mensaje");
-
 const inputNombre = document.getElementById('nombre');
 const inputTelefono = document.getElementById('telefono');
 const inputCorreo = document.getElementById('correo');
 const inputCiudad = document.getElementById('ciudad');
 const inputDireccion = document.getElementById('direccion');
-
 
 
 if (inputCedula) {

@@ -16,7 +16,10 @@ def registrar_cliente(request):
 
         # Validar si ya existe esa cédula
         if Cliente.objects.filter(numeroDocumento=numeroDocumento).exists():
-            return HttpResponse("❌ Ya existe un cliente con esa cédula.", status=400)
+            return JsonResponse({
+                'success': False,
+                'message': '❌ Ya existe un cliente con esa cédula.'
+            }, status=400)
 
         # Si no existe, crear cliente
         Cliente.objects.create(
@@ -28,7 +31,11 @@ def registrar_cliente(request):
             ciudad=ciudad,
             direccion=direccion
         )
-        return HttpResponse("✅ Cliente registrado exitosamente.")
+
+        return JsonResponse({
+            'success': True,
+            'message': '✅ Cliente registrado exitosamente.'
+        })
 
     return render(request, 'registro.html')
 
