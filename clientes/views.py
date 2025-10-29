@@ -4,6 +4,22 @@ from .models import Cliente
 from django.http import JsonResponse
 
 # Realizamos el Registro
+
+def clientes_view(request):
+    return render(request, 'clientes.html')
+
+
+
+def clientes_data(request):
+    clientes = Cliente.objects.all().values(
+        'idCliente', 'tipoDocumento', 'nombre',
+        'numeroDocumento', 'telefono', 'correo',
+        'ciudad', 'direccion'
+    )
+    data = list(clientes)
+    return JsonResponse({'data': data})
+
+
 def registrar_cliente(request):
     if request.method == 'POST':
         tipoDocumento = request.POST.get('tipoDocumento')
