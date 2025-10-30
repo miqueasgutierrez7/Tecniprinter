@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Cliente
 from django.http import JsonResponse
+from django.http import HttpResponseNotAllowed
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 
 # Realizamos el Registro
 
@@ -56,6 +59,20 @@ def registrar_cliente(request):
     return render(request, 'registro.html')
 
 
+
+@csrf_exempt
+def eliminar_cliente(request, id):
+    if request.method == 'DELETE':
+        try:
+            cliente = Cliente.objects.get(pk=id)
+            cliente.delete()
+            return JsonResponse({'mensaje': 'Cliente eliminado correctamente'})
+        except Cliente.DoesNotExist:
+            return JsonResponse({'error': 'Cliente no encontrado'}, status=404)
+    else:
+        return HttpResponseNotAllowed(['DELETE'])
+
+
     # Validamos cedula en tiempo real
 def validar_cedula(request):
     numeroDocumento = request.GET.get('documento', None)
@@ -79,3 +96,6 @@ def validar_cedula(request):
     except Cliente.DoesNotExist:
         # Si no existe, devolvemos solo existe=False
         return JsonResponse({'existe': False})
+    
+
+    
