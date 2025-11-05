@@ -1,6 +1,10 @@
+let tabla;
+
+
+
 $(document).ready(function() {
     console.log("DataTables iniciado correctamente");
-    $('#tabla-clientes').DataTable({
+    tabla = $('#tabla-clientes').DataTable({
         ajax: '/api/clientes/',
          dataSrc: 'data' ,
         columns: [
@@ -34,6 +38,45 @@ $(document).ready(function() {
         }
     });
 });
+
+
+
+$('#tabla-clientes').on('click', '.editar', function() {
+    const id = $(this).data('id');
+
+    // Hacer fetch a la vista de Django para obtener los datos del cliente
+    fetch(`/clientes/${id}/`, {  // Asegúrate que la URL coincida con tu urls.py
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Llenar los campos del modal con los datos del cliente
+            $('#edit-id').val(data.cliente.idCliente);
+            $('#edit-tipoDocumento').val(data.cliente.tipoDocumento);
+            $('#edit-nombre').val(data.cliente.nombre);
+            $('#edit-numeroDocumento').val(data.cliente.numeroDocumento);
+            $('#edit-telefono').val(data.cliente.telefono);
+            $('#edit-correo').val(data.cliente.correo);
+            $('#edit-ciudad').val(data.cliente.ciudad);
+            $('#edit-direccion').val(data.cliente.direccion);
+
+            // Mostrar modal
+            $('#modalEditarCliente').modal('show');
+        } else {
+            Swal.fire('Error', data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error al obtener cliente:', error);
+        Swal.fire('Error', 'No se pudo cargar la información del cliente', 'error');
+    });
+});
+
 
 
 $('#tabla-clientes').on('click', '.eliminar', function () {

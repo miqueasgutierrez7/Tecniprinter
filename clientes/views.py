@@ -59,6 +59,69 @@ def registrar_cliente(request):
     return render(request, 'registro.html')
 
 
+# ==============================
+# Modificar un cliente existente
+# ==============================
+@csrf_exempt
+def modificar_cliente(request, id):
+    """
+    Permite actualizar los datos de un cliente existente.
+    Puede recibir datos vía POST (formulario tradicional o AJAX).
+    """
+    if request.method == 'POST':
+        try:
+            cliente = Cliente.objects.get(pk=id)
+        except Cliente.DoesNotExist:
+            return JsonResponse({'success': False, 'message': '❌ Cliente no encontrado'}, status=404)
+
+        # Actualizamos los campos recibidos
+        cliente.tipoDocumento = request.POST.get('tipoDocumento', cliente.tipoDocumento)
+        cliente.nombre = request.POST.get('nombre', cliente.nombre)
+        cliente.numeroDocumento = request.POST.get('numeroDocumento', cliente.numeroDocumento)
+        cliente.telefono = request.POST.get('telefono', cliente.telefono)
+        cliente.correo = request.POST.get('correo', cliente.correo)
+        cliente.ciudad = request.POST.get('ciudad', cliente.ciudad)
+        cliente.direccion = request.POST.get('direccion', cliente.direccion)
+        cliente.save()
+
+        return JsonResponse({'success': True, 'message': '✅ Cliente modificado correctamente'})
+
+    else:
+        return HttpResponseNotAllowed(['POST'])
+    
+
+
+
+
+@csrf_exempt
+def obtener_cliente(request, id):
+    """
+    Devuelve los datos de un cliente en formato JSON.
+    """
+    if request.method == 'GET':
+        try:
+            cliente = Cliente.objects.get(pk=id)
+            return JsonResponse({
+                'success': True,
+                'cliente': {
+                    'idCliente': cliente.idCliente,
+                    'tipoDocumento': cliente.tipoDocumento,
+                    'nombre': cliente.nombre,
+                    'numeroDocumento': cliente.numeroDocumento,
+                    'telefono': cliente.telefono,
+                    'correo': cliente.correo,
+                    'ciudad': cliente.ciudad,
+                    'direccion': cliente.direccion
+                }
+            })
+        except Cliente.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Cliente no encontrado'}, status=404)
+    else:
+        return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
+    
+    
+
+
 
 @csrf_exempt
 def eliminar_cliente(request, id):
@@ -96,6 +159,4 @@ def validar_cedula(request):
     except Cliente.DoesNotExist:
         # Si no existe, devolvemos solo existe=False
         return JsonResponse({'existe': False})
-    
-
     

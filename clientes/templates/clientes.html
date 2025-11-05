@@ -201,11 +201,96 @@
 
     </div>
 
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEditarClienteLabel">Editar Cliente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form id="formEditarCliente">
+
+          <!-- ID oculto -->
+          <input type="hidden" id="edit-id">
+
+          <div class="mb-3">
+            <label for="edit-tipoDocumento" class="form-label">Tipo Documento</label>
+            <select id="edit-tipoDocumento" class="form-control">
+              <option value="CC">CC</option>
+              <option value="NIT">NIT</option>
+              <option value="CE">CE</option>
+              <option value="PS">PS</option>
+              <option value="PPT">PPT</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="edit-nombre" class="form-label">Nombre</label>
+            <input type="text" id="edit-nombre" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label for="edit-numeroDocumento" class="form-label">Número Documento</label>
+            <input type="text" id="edit-numeroDocumento" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label for="edit-telefono" class="form-label">Teléfono</label>
+            <input type="text" id="edit-telefono" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label for="edit-correo" class="form-label">Correo</label>
+            <input type="email" id="edit-correo" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label for="edit-ciudad" class="form-label">Ciudad</label>
+            <input type="text" id="edit-ciudad" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label for="edit-direccion" class="form-label">Dirección</label>
+            <input type="text" id="edit-direccion" class="form-control">
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="guardarCambiosCliente">Guardar cambios</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
     <!-- Scripts JS -->
 
     <script src="{% static 'js/sweetalert2.all.min.js' %}"></script>
     <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/adminlte.min.js' %}"></script>
     <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
@@ -227,6 +312,11 @@
             alert('Buscar y despachar el recibo: ' + placa);
         }
     </script>
+
+
+  
+
+
 </body>
 
 </html>

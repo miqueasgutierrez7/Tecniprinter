@@ -9,5 +9,6 @@ urlpatterns = [
     path('clientes/', views.clientes_view, name='clientes'),
     path('api/clientes/', views.clientes_data, name='clientes_data'),
     path('api/clientes/<int:id>/', views.eliminar_cliente, name='eliminar_cliente'),
-
+    path('api/clientes/modificar/<int:id>/', views.modificar_cliente, name='modificar_cliente'),
+    path('clientes/<int:id>/', views.obtener_cliente, name='obtener_cliente'),
 ]
