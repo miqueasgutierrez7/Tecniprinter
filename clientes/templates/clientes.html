@@ -150,6 +150,7 @@
 
         <!-- Content Wrapper -->
         <div class="content-wrapper">
+
             <section class="content">
                 <div class="row">
                     <div class="col-md-12">
@@ -157,6 +158,10 @@
                             <div class="box-header with-border text-center">
                                 <h1 class="box-title text-center text-dark">Registro de Cliente</h1>
                             </div>
+
+                                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalAgregarCliente">
+  Agregar Cliente
+</button>
 
                             <div class="panel-body " id="formularioregistros">
                               
@@ -205,11 +210,6 @@
 
 
 
-
-
-
-
-
 <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -239,19 +239,25 @@
           </div>
 
           <div class="mb-3">
-            <label for="edit-nombre" class="form-label">Nombre</label>
-            <input type="text" id="edit-nombre" class="form-control">
-          </div>
-
-          <div class="mb-3">
             <label for="edit-numeroDocumento" class="form-label">Número Documento</label>
             <input type="text" id="edit-numeroDocumento" class="form-control">
           </div>
 
           <div class="mb-3">
+            <label for="edit-nombre" class="form-label">Nombre</label>
+            <input type="text" id="edit-nombre" class="form-control">
+          </div>
+
+
+          
+          <div class="mb-3">
             <label for="edit-telefono" class="form-label">Teléfono</label>
             <input type="text" id="edit-telefono" class="form-control">
           </div>
+
+          
+          
+
 
           <div class="mb-3">
             <label for="edit-correo" class="form-label">Correo</label>
@@ -280,6 +286,126 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+<div class="modal fade" id="modalAgregarCliente" tabindex="-1" aria-labelledby="modalAgregarClienteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEditarClienteLabel">Agregar Cliente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        
+
+
+
+        <div class="panel-body " id="formularioregistros">
+                                <form action="" name="formulario" id="formulario" method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
+                                        <label for="">Tipo de Documento</label>
+                                        <select id="tipoDocumento" name="tipoDocumento"
+                                            class="form-control selectpicker" required>
+                                            <option value="CC" selected>CC</option>
+                                            <option value="NIT">NIT</option>
+                                            <option value="CE">CE</option>
+                                            <option value="PS">PS</option>
+                                            <option value="PPT">PPT</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
+                                        <label for="">Numero de Documento</label>
+                                        <input class="form-control" type="number" name="documento" id="documento"
+                                            placeholder="">
+                                        <div id="mensaje"></div>
+                                    </div>
+
+
+
+                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
+                                        <label for="">Nombre</label>
+                                        <input class="form-control" type="text" name="nombre" id="nombre"
+                                            placeholder="nombre" required>
+                                    </div>
+                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
+                                        <label for="">Telefono</label>
+                                        <input class="form-control" type="number" name="telefono" id="telefono"
+                                            placeholder="Telefono" required>
+                                    </div>
+                                    <div class="form-group col-lg-12 col-md-12 col-xs-12">
+                                    </div>
+                                    <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                                        <label for="">Correo</label>
+                                        <input class="form-control" type="text" name="correo" id="correo"
+                                            placeholder="correo">
+                                    </div>
+                                    <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                                        <label for="">Ciudad</label>
+
+                                        <select id="ciudad" name="ciudad" class="form-control selectpicker" required>
+
+                                            <option value="Palmira" selected>Palmira</option>
+                                            <option value="Candelaria">Candelaria</option>
+                                            <option value="Florida">Florida</option>
+                                            <option value="Pradera">Pradera</option>
+
+                                            <option value="Buga">Rozo</option>
+                                            <option value="Guacarí">Guacarí</option>
+                                            <option value="El Cerrito">El Cerrito</option>
+                                            <option value="Ginebra">Ginebra</option>
+
+                                        </select>
+
+                                    </div>
+                                    <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                                        <label for="">Direccion</label>
+                                        <input class="form-control" type="text" name="direccion" id="direccion"
+                                            placeholder="Direccion">
+
+
+
+
+                                    </div>
+                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
+
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn btn-secondary me-2 btn-primary"
+                                                onclick="window.history.back()">Cancelar</button>
+                                            <button  id="btnRegistrar" type="submit" class="btn text-center btn-primary">Registrar</button>
+                                        </div>
+                                    </div>
+
+
+
+
+                            </div>
+
+
+
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="guardarCambiosCliente">Guardar cambios</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
 
 
 
