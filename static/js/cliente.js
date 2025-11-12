@@ -155,6 +155,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+      if (tabla) {
+        tabla.ajax.reload(null, false); // false = mantiene la página actual
+    }
+
+    
+
                 formulario.reset();
 
             } else {
