@@ -64,31 +64,37 @@ def registrar_cliente(request):
 # ==============================
 @csrf_exempt
 def modificar_cliente(request, id):
-    """
-    Permite actualizar los datos de un cliente existente.
-    Puede recibir datos vía POST (formulario tradicional o AJAX).
-    """
-    if request.method == 'POST':
+    if request.method in ['PUT', 'POST']:
         try:
             cliente = Cliente.objects.get(pk=id)
         except Cliente.DoesNotExist:
             return JsonResponse({'success': False, 'message': '❌ Cliente no encontrado'}, status=404)
 
-        # Actualizamos los campos recibidos
-        cliente.tipoDocumento = request.POST.get('tipoDocumento', cliente.tipoDocumento)
-        cliente.nombre = request.POST.get('nombre', cliente.nombre)
-        cliente.numeroDocumento = request.POST.get('numeroDocumento', cliente.numeroDocumento)
-        cliente.telefono = request.POST.get('telefono', cliente.telefono)
-        cliente.correo = request.POST.get('correo', cliente.correo)
-        cliente.ciudad = request.POST.get('ciudad', cliente.ciudad)
-        cliente.direccion = request.POST.get('direccion', cliente.direccion)
+        # Si viene JSON (PUT)
+        if request.body and request.content_type == 'application/json':
+            import json
+            data = json.loads(request.body)
+            cliente.tipoDocumento = data.get('tipoDocumento', cliente.tipoDocumento)
+            cliente.numeroDocumento = data.get('numeroDocumento', cliente.numeroDocumento)
+            cliente.nombre = data.get('nombre', cliente.nombre)
+            cliente.telefono = data.get('telefono', cliente.telefono)
+            cliente.correo = data.get('correo', cliente.correo)
+            cliente.ciudad = data.get('ciudad', cliente.ciudad)
+            cliente.direccion = data.get('direccion', cliente.direccion)
+
+        else:  # Si viene como form-data (POST)
+            cliente.tipoDocumento = request.POST.get('tipoDocumento', cliente.tipoDocumento)
+            cliente.numeroDocumento = request.POST.get('numeroDocumento', cliente.numeroDocumento)
+            cliente.nombre = request.POST.get('nombre', cliente.nombre)
+            cliente.telefono = request.POST.get('telefono', cliente.telefono)
+            cliente.correo = request.POST.get('correo', cliente.correo)
+            cliente.ciudad = request.POST.get('ciudad', cliente.ciudad)
+            cliente.direccion = request.POST.get('direccion', cliente.direccion)
+
         cliente.save()
+        return JsonResponse({'success': True, 'message': '✅ Cliente actualizado correctamente'})
 
-        return JsonResponse({'success': True, 'message': '✅ Cliente modificado correctamente'})
-
-    else:
-        return HttpResponseNotAllowed(['POST'])
-    
+    return HttpResponseNotAllowed(['PUT', 'POST'])
 
 
 

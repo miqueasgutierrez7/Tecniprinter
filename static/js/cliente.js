@@ -65,6 +65,30 @@ $('#tabla-clientes').on('click', '.editar', function() {
             $('#edit-ciudad').val(data.cliente.ciudad);
             $('#edit-direccion').val(data.cliente.direccion);
 
+            const inputCiudadEditar = document.getElementById('edit-ciudad');
+
+
+
+            const ciudadCliente = data.cliente.ciudad;
+            const opcion = Array.from(inputCiudad.options).find(opt => opt.value === ciudadCliente);
+
+            if (opcion) {
+              // Si existe la ciudad en la lista, seleccionarla
+              inputCiudadEditar.value = ciudadCliente;
+
+              if ($(inputCiudadEditar).hasClass('selectpicker')) {
+    $(inputCiudadEditar).selectpicker('refresh');
+  }
+
+            } else {
+              // Si no existe, crear una nueva opción y seleccionarla
+              const nuevaOpcion = new Option(ciudadCliente, ciudadCliente, true, true);
+              inputCiudadEditar.add(nuevaOpcion);
+            }
+
+
+
+
             // Mostrar modal
             $('#modalEditarCliente').modal('show');
         } else {
@@ -109,6 +133,62 @@ $('#tabla-clientes').on('click', '.eliminar', function () {
         }
     });
 });
+
+
+
+
+
+
+document.getElementById("guardarCambiosCliente").addEventListener("click", async () => {
+
+    const id = document.getElementById("edit-id").value;
+
+    // Capturar datos del formulario
+    const datos = {
+        tipoDocumento: document.getElementById("edit-tipoDocumento").value,
+        numeroDocumento: document.getElementById("edit-numeroDocumento").value,
+        nombre: document.getElementById("edit-nombre").value,
+        telefono: document.getElementById("edit-telefono").value,
+        correo: document.getElementById("edit-correo").value,
+        ciudad: document.getElementById("edit-ciudad").value,
+        direccion: document.getElementById("edit-direccion").value
+    };
+
+    try {
+        const response = await fetch(`/api/clientes/modificar/${id}/`, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify(datos)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            Swal.fire({
+                title: "Actualizado",
+                text: "Cliente actualizado correctamente",
+                icon: "success"
+            });
+
+            $("#modalEditarCliente").modal("hide");
+
+            if (tabla) tabla.ajax.reload(null, false);
+
+        } else {
+            Swal.fire("Error", data.message, "error");
+        }
+
+    } catch (error) {
+        console.error("Error al actualizar cliente:", error);
+        Swal.fire("Error", "No se pudo actualizar el cliente", "error");
+    }
+
+});
+
+
 
 
 
