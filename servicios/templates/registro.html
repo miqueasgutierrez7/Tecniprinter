@@ -22,12 +22,12 @@
                     <div class="col-md-12">
                         <div class="box">
                             <div class="box-header with-border text-center">
-                                <h1 class="box-title text-center text-dark">Clientes</h1>
+                                <h1 class="box-title text-center text-dark">Orden de Servicio</h1>
                             </div>
 
                                   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalAgregarCliente">
                                     <i class="fa fa-plus-square" aria-hidden="true"></i>
-  Agregar Cliente
+  Agregar Ingreso
 </button>
 
                             <div class="panel-body " id="formularioregistros">
@@ -178,7 +178,7 @@
       <!-- Header -->
       <div class="modal-header">
         
-        <h4 class="modal-title" id="modalEditarClienteLabel">Agregar Cliente</h4>
+        <h4 class="modal-title" id="modalEditarClienteLabel">Nuevo Ingreso</h4>
     
       </div>
 
@@ -189,6 +189,7 @@
 
 
         <div class="panel-body " id="formularioregistros">
+          <h4 class="text-center"> Cliente</h4>
                                 <form action="" name="formulario" id="formulario" method="POST">
                                     {% csrf_token %}
                                     <div class="form-group col-lg-3 col-md-3 col-xs-12">
@@ -256,6 +257,64 @@
 
 
                                     </div>
+
+<div class="mb-3">
+  <label for="tipoServicio" class="form-label">Tipo de Servicio</label>
+  <select id="tipoServicio" name="tipoServicio" class="form-select" onchange="mostrarCampos()" required>
+    <option value="">Seleccione...</option>
+    <option value="PC">Reparación de Computador</option>
+    <option value="IMP">Reparación de Impresora</option>
+    <option value="TON">Recarga de Tóner</option>
+  </select>
+</div>
+
+
+
+ <div class="mb-3">
+    <label for="valorServicio" class="form-label">Valor del Servicio</label>
+    <input type="number" id="valorServicio" name="valorServicio"
+           class="form-control" placeholder="$">
+  </div>
+
+  <div class="mb-3">
+    <label for="observaciones" class="form-label">Observaciones</label>
+    <textarea id="observaciones" name="observaciones"
+              class="form-control" rows="3"
+              placeholder="Detalles adicionales del servicio"></textarea>
+  </div>
+
+  <!-- PC -->
+  <fieldset id="camposPC" class="d-none border rounded p-3 mb-3">
+    <legend class="fs-6">Datos del Computador</legend>
+    <input type="text" name="pc_marca" class="form-control mb-2" placeholder="Marca">
+    <input type="text" name="pc_modelo" class="form-control mb-2" placeholder="Modelo">
+    <textarea name="pc_problema" class="form-control" rows="2"
+              placeholder="Descripción del problema"></textarea>
+  </fieldset>
+
+  <!-- Impresora -->
+  <fieldset id="camposIMP" class="d-none border rounded p-3 mb-3">
+    <legend class="fs-6">Datos de la Impresora</legend>
+    <input type="text" name="imp_marca" class="form-control mb-2" placeholder="Marca">
+    <input type="text" name="imp_modelo" class="form-control mb-2" placeholder="Modelo">
+    <textarea name="imp_falla" class="form-control" rows="2"
+              placeholder="Descripción de la falla"></textarea>
+  </fieldset>
+
+  <!-- Tóner -->
+  <fieldset id="camposTON" class="d-none border rounded p-3 mb-3">
+    <legend class="fs-6">Datos del Tóner</legend>
+    <input type="text" name="toner_modelo" class="form-control"
+           placeholder="Modelo del tóner">
+  </fieldset>
+
+  <button type="submit" class="btn btn-primary w-100">
+    Registrar Servicio
+  </button>
+
+
+                                  
+
                                     <div class="form-group col-lg-3 col-md-3 col-xs-12">
 
                                        
@@ -284,6 +343,8 @@
 </div>
 
    {% include "includes/scripts.html" %}
+
+   <script src="{% static 'js/servicios.js' %}"></script>
 
 </body>
 
