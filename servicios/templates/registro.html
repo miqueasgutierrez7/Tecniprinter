@@ -189,7 +189,7 @@
 
 
         <div class="panel-body " id="formularioregistros">
-          <h4 class="text-center"> Cliente</h4>
+          <h4 class="text-center"> Datos del Cliente</h4>
                                 <form action="" name="formulario" id="formulario" method="POST">
                                     {% csrf_token %}
                                     <div class="form-group col-lg-3 col-md-3 col-xs-12">
@@ -258,13 +258,15 @@
 
                                     </div>
 
+                                    <h4 class="text-center"> Datos del Servicio</h4>
+
 <div class="mb-3">
   <label for="tipoServicio" class="form-label">Tipo de Servicio</label>
-  <select id="tipoServicio" name="tipoServicio" class="form-select" onchange="mostrarCampos()" required>
+  <select id="tipoServicio" name="tipoServicio" class="form-select form-control" onchange="mostrarCampos()" required>
     <option value="">Seleccione...</option>
+      <option value="IMP">Reparación de Impresora</option>
+         <option value="TON">Recarga de Tóner</option>
     <option value="PC">Reparación de Computador</option>
-    <option value="IMP">Reparación de Impresora</option>
-    <option value="TON">Recarga de Tóner</option>
   </select>
 </div>
 

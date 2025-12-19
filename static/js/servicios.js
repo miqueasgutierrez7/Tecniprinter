@@ -1,11 +1,24 @@
-function mostrarCampos() {
-  let tipo = document.getElementById("tipoServicio").value;
-  document.getElementById("camposPC").classList.add("d-none");
-  document.getElementById("camposIMP").classList.add("d-none");
-  document.getElementById("camposTON").classList.add("d-none");
+  var pc = document.getElementById("camposPC");
+    var imp = document.getElementById("camposIMP");
+    var ton = document.getElementById("camposTON");
 
-  if (tipo === "PC") document.getElementById("camposPC").classList.remove("d-none");
-  if (tipo === "IMP") document.getElementById("camposIMP").classList.remove("d-none");
-  if (tipo === "TON") document.getElementById("camposTON").classList.remove("d-none");
+    // Ocultar todos
+    pc.style.display = "none";
+    imp.style.display = "none";
+    ton.style.display = "none";
 
+    
+    
+    function mostrarCampos() {
+    var tipoServicio = document.getElementById("tipoServicio").value;
+
+  
+    // Mostrar el seleccionado
+    if (tipoServicio === "PC") {
+        pc.style.display = "block";
+    } else if (tipoServicio === "IMP") {
+        imp.style.display = "block";
+    } else if (tipoServicio === "TON") {
+        ton.style.display = "block";
+    }
 }
