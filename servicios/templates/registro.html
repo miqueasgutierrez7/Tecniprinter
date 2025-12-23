@@ -3,334 +3,343 @@
 <html lang="es">
 
 <head>
-     {% include "includes/head.html" %}
+  {% include "includes/head.html" %}
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
-    <div class="wrapper">
+  <div class="wrapper">
 
-        <!-- Header -->
-       {% include "includes/header.html" %}
-        <!-- Sidebar -->
-       {% include "includes/sidebar.html" %}
+    <!-- Header -->
+    {% include "includes/header.html" %}
+    <!-- Sidebar -->
+    {% include "includes/sidebar.html" %}
 
-        <!-- Content Wrapper -->
-        <div class="content-wrapper">
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
 
-            <section class="content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="box">
-                            <div class="box-header with-border text-center">
-                                <h1 class="box-title text-center text-dark">Orden de Servicio</h1>
-                            </div>
+      <section class="content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="box">
+              <div class="box-header with-border text-center">
+                <h1 class="box-title text-center text-dark">Orden de Servicio</h1>
+              </div>
 
-                                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalAgregarCliente">
-                                    <i class="fa fa-plus-square" aria-hidden="true"></i>
-  Agregar Ingreso
-</button>
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalAgregarCliente">
+                <i class="fa fa-plus-square" aria-hidden="true"></i>
+                Agregar Ingreso
+              </button>
 
-                            <div class="panel-body " id="formularioregistros">
-                              
-
-                                <table id="tabla-clientes" class="display" style="width:100%">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Tipo Documento</th>
-                <th>Nombre</th>
-                <th>N° Documento</th>
-                <th>Teléfono</th>
-                <th>Correo</th>
-                <th>Ciudad</th>
-                <th>Dirección</th>
-                <th>Acciones</th> <!-- 🔹 Nueva columna -->
-            </tr>
-        </thead>
-    </table>
+              <div class="panel-body " id="formularioregistros">
 
 
-                            </div>
+                <table id="tabla-clientes" class="display" style="width:100%">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Tipo Documento</th>
+                      <th>Nombre</th>
+                      <th>N° Documento</th>
+                      <th>Teléfono</th>
+                      <th>Correo</th>
+                      <th>Ciudad</th>
+                      <th>Dirección</th>
+                      <th>Acciones</th> <!-- 🔹 Nueva columna -->
+                    </tr>
+                  </thead>
+                </table>
 
 
-                            <!-- Buscar y despachar -->
+              </div>
 
 
-
-                        </div>
+              <!-- Buscar y despachar -->
 
 
 
-                    </div>
+            </div>
 
 
-                </div>
+
+          </div>
 
 
         </div>
-        </section>
-    </div>
+
 
     </div>
+    </section>
+  </div>
 
-</div>
+  </div>
 
-<div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
+  </div>
 
-      <!-- Header -->
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalEditarClienteLabel">Editar Cliente</h5>
-      </div>
+  <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
 
-      <!-- Body -->
-      <div class="modal-body">
-        <form id="formEditarCliente">
+        <!-- Header -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEditarClienteLabel">Editar Cliente</h5>
+        </div>
 
-          <!-- ID oculto -->
-          <input type="hidden" id="edit-id">
+        <!-- Body -->
+        <div class="modal-body">
+          <form id="formEditarCliente">
 
-          <div class="mb-3">
-            <label for="edit-tipoDocumento" class="form-label">Tipo Documento</label>
-            <select id="edit-tipoDocumento" class="form-control">
-              <option value="CC">CC</option>
-              <option value="NIT">NIT</option>
-              <option value="CE">CE</option>
-              <option value="PS">PS</option>
-              <option value="PPT">PPT</option>
-            </select>
-          </div>
+            <!-- ID oculto -->
+            <input type="hidden" id="edit-id">
 
-          <div class="mb-3">
-            <label for="edit-numeroDocumento" class="form-label">Número Documento</label>
-            <input type="text" id="edit-numeroDocumento" class="form-control">
-          </div>
+            <div class="mb-3">
+              <label for="edit-tipoDocumento" class="form-label">Tipo Documento</label>
+              <select id="edit-tipoDocumento" class="form-control">
+                <option value="CC">CC</option>
+                <option value="NIT">NIT</option>
+                <option value="CE">CE</option>
+                <option value="PS">PS</option>
+                <option value="PPT">PPT</option>
+              </select>
+            </div>
 
-          <div class="mb-3">
-            <label for="edit-nombre" class="form-label">Nombre</label>
-            <input type="text" id="edit-nombre" class="form-control">
-          </div>        
-          <div class="mb-3">
-            <label for="edit-telefono" class="form-label">Teléfono</label>
-            <input type="text" id="edit-telefono" class="form-control">
-          </div>
-          <div class="mb-3">
-            <label for="edit-correo" class="form-label">Correo</label>
-            <input type="email" id="edit-correo" class="form-control">
-          </div>
+            <div class="mb-3">
+              <label for="edit-numeroDocumento" class="form-label">Número Documento</label>
+              <input type="text" id="edit-numeroDocumento" class="form-control">
+            </div>
 
-          <div class="mb-3">
-            <label for="edit-ciudad" class="form-label">Ciudad</label>
+            <div class="mb-3">
+              <label for="edit-nombre" class="form-label">Nombre</label>
+              <input type="text" id="edit-nombre" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label for="edit-telefono" class="form-label">Teléfono</label>
+              <input type="text" id="edit-telefono" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label for="edit-correo" class="form-label">Correo</label>
+              <input type="email" id="edit-correo" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label for="edit-ciudad" class="form-label">Ciudad</label>
 
               <select id="edit-ciudad" name="ciudad" class="form-control selectpicker" required>
 
-                                            <option value="Palmira" selected>Palmira</option>
-                                            <option value="Candelaria">Candelaria</option>
-                                            <option value="Florida">Florida</option>
-                                            <option value="Pradera">Pradera</option>
+                <option value="Palmira" selected>Palmira</option>
+                <option value="Candelaria">Candelaria</option>
+                <option value="Florida">Florida</option>
+                <option value="Pradera">Pradera</option>
 
-                                            <option value="Buga">Rozo</option>
-                                            <option value="Guacarí">Guacarí</option>
-                                            <option value="El Cerrito">El Cerrito</option>
-                                            <option value="Ginebra">Ginebra</option>
+                <option value="Buga">Rozo</option>
+                <option value="Guacarí">Guacarí</option>
+                <option value="El Cerrito">El Cerrito</option>
+                <option value="Ginebra">Ginebra</option>
 
-                                        </select>
+              </select>
 
-          </div>
+            </div>
 
-          <div class="mb-3">
-            <label for="edit-direccion" class="form-label">Dirección</label>
-            <input type="text" id="edit-direccion" class="form-control">
-          </div>
+            <div class="mb-3">
+              <label for="edit-direccion" class="form-label">Dirección</label>
+              <input type="text" id="edit-direccion" class="form-control">
+            </div>
 
-        </form>
+          </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="guardarCambiosCliente">Guardar cambios</button>
+        </div>
+
       </div>
-
-      <!-- Footer -->
-      <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary" id="guardarCambiosCliente">Guardar cambios</button>
-      </div>
-
     </div>
   </div>
-</div>
 
 
 
 
 
-<div class="modal fade" id="modalAgregarCliente" tabindex="-1" aria-labelledby="modalAgregarClienteLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+  <div class="modal fade" id="modalAgregarCliente" tabindex="-1" aria-labelledby="modalAgregarClienteLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
 
-      <!-- Header -->
-      <div class="modal-header">
-        
-        <h4 class="modal-title" id="modalEditarClienteLabel">Nuevo Ingreso</h4>
-    
-      </div>
+        <!-- Header -->
+        <div class="modal-header">
 
-      <!-- Body -->
-      <div class="modal-body">
-        
+          <h4 class="modal-title" id="modalEditarClienteLabel">Nuevo Ingreso</h4>
 
+        </div>
 
-
-        <div class="panel-body " id="formularioregistros">
-          <h4 class="text-center"> Datos del Cliente</h4>
-                                <form action="" name="formulario" id="formulario" method="POST">
-                                    {% csrf_token %}
-                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
-                                        <label for="">Tipo de Documento</label>
-                                        <select id="tipoDocumento" name="tipoDocumento"
-                                            class="form-control selectpicker" required>
-                                            <option value="CC" selected>CC</option>
-                                            <option value="NIT">NIT</option>
-                                            <option value="CE">CE</option>
-                                            <option value="PS">PS</option>
-                                            <option value="PPT">PPT</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
-                                        <label for="">Numero de Documento</label>
-                                        <input class="form-control" type="number" name="documento" id="documento"
-                                            placeholder="">
-                                        <div id="mensaje"></div>
-                                    </div>
-
-
-
-                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
-                                        <label for="">Nombre</label>
-                                        <input class="form-control" type="text" name="nombre" id="nombre"
-                                            placeholder="nombre" required>
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
-                                        <label for="">Telefono</label>
-                                        <input class="form-control" type="number" name="telefono" id="telefono"
-                                            placeholder="Telefono" required>
-                                    </div>
-                                    <div class="form-group col-lg-12 col-md-12 col-xs-12">
-                                    </div>
-                                    <div class="form-group col-lg-4 col-md-4 col-xs-12">
-                                        <label for="">Correo</label>
-                                        <input class="form-control" type="text" name="correo" id="correo"
-                                            placeholder="correo">
-                                    </div>
-                                    <div class="form-group col-lg-4 col-md-4 col-xs-12">
-                                        <label for="">Ciudad</label>
-
-                                        <select id="ciudad" name="ciudad" class="form-control selectpicker" required>
-
-                                            <option value="Palmira" selected>Palmira</option>
-                                            <option value="Candelaria">Candelaria</option>
-                                            <option value="Florida">Florida</option>
-                                            <option value="Pradera">Pradera</option>
-
-                                            <option value="Buga">Rozo</option>
-                                            <option value="Guacarí">Guacarí</option>
-                                            <option value="El Cerrito">El Cerrito</option>
-                                            <option value="Ginebra">Ginebra</option>
-
-                                        </select>
-
-                                    </div>
-                                    <div class="form-group col-lg-4 col-md-4 col-xs-12">
-                                        <label for="">Direccion</label>
-                                        <input class="form-control" type="text" name="direccion" id="direccion"
-                                            placeholder="Direccion">
+        <!-- Body -->
+        <div class="modal-body">
 
 
 
 
-                                    </div>
+          <div class="panel-body " id="formularioregistros">
+            <h4 class="text-center"> Datos del Cliente</h4>
+            <form action="" name="formulario" id="formulario" method="POST">
+              {% csrf_token %}
+              <div class="form-group col-lg-3 col-md-3 col-xs-12">
+                <label for="">Tipo de Documento</label>
+                <select id="tipoDocumento" name="tipoDocumento" class="form-control selectpicker" required>
+                  <option value="CC" selected>CC</option>
+                  <option value="NIT">NIT</option>
+                  <option value="CE">CE</option>
+                  <option value="PS">PS</option>
+                  <option value="PPT">PPT</option>
+                </select>
+              </div>
 
-                                    <h4 class="text-center"> Datos del Servicio</h4>
+              <div class="form-group col-lg-3 col-md-3 col-xs-12">
+                <label for="">Numero de Documento</label>
+                <input class="form-control" type="number" name="documento" id="documento" placeholder="">
+                <div id="mensaje"></div>
+              </div>
 
-<div class="mb-3">
-  <label for="tipoServicio" class="form-label">Tipo de Servicio</label>
-  <select id="tipoServicio" name="tipoServicio" class="form-select form-control" onchange="mostrarCampos()" required>
-    <option value="">Seleccione...</option>
-      <option value="IMP">Reparación de Impresora</option>
-         <option value="TON">Recarga de Tóner</option>
-    <option value="PC">Reparación de Computador</option>
-  </select>
-</div>
 
- <div class="mb-3">
-    <label for="valorServicio" class="form-label">Valor del Servicio</label>
-    <input type="number" id="valorServicio" name="valorServicio"
-           class="form-control" placeholder="$">
-  </div>
 
-  <div class="mb-3">
-    <label for="observaciones" class="form-label">Observaciones</label>
-    <textarea id="observaciones" name="observaciones"
-              class="form-control" rows="3"
-              placeholder="Detalles adicionales del servicio"></textarea>
-  </div>
-
-  <!-- PC -->
-  <div id="camposPC">
-    <h4 class="text-center"> Datos del computador </h4>
-    <div class="form-group col-lg-4 col-md-4 col-xs-12">
-       <label for="">Marca</label>
-    <input type="text" name="pc_marca" class="form-control mb-2" placeholder="Marca">
-    </div>
-     <div class="form-group col-lg-4 col-md-4 col-xs-12">
-      <label for="">Modelo</label>
-    <input type="text" name="pc_modelo" class="form-control mb-2" placeholder="Modelo">
-    </div>
-    <div class="form-group col-lg-4 col-md-4 col-xs-12">
-      <label for="">Serial</label>
-    <input type="text" name="pc_serial" class="form-control mb-2" placeholder="Serial">
+              <div class="form-group col-lg-3 col-md-3 col-xs-12">
+                <label for="">Nombre</label>
+                <input class="form-control" type="text" name="nombre" id="nombre" placeholder="nombre" required>
+              </div>
+              <div class="form-group col-lg-3 col-md-3 col-xs-12">
+                <label for="">Telefono</label>
+                <input class="form-control" type="number" name="telefono" id="telefono" placeholder="Telefono" required>
+              </div>
+              <div class="form-group col-lg-12 col-md-12 col-xs-12">
               </div>
               <div class="form-group col-lg-4 col-md-4 col-xs-12">
-    <textarea name="pc_problema" class="form-control" rows="2"
-              placeholder="Descripción del problema"></textarea>
+                <label for="">Correo</label>
+                <input class="form-control" type="text" name="correo" id="correo" placeholder="correo">
+              </div>
+              <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                <label for="">Ciudad</label>
+
+                <select id="ciudad" name="ciudad" class="form-control selectpicker" required>
+
+                  <option value="Palmira" selected>Palmira</option>
+                  <option value="Candelaria">Candelaria</option>
+                  <option value="Florida">Florida</option>
+                  <option value="Pradera">Pradera</option>
+
+                  <option value="Buga">Rozo</option>
+                  <option value="Guacarí">Guacarí</option>
+                  <option value="El Cerrito">El Cerrito</option>
+                  <option value="Ginebra">Ginebra</option>
+
+                </select>
+
+              </div>
+              <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                <label for="">Direccion</label>
+                <input class="form-control" type="text" name="direccion" id="direccion" placeholder="Direccion">
+
               </div>
 
-               <div class="form-group col-lg-4 col-md-4 col-xs-12">
-    <textarea name="pc_solucion" class="form-control" rows="2"
-              placeholder="Descripción de la solución"></textarea>
+              <h4 class="text-center"> Datos del Servicio</h4>
+
+              <div class="mb-3">
+                <label for="tipoServicio" class="form-label">Tipo de Servicio</label>
+                <select id="tipoServicio" name="tipoServicio" class="form-select form-control"
+                  onchange="mostrarCampos()" required>
+                  <option value="">Seleccione...</option>
+                  <option value="IMP" selected>Reparación de Impresora</option>
+                  <option value="TON">Recarga de Tóner</option>
+                  <option value="PC">Reparación de Computador</option>
+                </select>
               </div>
-  </div>
-</div>
-  <!-- Impresora -->
-  <fieldset id="camposIMP" class="d-none border rounded p-3 mb-3">
-    <legend class="fs-6">Datos de la Impresora</legend>
-    <input type="text" name="imp_marca" class="form-control mb-2" placeholder="Marca">
-    <input type="text" name="imp_modelo" class="form-control mb-2" placeholder="Modelo">
-    <textarea name="imp_falla" class="form-control" rows="2"
-              placeholder="Descripción de la falla"></textarea>
-  </fieldset>
 
-  <!-- Tóner -->
-  <fieldset id="camposTON" class="d-none border rounded p-3 mb-3">
-    <legend class="fs-6">Datos del Tóner</legend>
-    <input type="text" name="toner_modelo" class="form-control"
-           placeholder="Modelo del tóner">
-  </fieldset>
+              <div class="mb-3">
+                <label for="valorServicio" class="form-label">Valor del Servicio</label>
+                <input type="number" id="valorServicio" name="valorServicio" class="form-control" placeholder="$">
+              </div>
 
-  <button type="submit" class="btn btn-primary w-100">
-    Registrar Servicio
-  </button>
+              <div class="mb-3">
+                <label for="observaciones" class="form-label">Observaciones</label>
+                <textarea id="observaciones" name="observaciones" class="form-control" rows="3"
+                  placeholder="Detalles adicionales del servicio"></textarea>
+              </div>
+
+              <!-- PC -->
+              <div id="camposPC">
+                <h4 class="text-center"> Datos del computador </h4>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label for="">Marca</label>
+                  <input type="text" name="pc_marca" class="form-control mb-2" placeholder="Marca">
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label for="">Modelo</label>
+                  <input type="text" name="pc_modelo" class="form-control mb-2" placeholder="Modelo">
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label for="">Serial</label>
+                  <input type="text" name="pc_serial" class="form-control mb-2" placeholder="Serial">
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <textarea name="pc_problema" class="form-control" rows="2"
+                    placeholder="Descripción del problema"></textarea>
+                </div>
+
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <textarea name="pc_solucion" class="form-control" rows="2"
+                    placeholder="Descripción de la solución"></textarea>
+                </div>
+              </div>
+          </div>
+          <!-- Impresora -->
+          <fieldset id="camposIMP" class="d-none border rounded p-3 mb-3">
+            <legend class="fs-6">Datos de la Impresora</legend>
+          
+            <div class="form-group col-lg-4 col-md-4 col-xs-12">
+              <label for="">Marca</label>
+              <input type="text" name="imp_marca" class="form-control mb-2" placeholder="Marca">
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-xs-12">
+              <label for="">Modelo</label>
+              <input type="text" name="imp_modelo" class="form-control mb-2" placeholder="Modelo">
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-xs-12">
+              <label for="">Serial</label>
+              <input type="text" name="imp_serial" class="form-control mb-2" placeholder="Serial">
+            </div>
+           <div class="form-group col-lg-4 col-md-4 col-xs-12">
+            <label for="">Diagnostico</label>
+            <textarea name="imp_diagnostico" class="form-control" rows="2" placeholder="Descripción de la falla"></textarea>
+         </div>
+
+         <div class="form-group col-lg-4 col-md-4 col-xs-12">
+            <label for="">Observaciones</label>
+            <textarea name="imp_diagnostico" class="form-control" rows="2" placeholder="Descripción de la falla"></textarea>
+         </div>
+          </fieldset>
+
+          <!-- Tóner -->
+          <fieldset id="camposTON" class="d-none border rounded p-3 mb-3">
+            <legend class="fs-6">Datos del Tóner</legend>
+            <input type="text" name="toner_modelo" class="form-control" placeholder="Modelo del tóner">
+          </fieldset>
+
+          <button type="submit" class="btn btn-primary w-100">
+            Registrar Servicio
+          </button>
 
 
-                                  
-
-                                    <div class="form-group col-lg-3 col-md-3 col-xs-12">
-
-                                       
-                                    </div>
 
 
+          <div class="form-group col-lg-3 col-md-3 col-xs-12">
 
 
-                            </div>
+          </div>
+
+
+
+
+        </div>
 
 
 
@@ -339,19 +348,19 @@
       <!-- Footer -->
       <div class="modal-footer">
         <div class="d-flex justify-content-end">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-                                        
-                                            <button  id="btnRegistrar" type="submit" class="btn text-center btn-primary">Registrar</button>
-                                        </div>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+
+          <button id="btnRegistrar" type="submit" class="btn text-center btn-primary">Registrar</button>
+        </div>
       </div>
 
     </div>
   </div>
-</div>
+  </div>
 
-   {% include "includes/scripts.html" %}
+  {% include "includes/scripts.html" %}
 
-   <script src="{% static 'js/servicios.js' %}"></script>
+  <script src="{% static 'js/servicios.js' %}"></script>
 
 </body>
 
