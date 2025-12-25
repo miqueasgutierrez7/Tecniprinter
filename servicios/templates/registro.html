@@ -256,7 +256,24 @@
                 <h4 class="text-center"> Datos del computador </h4>
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label for="">Marca</label>
-                  <input type="text" name="pc_marca" class="form-control mb-2" placeholder="Marca">
+                  <select name="form-control pc_marca" id="pc_marca" class="form-control mb-2">
+  <option value="">Seleccione una marca</option>
+  <option value="Acer">Acer</option>
+  <option value="ASUS">ASUS</option>
+  <option value="Dell">Dell</option>
+  <option value="HP" selected>HP</option>
+  <option value="Lenovo">Lenovo</option>
+  <option value="Apple">Apple</option>
+  <option value="MSI">MSI</option>
+  <option value="Samsung">Samsung</option>
+  <option value="Sony">Sony</option>
+  <option value="Toshiba">Toshiba</option>
+  <option value="Huawei">Huawei</option>
+  <option value="LG">LG</option>
+  <option value="Razer">Razer</option>
+  <option value="Microsoft">Microsoft</option>
+  <option value="Otro">Otro</option>
+</select>
                 </div>
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label for="">Modelo</label>
@@ -283,8 +300,20 @@
 
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label for="">Marca</label>
-                  <input type="text" name="imp_marca" class="form-control mb-2" placeholder="Marca">
+                  <label for="impresora_marca" class="form-label">Marca de impresora</label>
+                  <select name="imp_marca" id="impresora_marca" class="form-control form-select">
+                    <option value="">Seleccione una marca</option>
+                    <option value="Epson" selected>Epson</option>
+                    <option value="Canon">Canon</option>
+                    <option value="HP">HP</option>
+                    <option value="Brother">Brother</option>
+                    <option value="Lexmark">Lexmark</option>
+                    <option value="Samsung">Samsung</option>
+                    <option value="Xerox">Xerox</option>
+                    <option value="Ricoh">Ricoh</option>
+                  </select>
                 </div>
+
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label for="">Modelo</label>
                   <input type="text" name="imp_modelo" class="form-control mb-2" placeholder="Modelo">
@@ -371,10 +400,7 @@
 
 
         </div>
-        </form>
 
-
-        <!-- Footer -->
         <div class="modal-footer">
           <div class="d-flex justify-content-end">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
@@ -382,7 +408,7 @@
             <button id="btnRegistrar" type="submit" class="btn text-center btn-primary">Registrar</button>
           </div>
         </div>
-
+        </form>
 
       </div>
 
@@ -390,7 +416,7 @@
   </div>
   </div>
   </div>
-
+  <!-- Footer -->
   {% include "includes/scripts.html" %}
 
   <script src="{% static 'js/servicios.js' %}"></script>

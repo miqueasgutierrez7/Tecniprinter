@@ -18,6 +18,7 @@ def lista_servicios(request):
 
 
 def registrar_servicio(request):
+    print("POST:", request.POST)
     try:
         with transaction.atomic():
 
