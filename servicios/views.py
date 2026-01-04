@@ -83,4 +83,6 @@ def registrar_servicio(request):
     # =========================
     # RESPUESTA JSON
     # =========================
-    return JsonResponse({"ok": True, "mensaje": "Servicio registrado correctamente"})
+    return JsonResponse(
+        {"success": True, "message": "✅ Ingreso registrado exitosamente."}
+    )
