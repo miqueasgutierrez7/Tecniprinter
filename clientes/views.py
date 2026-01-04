@@ -8,37 +8,45 @@ from django.views.decorators.csrf import csrf_protect
 
 # Realizamos el Registro
 
-def clientes_view(request):
-    return render(request, 'clientes.html')
 
+def clientes_view(request):
+    return render(request, "clientes.html")
 
 
 def clientes_data(request):
     clientes = Cliente.objects.all().values(
-        'idCliente', 'tipoDocumento', 'nombre',
-        'numeroDocumento', 'telefono', 'correo',
-        'ciudad', 'direccion'
+        "idCliente",
+        "tipoDocumento",
+        "nombre",
+        "numeroDocumento",
+        "telefono",
+        "correo",
+        "ciudad",
+        "direccion",
     )
     data = list(clientes)
-    return JsonResponse({'data': data})
+    return JsonResponse({"data": data})
 
 
 def registrar_cliente(request):
-    if request.method == 'POST':
-        tipoDocumento = request.POST.get('tipoDocumento')
-        nombre = request.POST.get('nombre')
-        numeroDocumento = request.POST.get('documento')
-        telefono = request.POST.get('telefono')
-        correo = request.POST.get('correo')
-        ciudad = request.POST.get('ciudad')
-        direccion = request.POST.get('direccion')
+    if request.method == "POST":
+        tipoDocumento = request.POST.get("tipoDocumento")
+        nombre = request.POST.get("nombre")
+        numeroDocumento = request.POST.get("documento")
+        telefono = request.POST.get("telefono")
+        correo = request.POST.get("correo")
+        ciudad = request.POST.get("ciudad")
+        direccion = request.POST.get("direccion")
 
         # Validar si ya existe esa cédula
         if Cliente.objects.filter(numeroDocumento=numeroDocumento).exists():
-            return JsonResponse({
-                'success': False,
-                'message': '❌ Ya existe un cliente con esa cédula.'
-            }, status=400)
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "❌ Ya existe un cliente con esa cédula.",
+                },
+                status=400,
+            )
 
         # Si no existe, crear cliente
         Cliente.objects.create(
@@ -48,15 +56,14 @@ def registrar_cliente(request):
             telefono=telefono,
             correo=correo,
             ciudad=ciudad,
-            direccion=direccion
+            direccion=direccion,
         )
 
-        return JsonResponse({
-            'success': True,
-            'message': '✅ Cliente registrado exitosamente.'
-        })
+        return JsonResponse(
+            {"success": True, "message": "✅ Cliente registrado exitosamente."}
+        )
 
-    return render(request, 'registro.html')
+    return render(request, "registro.html")
 
 
 # ==============================
@@ -64,39 +71,48 @@ def registrar_cliente(request):
 # ==============================
 @csrf_exempt
 def modificar_cliente(request, id):
-    if request.method in ['PUT', 'POST']:
+    if request.method in ["PUT", "POST"]:
         try:
             cliente = Cliente.objects.get(pk=id)
         except Cliente.DoesNotExist:
-            return JsonResponse({'success': False, 'message': '❌ Cliente no encontrado'}, status=404)
+            return JsonResponse(
+                {"success": False, "message": "❌ Cliente no encontrado"}, status=404
+            )
 
         # Si viene JSON (PUT)
-        if request.body and request.content_type == 'application/json':
+        if request.body and request.content_type == "application/json":
             import json
+
             data = json.loads(request.body)
-            cliente.tipoDocumento = data.get('tipoDocumento', cliente.tipoDocumento)
-            cliente.numeroDocumento = data.get('numeroDocumento', cliente.numeroDocumento)
-            cliente.nombre = data.get('nombre', cliente.nombre)
-            cliente.telefono = data.get('telefono', cliente.telefono)
-            cliente.correo = data.get('correo', cliente.correo)
-            cliente.ciudad = data.get('ciudad', cliente.ciudad)
-            cliente.direccion = data.get('direccion', cliente.direccion)
+            cliente.tipoDocumento = data.get("tipoDocumento", cliente.tipoDocumento)
+            cliente.numeroDocumento = data.get(
+                "numeroDocumento", cliente.numeroDocumento
+            )
+            cliente.nombre = data.get("nombre", cliente.nombre)
+            cliente.telefono = data.get("telefono", cliente.telefono)
+            cliente.correo = data.get("correo", cliente.correo)
+            cliente.ciudad = data.get("ciudad", cliente.ciudad)
+            cliente.direccion = data.get("direccion", cliente.direccion)
 
         else:  # Si viene como form-data (POST)
-            cliente.tipoDocumento = request.POST.get('tipoDocumento', cliente.tipoDocumento)
-            cliente.numeroDocumento = request.POST.get('numeroDocumento', cliente.numeroDocumento)
-            cliente.nombre = request.POST.get('nombre', cliente.nombre)
-            cliente.telefono = request.POST.get('telefono', cliente.telefono)
-            cliente.correo = request.POST.get('correo', cliente.correo)
-            cliente.ciudad = request.POST.get('ciudad', cliente.ciudad)
-            cliente.direccion = request.POST.get('direccion', cliente.direccion)
+            cliente.tipoDocumento = request.POST.get(
+                "tipoDocumento", cliente.tipoDocumento
+            )
+            cliente.numeroDocumento = request.POST.get(
+                "numeroDocumento", cliente.numeroDocumento
+            )
+            cliente.nombre = request.POST.get("nombre", cliente.nombre)
+            cliente.telefono = request.POST.get("telefono", cliente.telefono)
+            cliente.correo = request.POST.get("correo", cliente.correo)
+            cliente.ciudad = request.POST.get("ciudad", cliente.ciudad)
+            cliente.direccion = request.POST.get("direccion", cliente.direccion)
 
         cliente.save()
-        return JsonResponse({'success': True, 'message': '✅ Cliente actualizado correctamente'})
+        return JsonResponse(
+            {"success": True, "message": "✅ Cliente actualizado correctamente"}
+        )
 
-    return HttpResponseNotAllowed(['PUT', 'POST'])
-
-
+    return HttpResponseNotAllowed(["PUT", "POST"])
 
 
 @csrf_exempt
@@ -104,65 +120,72 @@ def obtener_cliente(request, id):
     """
     Devuelve los datos de un cliente en formato JSON.
     """
-    if request.method == 'GET':
+    if request.method == "GET":
         try:
             cliente = Cliente.objects.get(pk=id)
-            return JsonResponse({
-                'success': True,
-                'cliente': {
-                    'idCliente': cliente.idCliente,
-                    'tipoDocumento': cliente.tipoDocumento,
-                    'nombre': cliente.nombre,
-                    'numeroDocumento': cliente.numeroDocumento,
-                    'telefono': cliente.telefono,
-                    'correo': cliente.correo,
-                    'ciudad': cliente.ciudad,
-                    'direccion': cliente.direccion
+            return JsonResponse(
+                {
+                    "success": True,
+                    "cliente": {
+                        "idCliente": cliente.idCliente,
+                        "tipoDocumento": cliente.tipoDocumento,
+                        "nombre": cliente.nombre,
+                        "numeroDocumento": cliente.numeroDocumento,
+                        "telefono": cliente.telefono,
+                        "correo": cliente.correo,
+                        "ciudad": cliente.ciudad,
+                        "direccion": cliente.direccion,
+                    },
                 }
-            })
+            )
         except Cliente.DoesNotExist:
-            return JsonResponse({'success': False, 'message': 'Cliente no encontrado'}, status=404)
+            return JsonResponse(
+                {"success": False, "message": "Cliente no encontrado"}, status=404
+            )
     else:
-        return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
-    
-    
-
+        return JsonResponse(
+            {"success": False, "message": "Método no permitido"}, status=405
+        )
 
 
 @csrf_exempt
 def eliminar_cliente(request, id):
-    if request.method == 'DELETE':
+    if request.method == "DELETE":
         try:
             cliente = Cliente.objects.get(pk=id)
             cliente.delete()
-            return JsonResponse({'mensaje': 'Cliente eliminado correctamente'})
+            return JsonResponse({"mensaje": "Cliente eliminado correctamente"})
         except Cliente.DoesNotExist:
-            return JsonResponse({'error': 'Cliente no encontrado'}, status=404)
+            return JsonResponse({"error": "Cliente no encontrado"}, status=404)
     else:
-        return HttpResponseNotAllowed(['DELETE'])
-
+        return HttpResponseNotAllowed(["DELETE"])
 
     # Validamos cedula en tiempo real
+
+
 def validar_cedula(request):
-    numeroDocumento = request.GET.get('documento', None)
+    numeroDocumento = request.GET.get("documento", None)
 
     if not numeroDocumento:
-        return JsonResponse({'error': 'No se proporcionó número de documento'}, status=400)
+        return JsonResponse(
+            {"error": "No se proporcionó número de documento"}, status=400
+        )
 
     try:
         cliente = Cliente.objects.get(numeroDocumento=numeroDocumento)
         # Si lo encuentra, devolvemos los datos
-        return JsonResponse({
-            'existe': True,
-            'cliente': {
-                'nombre': cliente.nombre,
-                'telefono': cliente.telefono,
-                'correo': cliente.correo,
-                'ciudad': cliente.ciudad,
-                'direccion': cliente.direccion
+        return JsonResponse(
+            {
+                "existe": True,
+                "cliente": {
+                    "nombre": cliente.nombre,
+                    "telefono": cliente.telefono,
+                    "correo": cliente.correo,
+                    "ciudad": cliente.ciudad,
+                    "direccion": cliente.direccion,
+                },
             }
-        })
+        )
     except Cliente.DoesNotExist:
         # Si no existe, devolvemos solo existe=False
-        return JsonResponse({'existe': False})
-    
+        return JsonResponse({"existe": False})

@@ -7,22 +7,27 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Cliente',
+            name="Cliente",
             fields=[
-                ('idCliente', models.AutoField(primary_key=True, serialize=False)),
-                ('idArea', models.IntegerField()),
-                ('tipoDocumento', models.CharField(choices=[('DNI', 'DNI'), ('RUC', 'RUC'), ('PAS', 'Pasaporte')], max_length=10)),
-                ('nombre', models.CharField(max_length=100)),
-                ('numeroDocumento', models.CharField(max_length=20, unique=True)),
-                ('telefono', models.CharField(blank=True, max_length=20, null=True)),
-                ('correo', models.EmailField(blank=True, max_length=254, null=True)),
-                ('ciudad', models.CharField(max_length=50)),
-                ('direccion', models.CharField(max_length=200)),
+                ("idCliente", models.AutoField(primary_key=True, serialize=False)),
+                ("idArea", models.IntegerField()),
+                (
+                    "tipoDocumento",
+                    models.CharField(
+                        choices=[("DNI", "DNI"), ("RUC", "RUC"), ("PAS", "Pasaporte")],
+                        max_length=10,
+                    ),
+                ),
+                ("nombre", models.CharField(max_length=100)),
+                ("numeroDocumento", models.CharField(max_length=20, unique=True)),
+                ("telefono", models.CharField(blank=True, max_length=20, null=True)),
+                ("correo", models.EmailField(blank=True, max_length=254, null=True)),
+                ("ciudad", models.CharField(max_length=50)),
+                ("direccion", models.CharField(max_length=200)),
             ],
         ),
     ]

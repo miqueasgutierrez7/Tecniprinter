@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
 
         try {
-            const response = await fetch("/registrar/", {
+            const response = await fetch("registrar/", {
                 method: "POST",
                 body: formData,
                 headers: {

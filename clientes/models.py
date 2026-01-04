@@ -1,10 +1,11 @@
 from django.db import models
 
+
 class Cliente(models.Model):
     TIPO_DOCUMENTO_CHOICES = [
-        ('DNI', 'DNI'),
-        ('RUC', 'RUC'),
-        ('PAS', 'Pasaporte'),
+        ("DNI", "DNI"),
+        ("RUC", "RUC"),
+        ("PAS", "Pasaporte"),
         # Agrega más si necesitas
     ]
 
