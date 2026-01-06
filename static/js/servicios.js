@@ -358,3 +358,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+
+const valorServicio = document.getElementById("valorServicio");
+  const abono = document.getElementById("abono");
+  const saldo = document.getElementById("saldo");
+
+  function calcularSaldo() {
+    const valor = parseFloat(valorServicio.value) || 0;
+    const pago = parseFloat(abono.value) || 0;
+
+    const resultado = valor - pago;
+    saldo.value = resultado >= 0 ? resultado : 0;
+  }
+
+  valorServicio.addEventListener("input", calcularSaldo);
+  abono.addEventListener("input", calcularSaldo);
