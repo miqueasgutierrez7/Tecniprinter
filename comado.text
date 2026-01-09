@@ -35,3 +35,42 @@ pip install psycopg2-binary
 pip install django
 
 deactivate
+
+
+
+
+
+
+
+
+ const tipoServicio = document.getElementById("tipoServicio").value;
+
+    // Campos impresora
+    const impModelo = document.querySelector('input[name="imp_modelo"]');
+    const impSerial = document.querySelector('input[name="imp_serial"]');
+
+    // Limpiar requeridos siempre
+    impModelo.removeAttribute("required");
+    impSerial.removeAttribute("required");
+
+    // Si es servicio de IMPRESORA
+    if (tipoServicio === "IMP") {
+
+        if (!impModelo.value.trim() || !impSerial.value.trim()) {
+            e.preventDefault(); // Detiene el submit
+
+            alert("⚠️ Para servicio de impresora, el MODELO y SERIAL son obligatorios.");
+
+            impModelo.setAttribute("required", "required");
+            impSerial.setAttribute("required", "required");
+
+            impModelo.focus();
+            return false;
+        }
+
+        // Si pasó la validación, los marcamos como requeridos
+        impModelo.setAttribute("required", "required");
+        impSerial.setAttribute("required", "required");
+    }
+
+  pc.style.display = "block";

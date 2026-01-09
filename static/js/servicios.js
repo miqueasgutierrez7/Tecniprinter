@@ -2,18 +2,18 @@ let tabla;
 
 $(document).ready(function () {
   console.log("DataTables iniciado correctamente");
-  tabla = $('#tabla-clientes').DataTable({
-    ajax: '/api/clientes/',
-    dataSrc: 'data',
+  tabla = $("#tabla-clientes").DataTable({
+    ajax: "/api/clientes/",
+    dataSrc: "data",
     columns: [
-      { data: 'idCliente' },
-      { data: 'tipoDocumento' },
-      { data: 'nombre' },
-      { data: 'numeroDocumento' },
-      { data: 'telefono' },
-      { data: 'correo' },
-      { data: 'ciudad' },
-      { data: 'direccion' },
+      { data: "idCliente" },
+      { data: "tipoDocumento" },
+      { data: "nombre" },
+      { data: "numeroDocumento" },
+      { data: "telefono" },
+      { data: "correo" },
+      { data: "ciudad" },
+      { data: "direccion" },
 
       {
         data: null,
@@ -27,174 +27,168 @@ $(document).ready(function () {
                             <i class="fa fa-trash"></i> Eliminar
                         </button>
                     `;
-        }
-      }
+        },
+      },
     ],
     responsive: true,
     language: {
-      url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
-    }
+      url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json",
+    },
   });
 });
 
-
-
-$('#tabla-clientes').on('click', '.editar', function () {
-  const id = $(this).data('id');
+$("#tabla-clientes").on("click", ".editar", function () {
+  const id = $(this).data("id");
 
   // Hacer fetch a la vista de Django para obtener los datos del cliente
-  fetch(`/clientes/${id}/`, {  // Asegúrate que la URL coincida con tu urls.py
-    method: 'GET',
+  fetch(`/clientes/${id}/`, {
+    // Asegúrate que la URL coincida con tu urls.py
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest'
-    }
+      "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
+    },
   })
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       if (data.success) {
         // Llenar los campos del modal con los datos del cliente
-        $('#edit-id').val(data.cliente.idCliente);
-        $('#edit-tipoDocumento').val(data.cliente.tipoDocumento);
-        $('#edit-nombre').val(data.cliente.nombre);
-        $('#edit-numeroDocumento').val(data.cliente.numeroDocumento);
-        $('#edit-telefono').val(data.cliente.telefono);
-        $('#edit-correo').val(data.cliente.correo);
-        $('#edit-ciudad').val(data.cliente.ciudad);
-        $('#edit-direccion').val(data.cliente.direccion);
+        $("#edit-id").val(data.cliente.idCliente);
+        $("#edit-tipoDocumento").val(data.cliente.tipoDocumento);
+        $("#edit-nombre").val(data.cliente.nombre);
+        $("#edit-numeroDocumento").val(data.cliente.numeroDocumento);
+        $("#edit-telefono").val(data.cliente.telefono);
+        $("#edit-correo").val(data.cliente.correo);
+        $("#edit-ciudad").val(data.cliente.ciudad);
+        $("#edit-direccion").val(data.cliente.direccion);
 
-        const inputCiudadEditar = document.getElementById('edit-ciudad');
-
-
+        const inputCiudadEditar = document.getElementById("edit-ciudad");
 
         const ciudadCliente = data.cliente.ciudad;
-        const opcion = Array.from(inputCiudad.options).find(opt => opt.value === ciudadCliente);
+        const opcion = Array.from(inputCiudad.options).find(
+          (opt) => opt.value === ciudadCliente
+        );
 
         if (opcion) {
           // Si existe la ciudad en la lista, seleccionarla
           inputCiudadEditar.value = ciudadCliente;
 
-          if ($(inputCiudadEditar).hasClass('selectpicker')) {
-            $(inputCiudadEditar).selectpicker('refresh');
+          if ($(inputCiudadEditar).hasClass("selectpicker")) {
+            $(inputCiudadEditar).selectpicker("refresh");
           }
-
         } else {
           // Si no existe, crear una nueva opción y seleccionarla
-          const nuevaOpcion = new Option(ciudadCliente, ciudadCliente, true, true);
+          const nuevaOpcion = new Option(
+            ciudadCliente,
+            ciudadCliente,
+            true,
+            true
+          );
           inputCiudadEditar.add(nuevaOpcion);
         }
 
-
-
-
         // Mostrar modal
-        $('#modalEditarCliente').modal('show');
+        $("#modalEditarCliente").modal("show");
       } else {
-        Swal.fire('Error', data.message, 'error');
+        Swal.fire("Error", data.message, "error");
       }
     })
-    .catch(error => {
-      console.error('Error al obtener cliente:', error);
-      Swal.fire('Error', 'No se pudo cargar la información del cliente', 'error');
+    .catch((error) => {
+      console.error("Error al obtener cliente:", error);
+      Swal.fire(
+        "Error",
+        "No se pudo cargar la información del cliente",
+        "error"
+      );
     });
 });
 
-
-
-$('#tabla-clientes').on('click', '.eliminar', function () {
-  const id = $(this).data('id');
+$("#tabla-clientes").on("click", ".eliminar", function () {
+  const id = $(this).data("id");
   if (!id) {
-    console.error('No se encontró el id para eliminar');
+    console.error("No se encontró el id para eliminar");
     return;
   }
   Swal.fire({
-    title: '¿Eliminar cliente?',
+    title: "¿Eliminar cliente?",
     text: "Esta acción no se puede deshacer.",
-    icon: 'warning',
+    icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
-    confirmButtonText: 'Sí, eliminar'
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sí, eliminar",
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({
-        url: `/api/clientes/${id}/`,  // Ajústalo a tu URL real
-        type: 'DELETE',
+        url: `/api/clientes/${id}/`, // Ajústalo a tu URL real
+        type: "DELETE",
         success: function (response) {
-          Swal.fire('Eliminado', 'Cliente eliminado correctamente', 'success');
-          $('#tabla-clientes').DataTable().ajax.reload();
+          Swal.fire("Eliminado", "Cliente eliminado correctamente", "success");
+          $("#tabla-clientes").DataTable().ajax.reload();
         },
         error: function (xhr, status, error) {
-          Swal.fire('Error', 'No se pudo eliminar el cliente', 'error');
-        }
+          Swal.fire("Error", "No se pudo eliminar el cliente", "error");
+        },
       });
     }
   });
 });
 
+document
+  .getElementById("guardarCambiosCliente")
+  .addEventListener("click", async () => {
+    const id = document.getElementById("edit-id").value;
 
+    // Capturar datos del formulario
+    const datos = {
+      tipoDocumento: document.getElementById("edit-tipoDocumento").value,
+      numeroDocumento: document.getElementById("edit-numeroDocumento").value,
+      nombre: document.getElementById("edit-nombre").value,
+      telefono: document.getElementById("edit-telefono").value,
+      correo: document.getElementById("edit-correo").value,
+      ciudad: document.getElementById("edit-ciudad").value,
+      direccion: document.getElementById("edit-direccion").value,
+    };
 
-
-
-
-document.getElementById("guardarCambiosCliente").addEventListener("click", async () => {
-
-  const id = document.getElementById("edit-id").value;
-
-  // Capturar datos del formulario
-  const datos = {
-    tipoDocumento: document.getElementById("edit-tipoDocumento").value,
-    numeroDocumento: document.getElementById("edit-numeroDocumento").value,
-    nombre: document.getElementById("edit-nombre").value,
-    telefono: document.getElementById("edit-telefono").value,
-    correo: document.getElementById("edit-correo").value,
-    ciudad: document.getElementById("edit-ciudad").value,
-    direccion: document.getElementById("edit-direccion").value
-  };
-
-  try {
-    const response = await fetch(`/api/clientes/modificar/${id}/`, {
-      method: "PUT",
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-      },
-      body: JSON.stringify(datos)
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      Swal.fire({
-        title: "Actualizado",
-        text: "Cliente actualizado correctamente",
-        icon: "success"
+    try {
+      const response = await fetch(`/api/clientes/modificar/${id}/`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
+            .value,
+        },
+        body: JSON.stringify(datos),
       });
 
-      $("#modalEditarCliente").modal("hide");
+      const data = await response.json();
 
-      if (tabla) tabla.ajax.reload(null, false);
+      if (data.success) {
+        Swal.fire({
+          title: "Actualizado",
+          text: "Cliente actualizado correctamente",
+          icon: "success",
+        });
 
-    } else {
-      Swal.fire("Error", data.message, "error");
+        $("#modalEditarCliente").modal("hide");
+
+        if (tabla) tabla.ajax.reload(null, false);
+      } else {
+        Swal.fire("Error", data.message, "error");
+      }
+    } catch (error) {
+      console.error("Error al actualizar cliente:", error);
+      Swal.fire("Error", "No se pudo actualizar el cliente", "error");
     }
-
-  } catch (error) {
-    console.error("Error al actualizar cliente:", error);
-    Swal.fire("Error", "No se pudo actualizar el cliente", "error");
-  }
-
-});
-
+  });
 
 const inputCedula = document.getElementById("documento");
 const mensaje = document.getElementById("mensaje");
-const inputNombre = document.getElementById('nombre');
-const inputTelefono = document.getElementById('telefono');
-const inputCorreo = document.getElementById('correo');
-const inputCiudad = document.getElementById('ciudad');
-const inputDireccion = document.getElementById('direccion');
-
+const inputNombre = document.getElementById("nombre");
+const inputTelefono = document.getElementById("telefono");
+const inputCorreo = document.getElementById("correo");
+const inputCiudad = document.getElementById("ciudad");
+const inputDireccion = document.getElementById("direccion");
 
 if (inputCedula) {
   inputCedula.addEventListener("input", () => {
@@ -211,12 +205,12 @@ if (inputCedula) {
           }
 
           if (data.existe) {
+            console.log(data);
 
-            console.log(data)
-
-            mensaje.textContent = "⚠️ Este Numero de Documento ya está registrado";
+            mensaje.textContent =
+              "⚠️ Este Numero de Documento ya está registrado";
             mensaje.style.color = "red";
-            inputCedula.style.border = '2px solid red';
+            inputCedula.style.border = "2px solid red";
 
             inputNombre.value = data.cliente.nombre;
             inputTelefono.value = data.cliente.telefono;
@@ -231,48 +225,44 @@ if (inputCedula) {
 
             document.getElementById("direccion").disabled = true;
 
-
-
             const ciudadCliente = data.cliente.ciudad;
-            const opcion = Array.from(inputCiudad.options).find(opt => opt.value === ciudadCliente);
+            const opcion = Array.from(inputCiudad.options).find(
+              (opt) => opt.value === ciudadCliente
+            );
 
             if (opcion) {
               // Si existe la ciudad en la lista, seleccionarla
               inputCiudad.value = ciudadCliente;
 
-              if ($(inputCiudad).hasClass('selectpicker')) {
-                $(inputCiudad).selectpicker('refresh');
+              if ($(inputCiudad).hasClass("selectpicker")) {
+                $(inputCiudad).selectpicker("refresh");
               }
-
             } else {
-
-
               // Si no existe, crear una nueva opción y seleccionarla
-              const nuevaOpcion = new Option(ciudadCliente, ciudadCliente, true, true);
+              const nuevaOpcion = new Option(
+                ciudadCliente,
+                ciudadCliente,
+                true,
+                true
+              );
               inputCiudad.add(nuevaOpcion);
             }
 
-
-            x
-
-
+            x;
           } else {
-
-
-            inputNombre.value = '';
-            inputTelefono.value = '';
-            inputCorreo.value = '';
-            inputDireccion.value = '';
-            document.getElementById('btnRegistrar').style.display = '';
+            inputNombre.value = "";
+            inputTelefono.value = "";
+            inputCorreo.value = "";
+            inputDireccion.value = "";
+            document.getElementById("btnRegistrar").style.display = "";
             document.getElementById("nombre").disabled = false;
             document.getElementById("telefono").disabled = false;
             document.getElementById("correo").disabled = false;
             document.getElementById("ciudad").disabled = false;
             document.getElementById("direccion").disabled = false;
 
-            mensaje.textContent = '';
-            inputCedula.style.border = '';
-
+            mensaje.textContent = "";
+            inputCedula.style.border = "";
           }
         })
         .catch((err) => console.error("Error al validar cédula:", err));
@@ -281,7 +271,6 @@ if (inputCedula) {
     }
   });
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
   const pc = document.getElementById("camposPC");
@@ -317,60 +306,147 @@ document.addEventListener("DOMContentLoaded", () => {
   formulario.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    btnRegistrar.disabled = true;
-    btnRegistrar.textContent = "Registrando...";
+    const tipoServicio = document.getElementById("tipoServicio").value;
 
-    const formData = new FormData(formulario);
+    // Campos impresora
+    const impModelo = document.querySelector('input[name="imp_modelo"]');
+    const impSerial = document.querySelector('input[name="imp_serial"]');
 
-    // Obtener token del input oculto
-    const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+    const pcModelo = document.querySelector('input[name="pc_modelo"]');
 
-    try {
-      const response = await fetch("registrar/", {
-        method: "POST",
-        body: formData,
-        headers: {
-          "X-CSRFToken": csrftoken,   // ✅ ahora sí correcto
-        },
-      });
+    const tnModelo = document.querySelector('input[name="toner_modelo"]');
 
-      const data = await response.json();
+    // Limpiar requeridos siempre
+    impModelo.removeAttribute("required");
+    impSerial.removeAttribute("required");
 
-      if (data.success) {
-        Swal.fire("Éxito", data.message, "success");
-        if (typeof tabla !== "undefined") {
-          tabla.ajax.reload(null, false);
+    // Si es servicio de IMPRESORA
+    switch (tipoServicio) {
+      case "IMP":
+        if (!impModelo.value.trim() || !impSerial.value.trim()) {
+          e.preventDefault(); // Detiene el submit
 
-          mensaje.textContent = '';
-          inputCedula.style.border = '';
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "⚠️ Para registrar un servicio de impresora, el modelo y el número de serial son obligatorios.",
+          });
+
+          impModelo.setAttribute("required", "required");
+          impSerial.setAttribute("required", "required");
+
+          impModelo.focus();
+          return false;
         }
-        formulario.reset();
-        ocultarCampos();
-      } else {
-        Swal.fire("Error", data.message, "error");
-      }
-    } catch (error) {
-      console.error(error);
-      Swal.fire("Error", "No se pudo registrar", "error");
-    } finally {
-      btnRegistrar.disabled = false;
-      btnRegistrar.textContent = "Registrar";
+
+        // Si pasó la validación, los marcamos como requeridos
+        impModelo.setAttribute("required", "required");
+        impSerial.setAttribute("required", "required");
+
+        await enviarDatos();
+        break;
+
+      case "PC":
+        if (!pcModelo.value.trim()) {
+          e.preventDefault(); // Detiene el submit
+
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "⚠️ Para registrar un servicio de computadora, el modelo es obligatorios.",
+          });
+
+          pcModelo.setAttribute("required", "required");
+          pcModelo.focus();
+          return false;
+        }
+
+        // Si pasó la validación, los marcamos como requeridos
+
+        pcModelo.setAttribute("required", "required");
+        await enviarDatos();
+        break;
+
+      case "TON":
+        if (!tnModelo.value.trim()) {
+          e.preventDefault(); // Detiene el submit
+
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "⚠️ El modelo del toner es obligatorios.",
+          });
+
+          tnModelo.setAttribute("required", "required");
+          tnModelo.focus();
+          return false;
+        }
+
+        // Si pasó la validación, los marcamos como requeridos
+
+        tnModelo.setAttribute("required", "required");
+        await enviarDatos();
+        break;
+
+      default:
+        // 👉 otros tipos de servicio
+        break;
     }
   });
 });
 
+async function enviarDatos() {
+  btnRegistrar.disabled = true;
+  btnRegistrar.textContent = "Registrando...";
+
+  const formData = new FormData(formulario);
+
+  // Obtener token del input oculto
+  const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+  try {
+    const response = await fetch("registrar/", {
+      method: "POST",
+      body: formData,
+      headers: {
+        "X-CSRFToken": csrftoken, // ✅ ahora sí correcto
+      },
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      Swal.fire("Éxito", data.message, "success");
+      if (typeof tabla !== "undefined") {
+        tabla.ajax.reload(null, false);
+
+        mensaje.textContent = "";
+        inputCedula.style.border = "";
+      }
+      formulario.reset();
+    } else {
+      Swal.fire("Error", data.message, "error");
+    }
+  } catch (error) {
+    console.error(error);
+    Swal.fire("Error", "No se pudo registrar", "error");
+  } finally {
+    btnRegistrar.disabled = false;
+    btnRegistrar.textContent = "Registrar";
+  }
+}
 
 const valorServicio = document.getElementById("valorServicio");
-  const abono = document.getElementById("abono");
-  const saldo = document.getElementById("saldo");
+const abono = document.getElementById("abono");
+const saldo = document.getElementById("saldo");
 
-  function calcularSaldo() {
-    const valor = parseFloat(valorServicio.value) || 0;
-    const pago = parseFloat(abono.value) || 0;
+function calcularSaldo() {
+  const valor = parseFloat(valorServicio.value) || 0;
+  const pago = parseFloat(abono.value) || 0;
 
-    const resultado = valor - pago;
-    saldo.value = resultado >= 0 ? resultado : 0;
-  }
+  const resultado = valor - pago;
+  saldo.value = resultado >= 0 ? resultado : 0;
+}
 
-  valorServicio.addEventListener("input", calcularSaldo);
-  abono.addEventListener("input", calcularSaldo);
+valorServicio.addEventListener("input", calcularSaldo);
+abono.addEventListener("input", calcularSaldo);
