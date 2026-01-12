@@ -2,31 +2,31 @@ let tabla;
 
 $(document).ready(function () {
   console.log("DataTables iniciado correctamente");
-  tabla = $("#tabla-clientes").DataTable({
-    ajax: "/api/clientes/",
-    dataSrc: "data",
+  tabla = $("#tabla-servicios").DataTable({
+    ajax: {
+      url: "/api/reparacionimpresora/",
+      dataSrc: "data"
+    },
     columns: [
-      { data: "idCliente" },
-      { data: "tipoDocumento" },
-      { data: "nombre" },
-      { data: "numeroDocumento" },
+      { data: "id" },
+      { data: "marca" },
+      { data: "modelo" },
+      { data: "serial" },
+      { data: "cliente" },
       { data: "telefono" },
-      { data: "correo" },
-      { data: "ciudad" },
-      { data: "direccion" },
-
+      { data: "estado" },
       {
         data: null,
         orderable: false,
         render: function (data, type, row) {
           return `
-                        <button class="btn btn-sm btn-primary editar" data-id="${row.idCliente}">
-                            <i class="fa fa-pencil"></i> Editar
-                        </button>
-                        <button class="btn btn-sm btn-danger eliminar" data-id="${row.idCliente}">
-                            <i class="fa fa-trash"></i> Eliminar
-                        </button>
-                    `;
+            <button class="btn btn-sm btn-primary editar" data-id="${row.id}">
+              <i class="fa fa-pencil"></i> Editar
+            </button>
+            <button class="btn btn-sm btn-danger eliminar" data-id="${row.id}">
+              <i class="fa fa-trash"></i> Eliminar
+            </button>
+          `;
         },
       },
     ],
@@ -36,6 +36,7 @@ $(document).ready(function () {
     },
   });
 });
+
 
 $("#tabla-clientes").on("click", ".editar", function () {
   const id = $(this).data("id");
