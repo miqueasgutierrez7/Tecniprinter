@@ -1,5 +1,7 @@
+from fpdf import FPDF
+from django.http import JsonResponse, HttpResponse
+from django.utils.timezone import localtime
 from django.shortcuts import render
-from django.http import JsonResponse
 from decimal import Decimal
 from servicios.models import (
     Cliente,
@@ -83,7 +85,21 @@ def ReparacionImpresora_data(request):
                 "serial": r.serial,
                 "cliente": r.servicio.cliente.nombre,
                 "telefono": r.servicio.cliente.telefono,
-                "estado": r.servicio.get_estado_display(),  # aquí el nombre legible
+                "estado": r.servicio.get_estado_display(),
             }
         )
     return JsonResponse({"data": data})
+
+
+def recibo_pdf(request):
+    pdf = FPDF(orientation="P", unit="mm", format=(216, 140))
+    pdf.add_page()
+    pdf.image("static/images/logo.jpg", x=10, y=8, w=30)
+    pdf.set_font("Helvetica", size=48)
+    pdf.cell(0, 20, txt="Hello World", ln=True, align="C")
+
+    pdf_bytes = bytes(pdf.output(dest="S"))
+
+    response = HttpResponse(pdf_bytes, content_type="application/pdf")
+    response["Content-Disposition"] = 'inline; filename="ejemplo.pdf"'
+    return response

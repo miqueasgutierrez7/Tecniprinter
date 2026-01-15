@@ -9,4 +9,5 @@ urlpatterns = [
         views.ReparacionImpresora_data,
         name="reparacionimpresora_data",
     ),
+    path("pdf/", views.recibo_pdf, name="recibo_pdf"),
 ]

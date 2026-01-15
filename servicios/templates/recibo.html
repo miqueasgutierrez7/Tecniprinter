@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Orden de trabajo N° {{ registro.idingresoequipo }}</title>
+
+  <!-- Recomendado: referenciar Bootstrap local al generar PDF -->
+  <link rel="stylesheet" href="{{ bootstrap_css_url|default:'/static/css/bootstrap.min.css' }}">
+
+  <style>
+    /* Tamaño de página y márgenes (equivalentes a SetMargins(4,12,4) mm) */
+    @page { size: Letter; margin: 12mm 4mm; }
+
+    body { font-family: "Segoe UI", Arial, sans-serif; font-size: 11pt; color: #222; }
+    .brand { font-weight: 700; letter-spacing: .3px; }
+    .text-muted-small { font-size: 10pt; color: #666; }
+
+    .card-plain { border: 1px solid #e5e7eb; border-radius: .5rem; padding: .75rem; }
+    .section-title { font-weight: 600; letter-spacing: .2px; }
+
+    table.table-sm th, table.table-sm td {
+      padding: .4rem .5rem;
+      vertical-align: middle;
+      border-color: #e5e7eb !important;
+    }
+    .table thead th { background: #f8f9fa; }
+
+    .total-row td { border-top: 2px solid #000 !important; font-weight: 600; }
+    .divider { border-top: 1px dashed #cbd5e1; margin: .6rem 0; }
+    .no-break { page-break-inside: avoid; }
+
+    /* Encabezado similar al bloque con MultiCell y logo */
+    .header-logo { max-height: 60px; }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+
+    <!-- Encabezado: Logo + datos de la empresa -->
+    <div class="row align-items-start">
+      <div class="col-7">
+        {% if empresa.logo_url %}
+          <img src="{{ empresa.logo_url }}" alt="Logo" class="header-logo">
+        {% else %}
+          <!-- Fallback si no hay logo -->
+          <div class="brand h5 mb-1">{{ empresa.nombre|default:"Mi Empresa" }}</div>
+        {% endif %}
+      </div>
+      <div class="col-5 text-end">
+        <div class="brand h6 mb-1">{{ empresa.nombre|default:"Mi Empresa" }}</div>
+        <div class="text-muted-small">
+          Nit: {{ empresa.nit }} · Tel: {{ empresa.telefono }}<br>
+          Dirección: {{ empresa.direccion }}<br>
+          Email: {{ empresa.correo }}
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Título y cabecera del documento -->
+    <div class="row g-2 no-break">
+      <div class="col-12">
+        <table class="table table-sm">
+          <tbody>
+            <tr>
+              <td style="width: 35%;">
+                <strong>ORDEN DE TRABAJO N°:</strong> {{ registro.idingresoequipo }}
+              </td>
+              <td style="width: 30%;">
+                <strong>TÉCNICO:</strong> {{ cajero }}
+              </td>
+              <td style="width: 35%;">
+                <strong>FECHA DE INGRESO:</strong>
+                {{ registro.fechaIngreso|date:"d-m-Y H:i:s" }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Datos del cliente -->
+    <div class="row mt-1 no-break">
+      <div class="col-12">
+        <div class="card-plain">
+          <div class="section-title mb-2 text-center">DATOS DEL CLIENTE</div>
+          <table class="table table-sm">
+            <tbody>
+              <tr>
+                <td style="width: 33%;"><strong>Nombre:</strong> {{ registro.nombre }}</td>
+                <td style="width: 33%;"><strong>CC/NIT:</strong> {{ registro.documento }}</td>
+                <td style="width: 34%;"><strong>Teléfono:</strong> {{ registro.telefono }}</td>
+              </tr>
+              <tr>
+                <td><strong>Correo:</strong> {{ registro.correo }}</td>
+                <td><strong>Ciudad:</strong> {{ registro.ciudad }}</td>
+                <td><strong>Dirección:</strong> {{ registro.direccion }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Datos de la impresora -->
+    <div class="row mt-2 no-break">
+      <div class="col-12">
+        <div class="card-plain">
+          <div class="section-title mb-2 text-center">DATOS DE LA IMPRESORA</div>
+          <table class="table table-sm">
+            <tbody>
+              <tr>
+                <td style="width: 33%;"><strong>Marca:</strong> {{ registro.marca }}</td>
+                <td style="width: 33%;"><strong>Modelo:</strong> {{ registro.modelo }}</td>
+                <td style="width: 34%;"><strong>N° Serie:</strong> {{ registro.serial }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
