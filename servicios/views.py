@@ -1,3 +1,5 @@
+from multiprocessing import connection
+from django.db import connection
 from fpdf import FPDF
 from django.http import JsonResponse, HttpResponse
 from django.utils.timezone import localtime
@@ -94,12 +96,52 @@ def ReparacionImpresora_data(request):
 def recibo_pdf(request):
     pdf = FPDF(orientation="P", unit="mm", format=(216, 140))
     pdf.add_page()
-    pdf.image("static/images/logo.jpg", x=10, y=8, w=30)
-    pdf.set_font("Helvetica", size=48)
-    pdf.cell(0, 20, txt="Hello World", ln=True, align="C")
+    pdf.image("static/images/logo.jpg", x=65, y=5, w=85)
+
+    pdf.set_font("Arial", style="I", size=13)
+    pdf.ln(18)
+    pdf.cell(195, 10, txt="Carrera 30 #28-43", ln=True, align="C")
+    pdf.ln(-4)
+    pdf.cell(195, 10, txt="Cels : 318-553 9043 / 318-873 3880", ln=True, align="C")
+    pdf.ln(-2)
+    pdf.cell(150, 10, txt="Orden de Trabajo", ln=True, align="C")
+    pdf.ln(-9)
+    pdf.set_x(110)
+    pdf.set_font("Arial", style="B", size=14)
+    pdf.cell(30, 10, txt="N 1231", border=3, ln=True, align="C")
+    pdf.set_font("Arial", size=12)
+    pdf.ln(4)
+
+    pdf.cell(100, 7, "Cliente:", border=1)
+    pdf.cell(95, 7, "Fecha:", border=1)
+    pdf.ln()
+    pdf.cell(100, 7, "Direccion:", border=1)
+    pdf.cell(95, 7, "Telefono:", border=1)
+    pdf.ln()
+    pdf.cell(100, 7, "Impresora:", border=1)
+    pdf.cell(95, 7, "Serial:", border=1)
+    pdf.ln()
+    pdf.cell(195, 7, "Diagnostico:", border=1)
+    pdf.ln()
+    pdf.cell(195, 7, "Trabajo a Realizar:", border=1)
+    pdf.ln()
+    pdf.cell(195, 7, "Observaciones:", border=1)
+    pdf.ln(7)
+    pdf.set_x(165)
+    pdf.cell(40, 7, "Valor:", border=1)
+    pdf.ln()
+    pdf.set_x(165)
+    pdf.cell(40, 7, "Abono:", border=1)
+    pdf.ln()
+    pdf.set_x(10)
+    pdf.cell(40, 7, "Firma del Cliente:_______________", border=0)
+    pdf.set_x(85)
+    pdf.cell(40, 7, "Firma del Tècnico:_______________", border=0)
+    pdf.set_x(165)
+    pdf.cell(40, 7, "Saldo:", border=1)
+    pdf.ln()
 
     pdf_bytes = bytes(pdf.output(dest="S"))
-
     response = HttpResponse(pdf_bytes, content_type="application/pdf")
     response["Content-Disposition"] = 'inline; filename="ejemplo.pdf"'
     return response

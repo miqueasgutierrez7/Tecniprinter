@@ -17,6 +17,7 @@ python manage.py runserver
 
 
 
+
 comando para modificar los css del login
 
 c
@@ -74,3 +75,14 @@ deactivate
     }
 
   pc.style.display = "block";
+
+
+
+  para insertar resultados de consulta sql: 
+
+  with connection.cursor() as cursor:
+        cursor.execute("SELECT numero, cliente FROM orden_trabajo WHERE id = %s", [1])
+        row = cursor.fetchone()
+
+    pdf.cell(0, 10, f"Orden de Trabajo: {row[0]}", ln=True)
+    pdf.cell(0, 10, f"Cliente: {row[1]}", ln=True)
