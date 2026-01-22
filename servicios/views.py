@@ -104,6 +104,19 @@ def recibo_pdf(request):
     pdf.ln(-4)
     pdf.cell(195, 10, txt="Cels : 318-553 9043 / 318-873 3880", ln=True, align="C")
     pdf.ln(-2)
+
+    id_servicio = 2  # variable externa
+
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+        SELECT s."idServicio" AS numero, c.nombre AS cliente, s."fechaIngreso", c.direccion, c.telefono, ri.marca, ri.modelo, ri.serial, ri.falla, ri.solucion, s.observaciones, s."valorServicio" , a.monto FROM servicios_servicio s INNER JOIN clientes_cliente c ON s."idCliente" = c."idCliente" LEFT JOIN servicios_reparacionimpresora ri ON ri."servicio_id" = s."idServicio" LEFT JOIN servicios_abono a ON a."servicio_id" = s."idServicio" WHERE s."idServicio" = %s
+        GROUP BY s."idServicio", c.nombre, s."fechaIngreso", c.direccion, c.telefono,
+                 ri.marca, ri.modelo, ri.serial, ri.falla, ri.solucion, s.observaciones, s."valorServicio", a.monto
+        """,
+            [id_servicio],
+        )
+    row = cursor.fetchone()
     pdf.cell(150, 10, txt="Orden de Trabajo", ln=True, align="C")
     pdf.ln(-9)
     pdf.set_x(110)
