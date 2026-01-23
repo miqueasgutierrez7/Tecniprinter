@@ -1,3 +1,4 @@
+from datetime import datetime
 from multiprocessing import connection
 from django.db import connection
 from fpdf import FPDF
@@ -105,7 +106,7 @@ def recibo_pdf(request):
     pdf.cell(195, 10, txt="Cels : 318-553 9043 / 318-873 3880", ln=True, align="C")
     pdf.ln(-2)
 
-    id_servicio = 2  # variable externa
+    id_servicio = 20  # variable externa
 
     with connection.cursor() as cursor:
         cursor.execute(
@@ -116,42 +117,45 @@ def recibo_pdf(request):
         """,
             [id_servicio],
         )
-    row = cursor.fetchone()
-    pdf.cell(150, 10, txt="Orden de Trabajo", ln=True, align="C")
+        row = cursor.fetchone()
+        columns = [col[0] for col in cursor.description]
+        datos = dict(zip(columns, row))
+    pdf.cell(150, 10, txt="Orden de Trabajo:", ln=True, align="C")
     pdf.ln(-9)
     pdf.set_x(110)
     pdf.set_font("Arial", style="B", size=14)
-    pdf.cell(30, 10, txt="N 1231", border=3, ln=True, align="C")
+    pdf.cell(30, 10, txt=f"N {datos['numero']}", border=3, ln=True, align="C")
     pdf.set_font("Arial", size=12)
     pdf.ln(4)
-
-    pdf.cell(100, 7, "Cliente:", border=1)
-    pdf.cell(95, 7, "Fecha:", border=1)
+    pdf.cell(100, 7, f"Cliente: {datos['cliente']}", border=1)
+    fecha_formateada = datos["fechaIngreso"].strftime("%d-%m-%Y %I:%M")
+    pdf.cell(95, 7, f"Fecha: {fecha_formateada}", border=1)
     pdf.ln()
-    pdf.cell(100, 7, "Direccion:", border=1)
-    pdf.cell(95, 7, "Telefono:", border=1)
+    pdf.cell(100, 7, f"Direccion: {datos['direccion']}", border=1)
+    pdf.cell(95, 7, f"Telefono: {datos['telefono']}", border=1)
     pdf.ln()
-    pdf.cell(100, 7, "Impresora:", border=1)
-    pdf.cell(95, 7, "Serial:", border=1)
+    pdf.cell(100, 7, f"Impresora: {datos['marca']} {datos['modelo']}", border=1)
+    pdf.cell(95, 7, f"Serial: {datos['serial']}", border=1)
     pdf.ln()
-    pdf.cell(195, 7, "Diagnostico:", border=1)
+    pdf.cell(195, 7, f"Diagnostico: {datos['falla']}", border=1)
     pdf.ln()
-    pdf.cell(195, 7, "Trabajo a Realizar:", border=1)
+    pdf.cell(195, 7, f"Trabajo a Realizar: {datos['solucion']}", border=1)
     pdf.ln()
-    pdf.cell(195, 7, "Observaciones:", border=1)
+    pdf.cell(195, 7, f"Observaciones: {datos['observaciones']}", border=1)
     pdf.ln(7)
     pdf.set_x(165)
-    pdf.cell(40, 7, "Valor:", border=1)
+    pdf.cell(40, 7, f"Valor: {datos['valorServicio']}", border=1)
     pdf.ln()
     pdf.set_x(165)
-    pdf.cell(40, 7, "Abono:", border=1)
+    saldo = datos["valorServicio"] - (datos["monto"] or 0)
+    pdf.cell(40, 7, f"Abono: {datos['monto']}", border=1)
     pdf.ln()
     pdf.set_x(10)
     pdf.cell(40, 7, "Firma del Cliente:_______________", border=0)
     pdf.set_x(85)
     pdf.cell(40, 7, "Firma del Tècnico:_______________", border=0)
     pdf.set_x(165)
-    pdf.cell(40, 7, "Saldo:", border=1)
+    pdf.cell(40, 7, f"Saldo: {saldo}", border=1)
     pdf.ln()
 
     pdf_bytes = bytes(pdf.output(dest="S"))
