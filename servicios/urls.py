@@ -9,5 +9,15 @@ urlpatterns = [
         views.ReparacionImpresora_data,
         name="reparacionimpresora_data",
     ),
-    path("pdf/", views.recibo_pdf, name="recibo_pdf"),
+    path(
+        "pdf_impresora/<int:id>/",
+        views.recibo_pdf_impresora,
+        name="recibo_pdf_impresora",
+    ),
+    path(
+        "pdf_computador/<int:id>/",
+        views.recibo_pdf_computador,
+        name="recibo_pdf_computador",
+    ),
+    path("pdf_toner/<int:id>/", views.recibo_pdf_toner, name="recibo_pdf_toner"),
 ]

@@ -417,17 +417,39 @@ async function enviarDatos() {
     const data = await response.json();
 
     if (data.success) {
-      Swal.fire("Éxito", data.message, "success");
-      if (typeof tabla !== "undefined") {
-        tabla.ajax.reload(null, false);
+  Swal.fire({
+    title: "Éxito",
+    text: data.message + "\n\n¿Desea imprimir el recibo?",
+    icon: "success",
+    showCancelButton: true,
+    confirmButtonText: "Sí, imprimir",
+    cancelButtonText: "No",
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33"
+  }).then((result) => {
 
-        mensaje.textContent = "";
-        inputCedula.style.border = "";
+     if (result.isConfirmed) {
+
+      let url = "";
+
+      if (data.tipo === "IMP") {
+        url = `/pdf_impresora/${data.id}/`;
+      } else if (data.tipo === "PC") {
+        url = `/pdf_computador/${data.id}/`;
+      } else if (data.tipo === "TON") {
+        url = `/pdf_toner/${data.id}/`;
       }
+
+      window.open(url, "_blank");
       formulario.reset();
-    } else {
-      Swal.fire("Error", data.message, "error");
     }
+
+    formulario.reset();
+  });
+
+} else {
+  Swal.fire("Error", data.message, "error");
+}
   } catch (error) {
     console.error(error);
     Swal.fire("Error", "No se pudo registrar", "error");

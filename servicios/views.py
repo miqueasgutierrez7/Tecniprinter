@@ -72,7 +72,12 @@ def registrar_servicio(request):
         Abono.objects.create(servicio=servicio, monto=Decimal(abono))
 
     return JsonResponse(
-        {"success": True, "message": "✅ Ingreso registrado exitosamente."}
+        {
+            "success": True,
+            "message": "✅ Ingreso registrado exitosamente.",
+            "id": servicio.idServicio,  # 👈 enviamos el id real
+            "tipo": servicio.tipoServicio,  # 👈 enviamos el tipo también
+        }
     )
 
 
@@ -94,7 +99,8 @@ def ReparacionImpresora_data(request):
     return JsonResponse({"data": data})
 
 
-def recibo_pdf(request):
+def recibo_pdf_impresora(request, id):
+
     pdf = FPDF(orientation="P", unit="mm", format=(216, 140))
     pdf.add_page()
     pdf.image("static/images/logo.jpg", x=65, y=5, w=85)
@@ -106,7 +112,7 @@ def recibo_pdf(request):
     pdf.cell(195, 10, txt="Cels : 318-553 9043 / 318-873 3880", ln=True, align="C")
     pdf.ln(-2)
 
-    id_servicio = 20  # variable externa
+    id_servicio = id  # variable externa
 
     with connection.cursor() as cursor:
         cursor.execute(
@@ -149,13 +155,151 @@ def recibo_pdf(request):
     pdf.ln()
     pdf.set_x(165)
     saldo = datos["valorServicio"] - (datos["monto"] or 0)
-    abono = datos["monto"]
+    abono = datos["monto"] or 0
     pdf.cell(40, 7, f"Abono:${abono:,.0f}".replace(",", "."), border=1)
     pdf.ln()
     pdf.set_x(10)
     pdf.cell(40, 7, "Firma del Cliente:_______________", border=0)
     pdf.set_x(85)
     pdf.cell(40, 7, "Firma del Tècnico:_______________", border=0)
+    pdf.set_x(165)
+    pdf.cell(40, 7, f"Saldo: ${saldo:,.0f}".replace(",", "."), border=1)
+    pdf.ln()
+
+    pdf_bytes = bytes(pdf.output(dest="S"))
+    response = HttpResponse(pdf_bytes, content_type="application/pdf")
+    response["Content-Disposition"] = 'inline; filename="ejemplo.pdf"'
+    return response
+
+
+def recibo_pdf_computador(request, id):
+
+    pdf = FPDF(orientation="P", unit="mm", format=(216, 140))
+    pdf.add_page()
+    pdf.image("static/images/logo.jpg", x=65, y=5, w=85)
+
+    pdf.set_font("Arial", style="I", size=13)
+    pdf.ln(18)
+    pdf.cell(195, 10, txt="Carrera 30 #28-43", ln=True, align="C")
+    pdf.ln(-4)
+    pdf.cell(195, 10, txt="Cels : 318-553 9043 / 318-873 3880", ln=True, align="C")
+    pdf.ln(-2)
+
+    id_servicio = id  # variable externa
+
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+        SELECT s."idServicio" AS numero, c.nombre AS cliente, s."fechaIngreso", c.direccion, c.telefono, rpc.marca, rpc.modelo, rpc.serial, rpc.problema, rpc.solucion, s.observaciones, s."valorServicio" , a.monto FROM servicios_servicio s INNER JOIN clientes_cliente c ON s."idCliente" = c."idCliente" LEFT JOIN servicios_reparacionpc rpc ON rpc."servicio_id" = s."idServicio" LEFT JOIN servicios_abono a ON a."servicio_id" = s."idServicio" WHERE s."idServicio" = %s
+        GROUP BY s."idServicio", c.nombre, s."fechaIngreso", c.direccion, c.telefono,
+                 rpc.marca, rpc.modelo, rpc.serial, rpc.problema, rpc.solucion, s.observaciones, s."valorServicio", a.monto
+        """,
+            [id_servicio],
+        )
+        row = cursor.fetchone()
+        columns = [col[0] for col in cursor.description]
+        datos = dict(zip(columns, row))
+    pdf.cell(150, 10, txt="Orden de Trabajo:", ln=True, align="C")
+    pdf.ln(-9)
+    pdf.set_x(110)
+    pdf.set_font("Arial", style="B", size=14)
+    pdf.cell(30, 8, txt=f"N {datos['numero']}", border=3, ln=True, align="C")
+    pdf.set_font("Arial", size=12)
+    pdf.ln(4)
+    pdf.cell(100, 7, f"Cliente: {datos['cliente']}", border=1)
+    fecha_formateada = datos["fechaIngreso"].strftime("%d-%m-%Y %I:%M")
+    pdf.cell(95, 7, f"Fecha: {fecha_formateada}", border=1)
+    pdf.ln()
+    pdf.cell(100, 7, f"Direccion: {datos['direccion']}", border=1)
+    pdf.cell(95, 7, f"Telefono: {datos['telefono']}", border=1)
+    pdf.ln()
+    pdf.cell(100, 7, f"Computador: {datos['marca']} {datos['modelo']}", border=1)
+    pdf.cell(95, 7, f"Serial: {datos['serial']}", border=1)
+    pdf.ln()
+    pdf.cell(195, 7, f"Diagnostico: {datos['problema']}", border=1)
+    pdf.ln()
+    pdf.cell(195, 7, f"Trabajo a Realizar: {datos['solucion']}", border=1)
+    pdf.ln()
+    pdf.cell(195, 7, f"Observaciones: {datos['observaciones']}", border=1)
+    pdf.ln(8)
+    pdf.set_x(165)
+    valor = datos["valorServicio"] or 0
+    pdf.cell(40, 7, f"Valor: ${valor:,.0f}".replace(",", "."), border=1)
+    pdf.ln()
+    pdf.set_x(165)
+    saldo = datos["valorServicio"] - (datos["monto"] or 0)
+    abono = datos["monto"] or 0
+    pdf.cell(40, 7, f"Abono:${abono:,.0f}".replace(",", "."), border=1)
+    pdf.ln()
+    pdf.set_x(10)
+    pdf.cell(40, 7, "Firma del Cliente:_______________", border=0)
+    pdf.set_x(85)
+    pdf.cell(40, 7, "Firma del Tècnico:_______________", border=0)
+    pdf.set_x(165)
+    pdf.cell(40, 7, f"Saldo: ${saldo:,.0f}".replace(",", "."), border=1)
+    pdf.ln()
+
+    pdf_bytes = bytes(pdf.output(dest="S"))
+    response = HttpResponse(pdf_bytes, content_type="application/pdf")
+    response["Content-Disposition"] = 'inline; filename="ejemplo.pdf"'
+    return response
+
+
+def recibo_pdf_toner(request, id):
+
+    pdf = FPDF(orientation="P", unit="mm", format=(216, 140))
+    pdf.add_page()
+    pdf.image("static/images/logo.jpg", x=65, y=5, w=85)
+
+    pdf.set_font("Arial", style="I", size=13)
+    pdf.ln(18)
+    pdf.cell(195, 10, txt="Carrera 30 #28-43", ln=True, align="C")
+    pdf.ln(-4)
+    pdf.cell(195, 10, txt="Cels : 318-553 9043 / 318-873 3880", ln=True, align="C")
+    pdf.ln(-2)
+
+    id_servicio = id  # variable externa
+
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+        SELECT s."idServicio" AS numero, c.nombre AS cliente, s."fechaIngreso", c.direccion, c.telefono, rt.modelo_toner, s.observaciones, s."valorServicio" , a.monto FROM servicios_servicio s INNER JOIN clientes_cliente c ON s."idCliente" = c."idCliente" LEFT JOIN servicios_recargatoner rt ON rt."servicio_id" = s."idServicio" LEFT JOIN servicios_abono a ON a."servicio_id" = s."idServicio" WHERE s."idServicio" = %s
+        GROUP BY s."idServicio", c.nombre, s."fechaIngreso", c.direccion, c.telefono,
+                 rt.modelo_toner, s.observaciones, s."valorServicio", a.monto
+        """,
+            [id_servicio],
+        )
+        row = cursor.fetchone()
+        columns = [col[0] for col in cursor.description]
+        datos = dict(zip(columns, row))
+    pdf.cell(150, 10, txt="Orden de Trabajo:", ln=True, align="C")
+    pdf.ln(-9)
+    pdf.set_x(110)
+    pdf.set_font("Arial", style="B", size=14)
+    pdf.cell(30, 8, txt=f"N {datos['numero']}", border=3, ln=True, align="C")
+    pdf.set_font("Arial", size=12)
+    pdf.ln(4)
+    pdf.cell(100, 7, f"Cliente: {datos['cliente']}", border=1)
+    fecha_formateada = datos["fechaIngreso"].strftime("%d-%m-%Y %I:%M")
+    pdf.cell(95, 7, f"Fecha: {fecha_formateada}", border=1)
+    pdf.ln()
+    pdf.cell(100, 7, f"Direccion: {datos['direccion']}", border=1)
+    pdf.cell(95, 7, f"Telefono: {datos['telefono']}", border=1)
+    pdf.ln()
+    pdf.cell(195, 7, f"Modelo del Toner: {datos['modelo_toner']}", border=1)
+    pdf.ln()
+
+    pdf.ln(8)
+    pdf.set_x(165)
+    valor = datos["valorServicio"] or 0
+    pdf.cell(40, 7, f"Valor: ${valor:,.0f}".replace(",", "."), border=1)
+    pdf.ln()
+    pdf.set_x(165)
+    saldo = datos["valorServicio"] - (datos["monto"] or 0)
+    abono = datos["monto"] or 0
+    pdf.cell(40, 7, f"Abono:${abono:,.0f}".replace(",", "."), border=1)
+    pdf.ln()
+    pdf.set_x(10)
     pdf.set_x(165)
     pdf.cell(40, 7, f"Saldo: ${saldo:,.0f}".replace(",", "."), border=1)
     pdf.ln()
