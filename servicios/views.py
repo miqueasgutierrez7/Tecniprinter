@@ -165,8 +165,7 @@ def recibo_pdf_impresora(request, id):
     pdf.set_x(165)
     pdf.cell(40, 7, f"Saldo: ${saldo:,.0f}".replace(",", "."), border=1)
     pdf.ln()
-
-    pdf_bytes = bytes(pdf.output(dest="S"))
+    pdf_bytes = pdf.output(dest="S").encode("latin1")  # clásico fpdf
     response = HttpResponse(pdf_bytes, content_type="application/pdf")
     response["Content-Disposition"] = 'inline; filename="ejemplo.pdf"'
     return response
@@ -238,8 +237,7 @@ def recibo_pdf_computador(request, id):
     pdf.set_x(165)
     pdf.cell(40, 7, f"Saldo: ${saldo:,.0f}".replace(",", "."), border=1)
     pdf.ln()
-
-    pdf_bytes = bytes(pdf.output(dest="S"))
+    pdf_bytes = pdf.output(dest="S").encode("latin1")  # clásico fpdf
     response = HttpResponse(pdf_bytes, content_type="application/pdf")
     response["Content-Disposition"] = 'inline; filename="ejemplo.pdf"'
     return response
@@ -303,8 +301,7 @@ def recibo_pdf_toner(request, id):
     pdf.set_x(165)
     pdf.cell(40, 7, f"Saldo: ${saldo:,.0f}".replace(",", "."), border=1)
     pdf.ln()
-
-    pdf_bytes = bytes(pdf.output(dest="S"))
+    pdf_bytes = pdf.output(dest="S").encode("latin1")  # clásico fpdf
     response = HttpResponse(pdf_bytes, content_type="application/pdf")
     response["Content-Disposition"] = 'inline; filename="ejemplo.pdf"'
     return response

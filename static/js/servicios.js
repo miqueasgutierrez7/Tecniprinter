@@ -442,8 +442,10 @@ async function enviarDatos() {
 
       window.open(url, "_blank");
       formulario.reset();
-    }
 
+     
+    }
+    
     formulario.reset();
   });
 
