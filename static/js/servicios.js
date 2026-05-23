@@ -1,11 +1,18 @@
 let tabla;
 
+const formulario = document.getElementById("formulario");
+const btnRegistrar = document.getElementById("btnRegistrar");
+
+const pc = document.getElementById("camposPC");
+const imp = document.getElementById("camposIMP");
+const ton = document.getElementById("camposTON");
+
 $(document).ready(function () {
   console.log("DataTables iniciado correctamente");
   tabla = $("#tabla-servicios").DataTable({
     ajax: {
       url: "/api/reparacionimpresora/",
-      dataSrc: "data"
+      dataSrc: "data",
     },
     columns: [
       { data: "id" },
@@ -37,7 +44,6 @@ $(document).ready(function () {
   });
 });
 
-
 $("#tabla-clientes").on("click", ".editar", function () {
   const id = $(this).data("id");
 
@@ -67,7 +73,7 @@ $("#tabla-clientes").on("click", ".editar", function () {
 
         const ciudadCliente = data.cliente.ciudad;
         const opcion = Array.from(inputCiudad.options).find(
-          (opt) => opt.value === ciudadCliente
+          (opt) => opt.value === ciudadCliente,
         );
 
         if (opcion) {
@@ -83,7 +89,7 @@ $("#tabla-clientes").on("click", ".editar", function () {
             ciudadCliente,
             ciudadCliente,
             true,
-            true
+            true,
           );
           inputCiudadEditar.add(nuevaOpcion);
         }
@@ -99,7 +105,7 @@ $("#tabla-clientes").on("click", ".editar", function () {
       Swal.fire(
         "Error",
         "No se pudo cargar la información del cliente",
-        "error"
+        "error",
       );
     });
 });
@@ -228,7 +234,7 @@ if (inputCedula) {
 
             const ciudadCliente = data.cliente.ciudad;
             const opcion = Array.from(inputCiudad.options).find(
-              (opt) => opt.value === ciudadCliente
+              (opt) => opt.value === ciudadCliente,
             );
 
             if (opcion) {
@@ -244,7 +250,7 @@ if (inputCedula) {
                 ciudadCliente,
                 ciudadCliente,
                 true,
-                true
+                true,
               );
               inputCiudad.add(nuevaOpcion);
             }
@@ -299,9 +305,6 @@ document.addEventListener("DOMContentLoaded", () => {
   mostrarCampos();
   tipoServicio.addEventListener("change", mostrarCampos);
 
-  const formulario = document.getElementById("formulario");
-  const btnRegistrar = document.getElementById("btnRegistrar");
-
   if (!formulario) return;
 
   formulario.addEventListener("submit", async (e) => {
@@ -333,16 +336,8 @@ document.addEventListener("DOMContentLoaded", () => {
             text: "⚠️ Para registrar un servicio de impresora, el modelo y el número de serial son obligatorios.",
           });
 
-          impModelo.setAttribute("required", "required");
-          impSerial.setAttribute("required", "required");
-
-          impModelo.focus();
           return false;
         }
-
-        // Si pasó la validación, los marcamos como requeridos
-        impModelo.setAttribute("required", "required");
-        impSerial.setAttribute("required", "required");
 
         await enviarDatos();
         break;
@@ -357,14 +352,11 @@ document.addEventListener("DOMContentLoaded", () => {
             text: "⚠️ Para registrar un servicio de computadora, el modelo es obligatorios.",
           });
 
-          pcModelo.setAttribute("required", "required");
-          pcModelo.focus();
           return false;
         }
 
         // Si pasó la validación, los marcamos como requeridos
 
-        pcModelo.setAttribute("required", "required");
         await enviarDatos();
         break;
 
@@ -378,14 +370,11 @@ document.addEventListener("DOMContentLoaded", () => {
             text: "⚠️ El modelo del toner es obligatorios.",
           });
 
-          tnModelo.setAttribute("required", "required");
-          tnModelo.focus();
           return false;
         }
 
         // Si pasó la validación, los marcamos como requeridos
 
-        tnModelo.setAttribute("required", "required");
         await enviarDatos();
         break;
 
@@ -397,8 +386,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function enviarDatos() {
-  btnRegistrar.disabled = true;
-  btnRegistrar.textContent = "Registrando...";
+  mensaje.textContent = "";
+  inputCedula.style.border = "";
 
   const formData = new FormData(formulario);
 
@@ -417,47 +406,54 @@ async function enviarDatos() {
     const data = await response.json();
 
     if (data.success) {
-  Swal.fire({
-    title: "Éxito",
-    text: data.message + "\n\n¿Desea imprimir el recibo?",
-    icon: "success",
-    showCancelButton: true,
-    confirmButtonText: "Sí, imprimir",
-    cancelButtonText: "No",
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33"
-  }).then((result) => {
+      Swal.fire({
+        title: "Éxito",
+        text: data.message + "\n\n¿Desea imprimir el recibo?",
+        icon: "success",
+        showCancelButton: true,
+        confirmButtonText: "Sí, imprimir",
+        cancelButtonText: "No",
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let url = "";
 
-     if (result.isConfirmed) {
+          if (data.tipo === "IMP") {
+            url = `/pdf_impresora/${data.id}/`;
 
-      let url = "";
+            formulario.reset();
+          } else if (data.tipo === "PC") {
+            url = `/pdf_computador/${data.id}/`;
+            formulario.reset();
+          } else if (data.tipo === "TON") {
+            url = `/pdf_toner/${data.id}/`;
+            formulario.reset();
+          }
 
-      if (data.tipo === "IMP") {
-        url = `/pdf_impresora/${data.id}/`;
-      } else if (data.tipo === "PC") {
-        url = `/pdf_computador/${data.id}/`;
-      } else if (data.tipo === "TON") {
-        url = `/pdf_toner/${data.id}/`;
-      }
+          window.open(url, "_blank");
+          formulario.reset();
 
-      window.open(url, "_blank");
+          location.reload();
+        }
+
+        formulario.reset();
+
+        $("#tabla-servicios").DataTable().ajax.reload(null, false);
+        $("#modalAgregarCliente").modal("hide");
+      });
+    } else {
+      Swal.fire("Error", data.message, "error");
+
       formulario.reset();
-
-     
     }
-    
-    formulario.reset();
-  });
-
-} else {
-  Swal.fire("Error", data.message, "error");
-}
   } catch (error) {
     console.error(error);
     Swal.fire("Error", "No se pudo registrar", "error");
   } finally {
-    btnRegistrar.disabled = false;
-    btnRegistrar.textContent = "Registrar";
+    $("#tabla-servicios").DataTable().ajax.reload(null, false);
+    $("#modalAgregarCliente").modal("hide");
+    formulario.reset();
   }
 }
 

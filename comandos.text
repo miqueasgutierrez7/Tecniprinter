@@ -1,5 +1,13 @@
 Comando usados para crear este proyecto
 
+activar entorno virtual en viaul estudio code
+
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+ 
+ YES O SI para dar persmiso apra ejecutar es estudio code
+
+env\Scripts\activate.bat
+
 instalar entorno virtual
 python -m venv env
 
