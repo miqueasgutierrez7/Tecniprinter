@@ -7,6 +7,8 @@ const pc = document.getElementById("camposPC");
 const imp = document.getElementById("camposIMP");
 const ton = document.getElementById("camposTON");
 
+
+
 $(document).ready(function () {
   console.log("DataTables iniciado correctamente");
   tabla = $("#tabla-servicios").DataTable({
@@ -21,7 +23,25 @@ $(document).ready(function () {
       { data: "serial" },
       { data: "cliente" },
       { data: "telefono" },
-      { data: "estado" },
+      {
+        data: "estado",
+        render: function (data, type, row) {
+          let color = "";
+          if (data === "Recibido") {
+            color = "#4DA6FF"; // Azul claro
+          } else if (data === "En proceso") {
+            color = "#FFC107"; // Amarillo
+          } else if (data === "Terminado") {
+            color = "#4CAF50"; // Verde
+          }
+          return `<span style="background-color:${color}; 
+                               color:white; 
+                               padding:4px 8px; 
+                               border-radius:4px;">
+                    ${data}
+                  </span>`;
+        },
+      },
       {
         data: null,
         orderable: false,
@@ -37,12 +57,24 @@ $(document).ready(function () {
         },
       },
     ],
+    // 🔑 Aquí pintamos la fila completa según el estado
+    createdRow: function (row, data, dataIndex) {
+      if (data.estado === "Recibido") {
+        $(row).css("background-color", "#E3F2FD"); // Azul muy claro
+      } else if (data.estado === "En proceso") {
+        $(row).css("background-color", "#FFF9C4"); // Amarillo claro
+      } else if (data.estado === "Terminado") {
+        $(row).css("background-color", "#E8F5E9"); // Verde claro
+      }
+    },
     responsive: true,
     language: {
       url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json",
     },
   });
 });
+
+
 
 $("#tabla-clientes").on("click", ".editar", function () {
   const id = $(this).data("id");
