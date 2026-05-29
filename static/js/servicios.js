@@ -28,7 +28,7 @@ $(document).ready(function () {
         render: function (data, type, row) {
           let color = "";
           if (data === "Recibido") {
-            color = "#4DA6FF"; // Azul claro
+            color = "#2c7bd1"; // Azul claro
           } else if (data === "En proceso") {
             color = "#FFC107"; // Amarillo
           } else if (data === "Terminado") {
@@ -57,15 +57,28 @@ $(document).ready(function () {
         },
       },
     ],
-    // 🔑 Aquí pintamos la fila completa según el estado
+    // 🔑 Pintamos la fila completa según el estado
     createdRow: function (row, data, dataIndex) {
+      let bgColor = "";
+      let textColor = "white"; // por defecto
+
       if (data.estado === "Recibido") {
-        $(row).css("background-color", "#E3F2FD"); // Azul muy claro
+        bgColor = "#007bff"; // Azul
       } else if (data.estado === "En proceso") {
-        $(row).css("background-color", "#FFF9C4"); // Amarillo claro
+        bgColor = "#ffc107"; // Amarillo claro
+        textColor = "black"; // mejor contraste sobre amarillo
       } else if (data.estado === "Terminado") {
-        $(row).css("background-color", "#E8F5E9"); // Verde claro
+        bgColor = "#4CAF50"; // Verde
+
+      } else if (data.estado === "No realizado") {
+        bgColor = "#dc3545"; // Verde
       }
+
+      // Aplica el color de fondo y texto a TODAS las celdas de la fila
+      $("td", row).css({
+        "background-color": bgColor,
+        "color": textColor
+      });
     },
     responsive: true,
     language: {
@@ -73,6 +86,7 @@ $(document).ready(function () {
     },
   });
 });
+
 
 
 
