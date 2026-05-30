@@ -14,7 +14,8 @@ from servicios.models import (
     ReparacionImpresora,
     RecargaToner,
 )
-
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
 
 def lista_servicios(request):
     return render(request, "registro.html")
@@ -98,6 +99,36 @@ def ReparacionImpresora_data(request):
         )
     return JsonResponse({"data": data})
 
+
+def obtener_servicioimpresora(request, id):
+    """
+    Devuelve los datos de una reparación de impresora en formato JSON.
+    """
+    if request.method == "GET":
+        try:
+            reparacion = get_object_or_404(ReparacionImpresora.objects.select_related("servicio__cliente"), pk=id)
+            return JsonResponse(
+                {
+                    "success": True,
+                    "servicio": {
+                        "id": reparacion.id,
+                        "marca": reparacion.marca,
+                        "modelo": reparacion.modelo,
+                        "serial": reparacion.serial,
+                        "cliente": reparacion.servicio.cliente.nombre,
+                        "telefono": reparacion.servicio.cliente.telefono,
+                        "estado": reparacion.servicio.get_estado_display(),
+                    },
+                }
+            )
+        except ReparacionImpresora.DoesNotExist:
+            return JsonResponse(
+                {"success": False, "message": "Servicio no encontrado"}, status=404
+            )
+    else:
+        return JsonResponse(
+            {"success": False, "message": "Método no permitido"}, status=405
+        )
 
 def recibo_pdf_impresora(request, id):
 
@@ -241,7 +272,6 @@ def recibo_pdf_computador(request, id):
     response = HttpResponse(pdf_bytes, content_type="application/pdf")
     response["Content-Disposition"] = 'inline; filename="ejemplo.pdf"'
     return response
-
 
 def recibo_pdf_toner(request, id):
 

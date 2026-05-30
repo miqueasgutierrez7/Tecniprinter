@@ -20,4 +20,5 @@ urlpatterns = [
         name="recibo_pdf_computador",
     ),
     path("pdf_toner/<int:id>/", views.recibo_pdf_toner, name="recibo_pdf_toner"),
+    path("servicioimpresora/<int:id>/", views.obtener_servicioimpresora, name="obtener_servicioimpresora"),
 ]
