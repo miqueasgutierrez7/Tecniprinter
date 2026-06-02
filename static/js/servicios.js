@@ -1,3 +1,4 @@
+
 let tabla;
 
 const formulario = document.getElementById("formulario");
@@ -11,7 +12,7 @@ const ton = document.getElementById("camposTON");
 
 $(document).ready(function () {
   console.log("DataTables iniciado correctamente");
-  tabla = $("#tabla-servicios").DataTable({
+  tabla = $("#tabla-serviciosimpresoras").DataTable({
     ajax: {
       url: "/api/reparacionimpresora/",
       dataSrc: "data",
@@ -90,11 +91,14 @@ $(document).ready(function () {
 
 
 
-$("#tabla-clientes").on("click", ".editar", function () {
+$("#tabla-serviciosimpresoras").on("click", ".editar", function () {
+
+   $("#modalEditarServicioImpresora").modal("show");
+
   const id = $(this).data("id");
 
   // Hacer fetch a la vista de Django para obtener los datos del cliente
-  fetch(`/clientes/${id}/`, {
+  fetch(`/servicioimpresora/${id}/`, {
     // Asegúrate que la URL coincida con tu urls.py
     method: "GET",
     headers: {
@@ -141,7 +145,7 @@ $("#tabla-clientes").on("click", ".editar", function () {
         }
 
         // Mostrar modal
-        $("#modalEditarCliente").modal("show");
+        
       } else {
         Swal.fire("Error", data.message, "error");
       }
@@ -337,14 +341,28 @@ document.addEventListener("DOMContentLoaded", () => {
     ton.style.display = "none";
   }
 
+  
+
   function mostrarCampos() {
     ocultarCampos();
     if (tipoServicio.value === "PC") {
+
+      console.log("hola");
+
       pc.style.display = "block";
+      imp.style.display = "none";
+    ton.style.display = "none";
+
+    
     } else if (tipoServicio.value === "IMP") {
       imp.style.display = "block";
+       ton.style.display = "none";
+      pc.style.display = "none";
+
     } else if (tipoServicio.value === "TON") {
       ton.style.display = "block";
+       imp.style.display = "none";
+        pc.style.display = "none";
     }
   }
 

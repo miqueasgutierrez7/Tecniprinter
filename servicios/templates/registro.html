@@ -35,15 +35,10 @@
                 Agregar Ingreso
               </button>
 
-
-
-              
-
-
                <h3 class="box-title text-center text-dark">Impresoras</h3>
 
               <div class="panel-body" id="formularioregistros">
-                <table id="tabla-servicios" class="display table table-bordered">
+                <table id="tabla-serviciosimpresoras" class="display table table-bordered">
   <thead>
     <tr >
       <th>Nº</th>
@@ -66,62 +61,63 @@
       </section>
     </div>
 
-    <!-- Modal Editar Cliente -->
-    <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLabel"
+    <!-- Modal Editar Servicio de Impresora-->
+    <div class="modal fade" id="modalEditarServicioImpresora" tabindex="-1" aria-labelledby="modalEditarClienteLabel"
       aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
           <div class="modal-header">
-            <h5 class="modal-title" id="modalEditarClienteLabel">Editar Cliente</h5>
+            <h5 class="modal-title" id="modalEditarClienteLabel">Editar Servicio de Impresora</h5>
           </div>
 
           <div class="modal-body">
-            <form id="formEditarCliente">
+            <form id="formEditarServicioImpresora">
               <input type="hidden" id="edit-id">
-              <div class="mb-3">
-                <label for="edit-tipoDocumento" class="form-label">Tipo Documento</label>
-                <select id="edit-tipoDocumento" class="form-control" name="tipoDocumento">
-                  <option value="CC">CC</option>
-                  <option value="NIT">NIT</option>
-                  <option value="CE">CE</option>
-                  <option value="PS">PS</option>
-                  <option value="PPT">PPT</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="edit-numeroDocumento" class="form-label">Número Documento</label>
-                <input type="number" id="edit-numeroDocumento" name="documento" class="form-control">
-              </div>
-              <div class="mb-3">
-                <label for="edit-nombre" class="form-label">Nombre</label>
-                <input type="text" id="edit-nombre" name="nombre" class="form-control">
-              </div>
-              <div class="mb-3">
-                <label for="edit-telefono" class="form-label">Teléfono</label>
-                <input type="tel" id="edit-telefono" name="telefono" class="form-control">
-              </div>
-              <div class="mb-3">
-                <label for="edit-correo" class="form-label">Correo</label>
-                <input type="email" id="edit-correo" name="correo" class="form-control">
-              </div>
-              <div class="mb-3">
-                <label for="edit-ciudad" class="form-label">Ciudad</label>
-                <select id="edit-ciudad" name="ciudad" class="form-control" required>
-                  <option value="Palmira" selected>Palmira</option>
-                  <option value="Candelaria">Candelaria</option>
-                  <option value="Florida">Florida</option>
-                  <option value="Pradera">Pradera</option>
-                  <option value="Rozo">Buga</option>
-                  <option value="Guacarí">Guacarí</option>
-                  <option value="El Cerrito">El Cerrito</option>
-                  <option value="Ginebra">Ginebra</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="edit-direccion" class="form-label">Dirección</label>
-                <input type="text" id="edit-direccion" name="direccion" class="form-control">
-              </div>
+
+              <!-- Campos Impresora -->
+              <fieldset id="" class="d-none border rounded p-3 mb-3">
+                <legend class="fs-6 text-center">Datos de la Impresora</legend>
+
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label>Marca de Impresora</label>
+                  <select name="imp_marca" id="impresora_marca" class="form-control form-select">
+                    <option value="">Seleccione una marca</option>
+                    <option value="Epson" selected>Epson</option>
+                    <option value="Canon">Canon</option>
+                    <option value="HP">HP</option>
+                    <option value="Brother">Brother</option>
+                    <option value="Lexmark">Lexmark</option>
+                    <option value="Samsung">Samsung</option>
+                    <option value="Xerox">Xerox</option>
+                    <option value="Ricoh">Ricoh</option>
+                  </select>
+                </div>
+
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label>Modelo</label>
+                  <input type="text" name="imp_modelo" class="form-control mb-2" placeholder="Modelo">
+      
+                </div>
+
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label>Serial</label>
+                  <input type="text" name="imp_serial" class="form-control mb-2" placeholder="Serial">
+                </div>
+
+                <div class="form-group col-lg-6 col-md-6 col-xs-12">
+                  <label>Diagnóstico</label>
+                  <textarea name="imp_diagnostico" class="form-control" rows="2"
+                    placeholder="Descripción de la falla"></textarea>
+                </div>
+
+                <div class="form-group col-lg-6 col-md-6 col-xs-12">
+                  <label>Trabajo a Realizar</label>
+                  <textarea name="imp_solucion" class="form-control" rows="2"
+                    placeholder="Descripción de la solución"></textarea>
+                </div>
+              </fieldset>
+             
             </form>
           </div>
 
@@ -134,7 +130,9 @@
       </div>
     </div>
 
-    <!-- Modal Agregar Cliente -->
+    <!-- Modal Agregar Servicios -->
+
+    
     <div class="modal fade" id="modalAgregarCliente" tabindex="-1" aria-labelledby="modalAgregarClienteLabel"
       aria-hidden="true">
       <div class="modal-dialog modal-lg">
