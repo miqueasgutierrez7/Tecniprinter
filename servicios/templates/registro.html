@@ -6,54 +6,45 @@
   {% include "includes/head.html" %}
 </head>
 
-
-
-
-
 <body class="hold-transition skin-blue sidebar-mini">
   <div class="wrapper">
-
     <!-- Header -->
     {% include "includes/header.html" %}
     <!-- Sidebar -->
     {% include "includes/sidebar.html" %}
 
-    <!-- Content Wrapper -->
     <div class="content-wrapper">
       <section class="content">
-
-
-        
         <div class="row">
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border text-center">
                 <h1 class="box-title text-center text-dark">Orden de Servicios</h1>
               </div>
+
               <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalAgregarCliente">
                 <i class="fa fa-plus-square" aria-hidden="true"></i>
                 Agregar Ingreso
               </button>
 
-               <h3 class="box-title text-center text-dark">Impresoras</h3>
+              <h3 class="box-title text-center text-dark">Impresoras</h3>
 
               <div class="panel-body" id="formularioregistros">
                 <table id="tabla-serviciosimpresoras" class="display table table-bordered">
-  <thead>
-    <tr >
-      <th>Nº</th>
-      <th>Marca</th>
-      <th>Modelo</th>
-      <th>Serial</th>
-      <th>Cliente</th>
-      <th>Telefono</th>
-      <th>Estado</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-
+                  <thead>
+                    <tr>
+                      <th>Nº</th>
+                      <th>Marca</th>
+                      <th>Modelo</th>
+                      <th>Serial</th>
+                      <th>Cliente</th>
+                      <th>Telefono</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -62,26 +53,20 @@
     </div>
 
     <!-- Modal Editar Servicio de Impresora-->
-    <div class="modal fade" id="modalEditarServicioImpresora" tabindex="-1" aria-labelledby="modalEditarClienteLabel"
-      aria-hidden="true">
+    <div class="modal fade" id="modalEditarServicioImpresora" tabindex="-1" aria-labelledby="modalEditarClienteLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
           <div class="modal-header">
             <h5 class="modal-title" id="modalEditarClienteLabel">Editar Servicio de Impresora</h5>
           </div>
-
           <div class="modal-body">
             <form id="formEditarServicioImpresora">
-              <input type="hidden" id="edit-id">
-
-              <!-- Campos Impresora -->
-              <fieldset id="" class="d-none border rounded p-3 mb-3">
+              <input type="hidden"  id="edit_id" />
+              <fieldset class="d-none border rounded p-3 mb-3">
                 <legend class="fs-6 text-center">Datos de la Impresora</legend>
-
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label>Marca de Impresora</label>
-                  <select name="imp_marca" id="impresora_marca" class="form-control form-select">
+                  <select  id="edit_impresora_marca" class="form-control form-select">
                     <option value="">Seleccione una marca</option>
                     <option value="Epson" selected>Epson</option>
                     <option value="Canon">Canon</option>
@@ -93,61 +78,74 @@
                     <option value="Ricoh">Ricoh</option>
                   </select>
                 </div>
-
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label>Modelo</label>
-                  <input type="text" name="imp_modelo" class="form-control mb-2" placeholder="Modelo">
-      
+                  <input type="text" id="edit_imp_modelo" class="form-control mb-2" placeholder="Modelo" />
                 </div>
-
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label>Serial</label>
-                  <input type="text" name="imp_serial" class="form-control mb-2" placeholder="Serial">
+                  <input type="text" name="edit_imp_serial" class="form-control mb-2" placeholder="Serial" />
                 </div>
-
                 <div class="form-group col-lg-6 col-md-6 col-xs-12">
                   <label>Diagnóstico</label>
-                  <textarea name="imp_diagnostico" class="form-control" rows="2"
-                    placeholder="Descripción de la falla"></textarea>
+                  <textarea name="edit_imp_diagnostico" class="form-control" rows="2" placeholder="Descripción de la falla"></textarea>
                 </div>
-
                 <div class="form-group col-lg-6 col-md-6 col-xs-12">
                   <label>Trabajo a Realizar</label>
-                  <textarea name="imp_solucion" class="form-control" rows="2"
-                    placeholder="Descripción de la solución"></textarea>
+                  <textarea name="edit_imp_solucion" class="form-control" rows="2" placeholder="Descripción de la solución"></textarea>
                 </div>
+
+                <!-- Observaciones y datos del servicio -->
+              <div class="form-group col-lg-12 col-md-12 col-xs-12">
+                <label for="observaciones" class="form-label">Observaciones</label>
+                <textarea id="observaciones" name="edit_observaciones" class="form-control" rows="3" placeholder="Detalles adicionales del servicio"></textarea>
+              </div>
+
+              <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                <label for="valorServicio" class="form-label">Valor del Servicio</label>
+                <input type="number" id="valorServicio" name="edit_valorServicio" class="form-control" placeholder="$" />
+              </div>
+              <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                <label for="abono" class="form-label">Abono</label>
+                <input id="abono" name="edit_abono" class="form-control" placeholder="$" />
+              </div>
+              <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                <label for="saldo" class="form-label">Saldo Restante</label>
+                <input id="saldo" name="edit_saldo" class="form-control" placeholder="$" readonly />
+              </div>
+              <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                <label for="id_estado" class="form-label">Estado del Servicio</label>
+                <select class="form-control form-select" id="id_estado" name="edit_estado">
+                  <option value="REC">📥 Recibido</option>
+                  <option value="PRO">⚙️ En proceso</option>
+                  <option value="TER">✅ Terminado</option>
+                  <option value="ENT">📦 Entregado</option>
+                  <option value="NRE">❌ No realizado</option>
+                </select>
+              </div>
+
               </fieldset>
-             
             </form>
           </div>
-
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
             <button type="button" class="btn btn-primary" id="guardarCambiosCliente">Guardar cambios</button>
           </div>
-
         </div>
       </div>
     </div>
 
     <!-- Modal Agregar Servicios -->
-
-    
-    <div class="modal fade" id="modalAgregarCliente" tabindex="-1" aria-labelledby="modalAgregarClienteLabel"
-      aria-hidden="true">
+    <div class="modal fade" id="modalAgregarCliente" tabindex="-1" aria-labelledby="modalAgregarClienteLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
           <div class="modal-header">
             <h4 class="modal-title" id="modalAgregarClienteLabel">Nuevo Ingreso</h4>
           </div>
-
           <div class="modal-body">
             <form action="{% url 'registrar_servicio' %}" method="POST" id="formulario">
               {% csrf_token %}
-
               <h4 class="text-center">Datos del Cliente</h4>
-
               <div class="form-group col-lg-3 col-md-3 col-xs-12">
                 <label>Tipo de Documento</label>
                 <select id="tipoDocumento" name="tipoDocumento" class="form-control" required>
@@ -158,31 +156,26 @@
                   <option value="PPT">PPT</option>
                 </select>
               </div>
-
               <div class="form-group col-lg-3 col-md-3 col-xs-12">
                 <label>Número de Documento</label>
-                <input class="form-control" type="number" name="documento" id="documento" placeholder="" required>
-                
+                <input class="form-control" type="number" name="documento" id="documento" placeholder="" required />
               </div>
-
               <div class="form-group col-lg-3 col-md-3 col-xs-12">
                 <label>Nombre</label>
-                <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" required>
+                <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" required />
               </div>
-
               <div class="form-group col-lg-3 col-md-3 col-xs-12">
                 <label>Teléfono</label>
-                <input class="form-control" type="tel" name="telefono" id="telefono" placeholder="Teléfono" >
+                <input class="form-control" type="tel" name="telefono" id="telefono" placeholder="Teléfono" />
               </div>
-<div id="mensaje"></div>
+              <div id="mensaje"></div>
               <div class="form-group col-lg-4 col-md-4 col-xs-12">
                 <label>Correo</label>
-                <input class="form-control" type="email" name="correo" id="correo" placeholder="Correo">
+                <input class="form-control" type="email" name="correo" id="correo" placeholder="Correo" />
               </div>
-
               <div class="form-group col-lg-4 col-md-4 col-xs-12">
                 <label>Ciudad</label>
-                <select id="ciudad" name="ciudad" class="form-control" >
+                <select id="ciudad" name="ciudad" class="form-control">
                   <option value="Palmira" selected>Palmira</option>
                   <option value="Candelaria">Candelaria</option>
                   <option value="Florida">Florida</option>
@@ -193,12 +186,10 @@
                   <option value="Ginebra">Ginebra</option>
                 </select>
               </div>
-
               <div class="form-group col-lg-4 col-md-4 col-xs-12">
                 <label>Dirección</label>
-                <input class="form-control" type="text" name="direccion" id="direccion" placeholder="Dirección">
+                <input class="form-control" type="text" name="direccion" id="direccion" placeholder="Dirección" />
               </div>
-
               <div class="mb-3">
                 <label for="tipoServicio" class="form-label">Tipo de Servicio</label>
                 <select id="tipoServicio" name="tipoServicio" class="form-control" onchange="mostrarCampos()" required>
@@ -233,34 +224,27 @@
                     <option value="Otro">Otro</option>
                   </select>
                 </div>
-
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label>Modelo</label>
-                  <input type="text" name="pc_modelo" class="form-control mb-2" placeholder="Modelo">
+                  <input type="text" name="pc_modelo" class="form-control mb-2" placeholder="Modelo" />
                 </div>
-
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label>Serial</label>
-                  <input type="text" name="pc_serial" class="form-control mb-2" placeholder="Serial">
+                  <input type="text" name="pc_serial" class="form-control mb-2" placeholder="Serial" />
                 </div>
-
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label>Diagnóstico</label>
-                  <textarea name="pc_problema" class="form-control" rows="2"
-                    placeholder="Descripción del problema"></textarea>
+                  <textarea name="pc_problema" class="form-control" rows="2" placeholder="Descripción del problema"></textarea>
                 </div>
-
                 <div class="form-group col-lg-8 col-md-8 col-xs-12">
-                   <label>Trabajo a realizar</label>
-                  <textarea name="pc_solucion" class="form-control" rows="2"
-                    placeholder="Descripción de la solución"></textarea>
+                  <label>Trabajo a realizar</label>
+                  <textarea name="pc_solucion" class="form-control" rows="2" placeholder="Descripción de la solución"></textarea>
                 </div>
               </div>
 
               <!-- Campos Impresora -->
               <fieldset id="camposIMP" class="d-none border rounded p-3 mb-3">
                 <legend class="fs-6 text-center">Datos de la Impresora</legend>
-
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label>Marca de Impresora</label>
                   <select name="imp_marca" id="impresora_marca" class="form-control form-select">
@@ -275,28 +259,21 @@
                     <option value="Ricoh">Ricoh</option>
                   </select>
                 </div>
-
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label>Modelo</label>
-                  <input type="text" name="imp_modelo" class="form-control mb-2" placeholder="Modelo">
-      
+                  <input type="text" name="imp_modelo" class="form-control mb-2" placeholder="Modelo" />
                 </div>
-
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label>Serial</label>
-                  <input type="text" name="imp_serial" class="form-control mb-2" placeholder="Serial">
+                  <input type="text" name="imp_serial" class="form-control mb-2" placeholder="Serial" />
                 </div>
-
                 <div class="form-group col-lg-6 col-md-6 col-xs-12">
                   <label>Diagnóstico</label>
-                  <textarea name="imp_diagnostico" class="form-control" rows="2"
-                    placeholder="Descripción de la falla"></textarea>
+                  <textarea name="imp_diagnostico" class="form-control" rows="2" placeholder="Descripción de la falla"></textarea>
                 </div>
-
                 <div class="form-group col-lg-6 col-md-6 col-xs-12">
                   <label>Trabajo a Realizar</label>
-                  <textarea name="imp_solucion" class="form-control" rows="2"
-                    placeholder="Descripción de la solución"></textarea>
+                  <textarea name="imp_solucion" class="form-control" rows="2" placeholder="Descripción de la solución"></textarea>
                 </div>
               </fieldset>
 
@@ -304,41 +281,30 @@
               <div id="camposTON">
                 <legend class="fs-6 text-center">Datos del Tóner</legend>
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
-                  <input type="text" name="toner_modelo" class="form-control" placeholder="Modelo del tóner">
+                  <input type="text" name="toner_modelo" class="form-control" placeholder="Modelo del tóner" />
                 </div>
-                <div class="form-group col-lg-4 col-md-4 col-xs-12">
-                  
-                </div>
-                <div class="form-group col-lg-4 col-md-4 col-xs-12">
-                  
-                </div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12"></div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12"></div>
               </div>
 
               <!-- Observaciones y datos del servicio -->
               <div class="form-group col-lg-12 col-md-12 col-xs-12">
-                 <legend class="text-center">Datos del Servicio</legend>
                 <label for="observaciones" class="form-label">Observaciones</label>
-                <textarea id="observaciones" name="observaciones" class="form-control" rows="3"
-                  placeholder="Detalles adicionales del servicio"></textarea>
+                <textarea id="observaciones" name="observaciones" class="form-control" rows="3" placeholder="Detalles adicionales del servicio"></textarea>
               </div>
-
-             
 
               <div class="form-group col-lg-4 col-md-4 col-xs-12">
                 <label for="valorServicio" class="form-label">Valor del Servicio</label>
-                <input type="number" id="valorServicio" name="valorServicio" class="form-control" placeholder="$">
+                <input type="number" id="valorServicio" name="valorServicio" class="form-control" placeholder="$" />
               </div>
-
               <div class="form-group col-lg-4 col-md-4 col-xs-12">
                 <label for="abono" class="form-label">Abono</label>
-                <input id="abono" name="abono" class="form-control" placeholder="$">
+                <input id="abono" name="abono" class="form-control" placeholder="$" />
               </div>
-
               <div class="form-group col-lg-4 col-md-4 col-xs-12">
                 <label for="saldo" class="form-label">Saldo Restante</label>
-                <input id="saldo" name="saldo" class="form-control" placeholder="$" readonly>
+                <input id="saldo" name="saldo" class="form-control" placeholder="$" readonly />
               </div>
-
               <div class="form-group col-lg-4 col-md-4 col-xs-12">
                 <label for="id_estado" class="form-label">Estado del Servicio</label>
                 <select class="form-control form-select" id="id_estado" name="estado">
@@ -349,8 +315,8 @@
                   <option value="NRE">❌ No realizado</option>
                 </select>
               </div>
-               </div>
-          <div class="modal-footer">
+
+              <div class="modal-footer">
                 <div class="d-flex justify-content-end">
                   <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
                   <button id="btnRegistrar" type="submit" class="btn btn-primary">Registrar</button>
@@ -358,7 +324,6 @@
               </div>
             </form>
           </div>
-
         </div>
       </div>
     </div>
@@ -367,4 +332,5 @@
     <script src="{% static 'js/servicios.js' %}"></script>
   </div>
 </body>
+
 </html>

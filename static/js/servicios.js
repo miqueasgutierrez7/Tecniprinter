@@ -35,9 +35,9 @@ $(document).ready(function () {
           } else if (data === "Terminado") {
             color = "#4CAF50"; // Verde
           }
-          return `<span style="background-color:${color}; 
-                               color:white; 
-                               padding:4px 8px; 
+          return `<span style="background-color:${color};
+                               color:white;
+                               padding:4px 8px;
                                border-radius:4px;">
                     ${data}
                   </span>`;
@@ -97,6 +97,8 @@ $("#tabla-serviciosimpresoras").on("click", ".editar", function () {
 
   const id = $(this).data("id");
 
+  console.log("ID del servicio a editar:", id);
+
   // Hacer fetch a la vista de Django para obtener los datos del cliente
   fetch(`/servicioimpresora/${id}/`, {
     // Asegúrate que la URL coincida con tu urls.py
@@ -109,43 +111,13 @@ $("#tabla-serviciosimpresoras").on("click", ".editar", function () {
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
+
         // Llenar los campos del modal con los datos del cliente
-        $("#edit-id").val(data.cliente.idCliente);
-        $("#edit-tipoDocumento").val(data.cliente.tipoDocumento);
-        $("#edit-nombre").val(data.cliente.nombre);
-        $("#edit-numeroDocumento").val(data.cliente.numeroDocumento);
-        $("#edit-telefono").val(data.cliente.telefono);
-        $("#edit-correo").val(data.cliente.correo);
-        $("#edit-ciudad").val(data.cliente.ciudad);
-        $("#edit-direccion").val(data.cliente.direccion);
+        $("#edit_id").val(data.servicio.id);
+        $("#edit_imp_modelo").val(data.servicio.modelo);
 
-        const inputCiudadEditar = document.getElementById("edit-ciudad");
 
-        const ciudadCliente = data.cliente.ciudad;
-        const opcion = Array.from(inputCiudad.options).find(
-          (opt) => opt.value === ciudadCliente,
-        );
 
-        if (opcion) {
-          // Si existe la ciudad en la lista, seleccionarla
-          inputCiudadEditar.value = ciudadCliente;
-
-          if ($(inputCiudadEditar).hasClass("selectpicker")) {
-            $(inputCiudadEditar).selectpicker("refresh");
-          }
-        } else {
-          // Si no existe, crear una nueva opción y seleccionarla
-          const nuevaOpcion = new Option(
-            ciudadCliente,
-            ciudadCliente,
-            true,
-            true,
-          );
-          inputCiudadEditar.add(nuevaOpcion);
-        }
-
-        // Mostrar modal
-        
       } else {
         Swal.fire("Error", data.message, "error");
       }
@@ -341,7 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ton.style.display = "none";
   }
 
-  
+
 
   function mostrarCampos() {
     ocultarCampos();
@@ -353,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
       imp.style.display = "none";
     ton.style.display = "none";
 
-    
+
     } else if (tipoServicio.value === "IMP") {
       imp.style.display = "block";
        ton.style.display = "none";

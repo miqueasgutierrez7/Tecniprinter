@@ -20,7 +20,6 @@ from django.shortcuts import get_object_or_404
 def lista_servicios(request):
     return render(request, "registro.html")
 
-
 def registrar_servicio(request):
     documento = request.POST.get("documento")
     cliente, creado = Cliente.objects.get_or_create(
@@ -129,7 +128,6 @@ def obtener_servicioimpresora(request, id):
         return JsonResponse(
             {"success": False, "message": "Método no permitido"}, status=405
         )
-
 def recibo_pdf_impresora(request, id):
 
     pdf = FPDF(orientation="P", unit="mm", format=(216, 140))
