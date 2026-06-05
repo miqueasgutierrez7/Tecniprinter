@@ -3,7 +3,7 @@ Comando usados para crear este proyecto
 activar entorno virtual en viaul estudio code
 
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
- 
+
  YES O SI para dar persmiso apra ejecutar es estudio code
 
 env\Scripts\activate.bat
@@ -86,7 +86,7 @@ deactivate
 
 
 
-  para insertar resultados de consulta sql: 
+  para insertar resultados de consulta sql:
 
   with connection.cursor() as cursor:
         cursor.execute("SELECT numero, cliente FROM orden_trabajo WHERE id = %s", [1])

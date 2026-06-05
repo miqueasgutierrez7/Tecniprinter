@@ -1,0 +1,9 @@
+/* Estilos personalizados para el proyecto Tecniprinter */
+
+/* Estilos para los formularios */
+
+.form-control {
+    border-radius: 3;
+    box-shadow: none;
+    border-color: #041e53;
+}

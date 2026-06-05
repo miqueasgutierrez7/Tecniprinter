@@ -8,7 +8,7 @@ const pc = document.getElementById("camposPC");
 const imp = document.getElementById("camposIMP");
 const ton = document.getElementById("camposTON");
 
-
+console.log("Archivo servicios.js cargado correctamente");
 
 $(document).ready(function () {
   console.log("DataTables iniciado correctamente");
@@ -89,17 +89,15 @@ $(document).ready(function () {
 });
 
 
-
+// Definimos la funcion para invocar el modal de edicion y cargar los datos del cliente
 
 $("#tabla-serviciosimpresoras").on("click", ".editar", function () {
-
-   $("#modalEditarServicioImpresora").modal("show");
-
+  $("#modalEditarServicioImpresora").modal("show");
   const id = $(this).data("id");
-
   console.log("ID del servicio a editar:", id);
 
-  // Hacer fetch a la vista de Django para obtener los datos del cliente
+  // Hacer fetch a la vista de Django para obtener los datos del servicio por su ID
+
   fetch(`/servicioimpresora/${id}/`, {
     // Asegúrate que la URL coincida con tu urls.py
     method: "GET",
@@ -115,8 +113,55 @@ $("#tabla-serviciosimpresoras").on("click", ".editar", function () {
         // Llenar los campos del modal con los datos del cliente
         $("#edit_id").val(data.servicio.id);
         $("#edit_imp_modelo").val(data.servicio.modelo);
+        $("#edit_imp_serial").val(data.servicio.serial);
+        $("#edit_imp_diagnostico").val(data.servicio.diagnostico);
+        $("#edit_imp_solucion").val(data.servicio.solucion);
+        $("#edit_observaciones").val(data.servicio.observaciones);
+        $("#edit_valorServicio").val(data.servicio.valorServicio);
+        $("#edit_abono").val(data.servicio.abonos);
+        $("#edit_saldo").val(data.servicio.saldo);
 
 
+        // Manejo especial parameñ campo ""marca de impresora"
+
+        const inputMarcaEditar = document.getElementById('edit_impr_marca');
+        const marcaImpresora = data.servicio.marca;
+
+        if (inputMarcaEditar) {
+          const opcion = Array.from(inputMarcaEditar.options).find(opt => opt.value === marcaImpresora);
+
+          // Si existe el modelo en la lista, seleccionarla
+          if (opcion) {
+            inputMarcaEditar.value = marcaImpresora;
+            if ($(inputMarcaEditar).hasClass('selectpicker')) {
+              $(inputMarcaEditar).selectpicker('refresh');
+            }
+          } else {
+            const nuevaOpcion = new Option(marcaImpresora, marcaImpresora, true, true);
+            inputMarcaEditar.add(nuevaOpcion);
+          }
+        }
+
+        // El estado del servicio
+
+        const inputEstadoEditar = document.getElementById('edit_estado');
+        const estadoServicio = data.servicio.estado;
+
+        if (inputEstadoEditar) {
+          const opcionEstado = Array.from(inputEstadoEditar.options).find(opt => opt.value === estadoServicio);
+
+          if (opcionEstado) {
+            inputEstadoEditar.value = estadoServicio;
+            if ($(inputEstadoEditar).hasClass('selectpicker')) {
+              $(inputEstadoEditar).selectpicker('refresh');
+            }
+          } else {
+            const nuevaOpcionEstado = new Option(estadoServicio, estadoServicio, true, true);
+            inputEstadoEditar.add(nuevaOpcionEstado);
+          }
+        }
+
+        console.log("Estado del servicio:", estadoServicio);
 
       } else {
         Swal.fire("Error", data.message, "error");
@@ -323,18 +368,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       pc.style.display = "block";
       imp.style.display = "none";
-    ton.style.display = "none";
+      ton.style.display = "none";
 
 
     } else if (tipoServicio.value === "IMP") {
       imp.style.display = "block";
-       ton.style.display = "none";
+      ton.style.display = "none";
       pc.style.display = "none";
 
     } else if (tipoServicio.value === "TON") {
       ton.style.display = "block";
-       imp.style.display = "none";
-        pc.style.display = "none";
+      imp.style.display = "none";
+      pc.style.display = "none";
     }
   }
 

@@ -2,11 +2,11 @@ let tabla;
 
 
 
-$(document).ready(function() {
+$(document).ready(function () {
     console.log("DataTables iniciado correctamente");
     tabla = $('#tabla-clientes').DataTable({
         ajax: '/api/clientes/',
-         dataSrc: 'data' ,
+        dataSrc: 'data',
         columns: [
             { data: 'idCliente' },
             { data: 'tipoDocumento' },
@@ -41,7 +41,7 @@ $(document).ready(function() {
 
 
 
-$('#tabla-clientes').on('click', '.editar', function() {
+$('#tabla-clientes').on('click', '.editar', function () {
     const id = $(this).data('id');
 
     // Hacer fetch a la vista de Django para obtener los datos del cliente
@@ -52,53 +52,49 @@ $('#tabla-clientes').on('click', '.editar', function() {
             'X-Requested-With': 'XMLHttpRequest'
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Llenar los campos del modal con los datos del cliente
-            $('#edit-id').val(data.cliente.idCliente);
-            $('#edit-tipoDocumento').val(data.cliente.tipoDocumento);
-            $('#edit-nombre').val(data.cliente.nombre);
-            $('#edit-numeroDocumento').val(data.cliente.numeroDocumento);
-            $('#edit-telefono').val(data.cliente.telefono);
-            $('#edit-correo').val(data.cliente.correo);
-            $('#edit-ciudad').val(data.cliente.ciudad);
-            $('#edit-direccion').val(data.cliente.direccion);
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Llenar los campos del modal con los datos del cliente
+                $('#edit-id').val(data.cliente.idCliente);
+                $('#edit-tipoDocumento').val(data.cliente.tipoDocumento);
+                $('#edit-nombre').val(data.cliente.nombre);
+                $('#edit-numeroDocumento').val(data.cliente.numeroDocumento);
+                $('#edit-telefono').val(data.cliente.telefono);
+                $('#edit-correo').val(data.cliente.correo);
+                $('#edit-ciudad').val(data.cliente.ciudad);
+                $('#edit-direccion').val(data.cliente.direccion);
 
-            const inputCiudadEditar = document.getElementById('edit-ciudad');
+                // Manejar el caso de la ciudad: si no existe en el select, agregarla
 
+                const inputCiudadEditar = document.getElementById('edit-ciudad');
+                const ciudadCliente = data.cliente.ciudad;
+                const opcion = Array.from(inputCiudad.options).find(opt => opt.value === ciudadCliente);
 
+                if (opcion) {
+                    // Si existe la ciudad en la lista, seleccionarla
+                    inputCiudadEditar.value = ciudadCliente;
 
-            const ciudadCliente = data.cliente.ciudad;
-            const opcion = Array.from(inputCiudad.options).find(opt => opt.value === ciudadCliente);
+                    if ($(inputCiudadEditar).hasClass('selectpicker')) {
+                        $(inputCiudadEditar).selectpicker('refresh');
+                    }
 
-            if (opcion) {
-              // Si existe la ciudad en la lista, seleccionarla
-              inputCiudadEditar.value = ciudadCliente;
+                } else {
+                    // Si no existe, crear una nueva opción y seleccionarla
+                    const nuevaOpcion = new Option(ciudadCliente, ciudadCliente, true, true);
+                    inputCiudadEditar.add(nuevaOpcion);
+                }
 
-              if ($(inputCiudadEditar).hasClass('selectpicker')) {
-    $(inputCiudadEditar).selectpicker('refresh');
-  }
-
+                // Mostrar modal
+                $('#modalEditarCliente').modal('show');
             } else {
-              // Si no existe, crear una nueva opción y seleccionarla
-              const nuevaOpcion = new Option(ciudadCliente, ciudadCliente, true, true);
-              inputCiudadEditar.add(nuevaOpcion);
+                Swal.fire('Error', data.message, 'error');
             }
-
-
-
-
-            // Mostrar modal
-            $('#modalEditarCliente').modal('show');
-        } else {
-            Swal.fire('Error', data.message, 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error al obtener cliente:', error);
-        Swal.fire('Error', 'No se pudo cargar la información del cliente', 'error');
-    });
+        })
+        .catch(error => {
+            console.error('Error al obtener cliente:', error);
+            Swal.fire('Error', 'No se pudo cargar la información del cliente', 'error');
+        });
 });
 
 
@@ -205,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnRegistrar.textContent = "Enviando...";
         const formData = new FormData(formulario);
 
-        
+
 
         try {
             const response = await fetch("registrar/", {
@@ -221,25 +217,25 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
 
             if (data.success) {
-               
-
-                 Swal.fire({
-        title: '¡Registro exitoso!',
-        text: data.message,
-        icon: 'success',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#3085d6',
-        timer: 2500,
-        timerProgressBar: true
-    });
 
 
+                Swal.fire({
+                    title: '¡Registro exitoso!',
+                    text: data.message,
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#3085d6',
+                    timer: 2500,
+                    timerProgressBar: true
+                });
 
-      if (tabla) {
-        tabla.ajax.reload(null, false); // false = mantiene la página actual
-    }
 
-    
+
+                if (tabla) {
+                    tabla.ajax.reload(null, false); // false = mantiene la página actual
+                }
+
+
 
                 formulario.reset();
 
@@ -267,94 +263,94 @@ const inputDireccion = document.getElementById('direccion');
 
 
 if (inputCedula) {
-  inputCedula.addEventListener("input", () => {
-    const valor = inputCedula.value.trim();
+    inputCedula.addEventListener("input", () => {
+        const valor = inputCedula.value.trim();
 
-    if (valor.length > 0) {
-      fetch(`/validar-cedula/?documento=${valor}`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.error) {
-            mensaje.textContent = data.error;
-            mensaje.style.color = "orange";
-            return;
-          }
+        if (valor.length > 0) {
+            fetch(`/validar-cedula/?documento=${valor}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        mensaje.textContent = data.error;
+                        mensaje.style.color = "orange";
+                        return;
+                    }
 
-          if (data.existe) {
+                    if (data.existe) {
 
-             console.log(data)
-
-
-               document.getElementById('btnRegistrar').style.display = 'none';
+                        console.log(data)
 
 
-
-            mensaje.textContent = "⚠️ Este Numero de Documento ya está registrado";
-            mensaje.style.color = "red";
-            inputCedula.style.border = '2px solid red';
-
-             inputNombre.value = data.cliente.nombre;
-             inputTelefono.value = data.cliente.telefono;
-             inputCorreo.value = data.cliente.correo;
-             inputDireccion.value = data.cliente.direccion;
-
-             // Bloqueamos los campos
-
-             document.getElementById("nombre").disabled = true;
-             document.getElementById("telefono").disabled = true;
-             document.getElementById("correo").disabled = true;
-    
-             document.getElementById("direccion").disabled = true;
+                        document.getElementById('btnRegistrar').style.display = 'none';
 
 
 
-            const ciudadCliente = data.cliente.ciudad;
-            const opcion = Array.from(inputCiudad.options).find(opt => opt.value === ciudadCliente);
+                        mensaje.textContent = "⚠️ Este Numero de Documento ya está registrado";
+                        mensaje.style.color = "red";
+                        inputCedula.style.border = '2px solid red';
 
-            if (opcion) {
-              // Si existe la ciudad en la lista, seleccionarla
-              inputCiudad.value = ciudadCliente;
+                        inputNombre.value = data.cliente.nombre;
+                        inputTelefono.value = data.cliente.telefono;
+                        inputCorreo.value = data.cliente.correo;
+                        inputDireccion.value = data.cliente.direccion;
 
-              if ($(inputCiudad).hasClass('selectpicker')) {
-    $(inputCiudad).selectpicker('refresh');
-  }
+                        // Bloqueamos los campos
 
-            } else {
+                        document.getElementById("nombre").disabled = true;
+                        document.getElementById("telefono").disabled = true;
+                        document.getElementById("correo").disabled = true;
 
-              
-              // Si no existe, crear una nueva opción y seleccionarla
-              const nuevaOpcion = new Option(ciudadCliente, ciudadCliente, true, true);
-              inputCiudad.add(nuevaOpcion);
-            }
+                        document.getElementById("direccion").disabled = true;
 
 
-        x
+
+                        const ciudadCliente = data.cliente.ciudad;
+                        const opcion = Array.from(inputCiudad.options).find(opt => opt.value === ciudadCliente);
+
+                        if (opcion) {
+                            // Si existe la ciudad en la lista, seleccionarla
+                            inputCiudad.value = ciudadCliente;
+
+                            if ($(inputCiudad).hasClass('selectpicker')) {
+                                $(inputCiudad).selectpicker('refresh');
+                            }
+
+                        } else {
 
 
-          } else {
+                            // Si no existe, crear una nueva opción y seleccionarla
+                            const nuevaOpcion = new Option(ciudadCliente, ciudadCliente, true, true);
+                            inputCiudad.add(nuevaOpcion);
+                        }
 
 
-             inputNombre.value = '';
-             inputTelefono.value = '';
-             inputCorreo.value = '';
-             inputDireccion.value = '';
+                        x
 
 
-            document.getElementById('btnRegistrar').style.display = '';
-    document.getElementById("nombre").disabled = false;
-    document.getElementById("telefono").disabled = false;
-    document.getElementById("correo").disabled = false;
-    document.getElementById("ciudad").disabled = false;
-    document.getElementById("direccion").disabled = false;
+                    } else {
 
-            mensaje.textContent ='';
-             inputCedula.style.border = ''; 
-            
-          }
-        })
-        .catch((err) => console.error("Error al validar cédula:", err));
-    } else {
-      mensaje.textContent = "";
-    }
-  });
+
+                        inputNombre.value = '';
+                        inputTelefono.value = '';
+                        inputCorreo.value = '';
+                        inputDireccion.value = '';
+
+
+                        document.getElementById('btnRegistrar').style.display = '';
+                        document.getElementById("nombre").disabled = false;
+                        document.getElementById("telefono").disabled = false;
+                        document.getElementById("correo").disabled = false;
+                        document.getElementById("ciudad").disabled = false;
+                        document.getElementById("direccion").disabled = false;
+
+                        mensaje.textContent = '';
+                        inputCedula.style.border = '';
+
+                    }
+                })
+                .catch((err) => console.error("Error al validar cédula:", err));
+        } else {
+            mensaje.textContent = "";
+        }
+    });
 }

@@ -66,9 +66,9 @@
                 <legend class="fs-6 text-center">Datos de la Impresora</legend>
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label>Marca de Impresora</label>
-                  <select  id="edit_impresora_marca" class="form-control form-select">
+                  <select  id="edit_impr_marca" class="form-control form-select">
                     <option value="">Seleccione una marca</option>
-                    <option value="Epson" selected>Epson</option>
+                    <option value="Epson">Epson</option>
                     <option value="Canon">Canon</option>
                     <option value="HP">HP</option>
                     <option value="Brother">Brother</option>
@@ -84,38 +84,38 @@
                 </div>
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label>Serial</label>
-                  <input type="text" name="edit_imp_serial" class="form-control mb-2" placeholder="Serial" />
+                  <input type="text" id="edit_imp_serial" class="form-control mb-2" placeholder="Serial" />
                 </div>
                 <div class="form-group col-lg-6 col-md-6 col-xs-12">
                   <label>Diagnóstico</label>
-                  <textarea name="edit_imp_diagnostico" class="form-control" rows="2" placeholder="Descripción de la falla"></textarea>
+                  <textarea id="edit_imp_diagnostico" class="form-control" rows="2" placeholder="Descripción de la falla"></textarea>
                 </div>
                 <div class="form-group col-lg-6 col-md-6 col-xs-12">
                   <label>Trabajo a Realizar</label>
-                  <textarea name="edit_imp_solucion" class="form-control" rows="2" placeholder="Descripción de la solución"></textarea>
+                  <textarea id="edit_imp_solucion" class="form-control" rows="2" placeholder="Descripción de la solución"></textarea>
                 </div>
 
                 <!-- Observaciones y datos del servicio -->
               <div class="form-group col-lg-12 col-md-12 col-xs-12">
                 <label for="observaciones" class="form-label">Observaciones</label>
-                <textarea id="observaciones" name="edit_observaciones" class="form-control" rows="3" placeholder="Detalles adicionales del servicio"></textarea>
+                <textarea id="edit_observaciones" class="form-control" rows="3" placeholder="Detalles adicionales del servicio"></textarea>
               </div>
 
               <div class="form-group col-lg-4 col-md-4 col-xs-12">
                 <label for="valorServicio" class="form-label">Valor del Servicio</label>
-                <input type="number" id="valorServicio" name="edit_valorServicio" class="form-control" placeholder="$" />
+                <input type="number" id="edit_valorServicio" class="form-control" placeholder="$" />
               </div>
               <div class="form-group col-lg-4 col-md-4 col-xs-12">
                 <label for="abono" class="form-label">Abono</label>
-                <input id="abono" name="edit_abono" class="form-control" placeholder="$" />
+                <input id="edit_abono" class="form-control" placeholder="$" />
               </div>
               <div class="form-group col-lg-4 col-md-4 col-xs-12">
                 <label for="saldo" class="form-label">Saldo Restante</label>
-                <input id="saldo" name="edit_saldo" class="form-control" placeholder="$" readonly />
+                <input id="edit_saldo" class="form-control" placeholder="$" readonly />
               </div>
               <div class="form-group col-lg-4 col-md-4 col-xs-12">
-                <label for="id_estado" class="form-label">Estado del Servicio</label>
-                <select class="form-control form-select" id="id_estado" name="edit_estado">
+                <label for="edit_estado" class="form-label">Estado del Servicio</label>
+                <select class="form-control form-select" id="edit_estado" name="edit_estado">
                   <option value="REC">📥 Recibido</option>
                   <option value="PRO">⚙️ En proceso</option>
                   <option value="TER">✅ Terminado</option>

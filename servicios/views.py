@@ -115,7 +115,12 @@ def obtener_servicioimpresora(request, id):
                         "modelo": reparacion.modelo,
                         "serial": reparacion.serial,
                         "cliente": reparacion.servicio.cliente.nombre,
-                        "telefono": reparacion.servicio.cliente.telefono,
+                        "diagnostico": reparacion.falla,
+                        "solucion": reparacion.solucion,
+                        "observaciones": reparacion.servicio.observaciones,
+                        "valorServicio": str(reparacion.servicio.valorServicio),
+                        "abonos": str(reparacion.servicio.total_abonado()),
+                        "saldo": str(reparacion.servicio.saldo_pendiente()),
                         "estado": reparacion.servicio.get_estado_display(),
                     },
                 }
