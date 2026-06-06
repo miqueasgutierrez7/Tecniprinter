@@ -34,7 +34,7 @@ def registrar_servicio(request):
         },
     )
 
-    servicio: Servicio = Servicio.objects.create(
+    servicio = Servicio.objects.create(
         cliente=cliente,
         tipoServicio=request.POST.get("tipoServicio"),
         observaciones=request.POST.get("observaciones"),
@@ -67,16 +67,19 @@ def registrar_servicio(request):
             modelo_toner=request.POST.get("toner_modelo"),
         )
 
+    # Manejo del abono
     abono = request.POST.get("abono")
-    if abono and Decimal(abono) > 0:
-        Abono.objects.create(servicio=servicio, monto=Decimal(abono))
+    if not abono or abono.strip() == "":
+        abono = "0"
+
+    Abono.objects.create(servicio=servicio, monto=Decimal(abono))
 
     return JsonResponse(
         {
             "success": True,
             "message": "✅ Ingreso registrado exitosamente.",
-            "id": servicio.idServicio,  # 👈 enviamos el id real
-            "tipo": servicio.tipoServicio,  # 👈 enviamos el tipo también
+            "id": servicio.idServicio,
+            "tipo": servicio.tipoServicio,
         }
     )
 

@@ -1,6 +1,6 @@
 from django.db import models
 from clientes.models import Cliente
-
+from decimal import Decimal
 
 # --------------------
 # Servicio (general)
