@@ -28,6 +28,23 @@ def clientes_data(request):
     return JsonResponse({"data": data})
 
 
+def buscar_clientes(request):
+    q = request.GET.get("q", "").strip()
+    clientes = Cliente.objects.none()
+    if q:
+        clientes = Cliente.objects.filter(nombre__icontains=q).values(
+            "idCliente",
+            "tipoDocumento",
+            "nombre",
+            "numeroDocumento",
+            "telefono",
+            "correo",
+            "ciudad",
+            "direccion",
+        )[:20]
+    return JsonResponse({"clientes": list(clientes)})
+
+
 def registrar_cliente(request):
     if request.method == "POST":
         tipoDocumento = request.POST.get("tipoDocumento")

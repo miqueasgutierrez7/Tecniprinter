@@ -6,6 +6,10 @@
   {% include "includes/head.html" %}
 </head>
 
+
+
+
+
 <body class="hold-transition skin-blue sidebar-mini">
   <div class="wrapper">
     <!-- Header -->
@@ -162,7 +166,8 @@
               </div>
               <div class="form-group col-lg-3 col-md-3 col-xs-12">
                 <label>Nombre</label>
-                <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" required />
+                <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" list="clientes-sugeridos" autocomplete="off" required />
+                <datalist id="clientes-sugeridos"></datalist>
               </div>
               <div class="form-group col-lg-3 col-md-3 col-xs-12">
                 <label>Teléfono</label>

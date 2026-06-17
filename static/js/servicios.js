@@ -11,6 +11,7 @@ const ton = document.getElementById("camposTON");
 console.log("Archivo servicios.js cargado correctamente");
 
 $(document).ready(function () {
+
   console.log("DataTables iniciado correctamente");
   tabla = $("#tabla-serviciosimpresoras").DataTable({
     ajax: {
@@ -263,6 +264,65 @@ const inputTelefono = document.getElementById("telefono");
 const inputCorreo = document.getElementById("correo");
 const inputCiudad = document.getElementById("ciudad");
 const inputDireccion = document.getElementById("direccion");
+const datalistClientes = document.getElementById("clientes-sugeridos");
+
+function buscarClientesPorNombre(nombre) {
+  if (!nombre || nombre.length < 2) {
+    datalistClientes.innerHTML = "";
+    return;
+  }
+
+  fetch(`/api/clientes/buscar/?q=${encodeURIComponent(nombre)}`)
+    .then((response) => response.json())
+    .then((data) => {
+      datalistClientes.innerHTML = "";
+      data.clientes.forEach((cliente) => {
+        const option = document.createElement("option");
+        option.value = cliente.nombre;
+        option.dataset.idCliente = cliente.idCliente;
+        option.dataset.tipoDocumento = cliente.tipoDocumento;
+        option.dataset.numeroDocumento = cliente.numeroDocumento;
+        option.dataset.telefono = cliente.telefono;
+        option.dataset.correo = cliente.correo;
+        option.dataset.ciudad = cliente.ciudad;
+        option.dataset.direccion = cliente.direccion;
+        datalistClientes.appendChild(option);
+      });
+    })
+    .catch((err) => console.error("Error al buscar clientes:", err));
+}
+
+if (inputNombre) {
+  inputNombre.addEventListener("input", () => {
+    buscarClientesPorNombre(inputNombre.value.trim());
+  });
+
+  inputNombre.addEventListener("change", () => {
+    const opciones = Array.from(datalistClientes.options);
+    const seleccion = opciones.find(
+      (opt) => opt.value.toLowerCase() === inputNombre.value.trim().toLowerCase(),
+    );
+
+    if (seleccion) {
+      document.getElementById("tipoDocumento").value = seleccion.dataset.tipoDocumento || "CC";
+      document.getElementById("documento").value = seleccion.dataset.numeroDocumento || "";
+      document.getElementById("telefono").value = seleccion.dataset.telefono || "";
+      document.getElementById("correo").value = seleccion.dataset.correo || "";
+      document.getElementById("direccion").value = seleccion.dataset.direccion || "";
+
+      const ciudadCliente = seleccion.dataset.ciudad;
+      const opcionCiudad = Array.from(inputCiudad.options).find(
+        (opt) => opt.value === ciudadCliente,
+      );
+      if (opcionCiudad) {
+        inputCiudad.value = ciudadCliente;
+      } else if (ciudadCliente) {
+        const nuevaOpcion = new Option(ciudadCliente, ciudadCliente, true, true);
+        inputCiudad.add(nuevaOpcion);
+      }
+    }
+  });
+}
 
 if (inputCedula) {
   inputCedula.addEventListener("input", () => {
