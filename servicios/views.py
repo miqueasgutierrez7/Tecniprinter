@@ -140,13 +140,13 @@ def recibo_pdf_impresora(request, id):
 
     pdf = FPDF(orientation="P", unit="mm", format=(216, 140))
     pdf.add_page()
-    pdf.image("static/images/logo.jpg", x=65, y=5, w=85)
+    pdf.image("static/images/logo.jpg", x=20, y=7, w=92)
 
     pdf.set_font("Arial", style="I", size=13)
-    pdf.ln(18)
-    pdf.cell(195, 10, txt="Carrera 30 #28-43", ln=True, align="C")
+    pdf.ln(5)
+    pdf.cell(170, 10, txt="Carrera 30 #28-43", ln=True, align="R")
     pdf.ln(-4)
-    pdf.cell(195, 10, txt="Cels : 318-553 9043 / 318-873 3880", ln=True, align="C")
+    pdf.cell(190, 10, txt="Cels : 318-553 9043 / 318-873 3880", ln=True, align="R")
     pdf.ln(-2)
 
     id_servicio = id  # variable externa
@@ -163,13 +163,13 @@ def recibo_pdf_impresora(request, id):
         row = cursor.fetchone()
         columns = [col[0] for col in cursor.description]
         datos = dict(zip(columns, row))
-    pdf.cell(150, 10, txt="Orden de Trabajo:", ln=True, align="C")
-    pdf.ln(-9)
-    pdf.set_x(110)
-    pdf.set_font("Arial", style="B", size=14)
-    pdf.cell(30, 8, txt=f"N {datos['numero']}", border=3, ln=True, align="C")
+
+    pdf.ln(8)
+    pdf.set_font("Arial", style="B", size=15)
+    pdf.cell(195, 10, txt=f"ORDEN DE TRABAJO N° {datos['numero']}", border=1, ln=True, align="C")
+
     pdf.set_font("Arial", size=12)
-    pdf.ln(4)
+
     pdf.cell(100, 7, f"Cliente: {datos['cliente']}", border=1)
     fecha_formateada = datos["fechaIngreso"].strftime("%d-%m-%Y %I:%M")
     pdf.cell(95, 7, f"Fecha: {fecha_formateada}", border=1)
@@ -185,23 +185,25 @@ def recibo_pdf_impresora(request, id):
     pdf.cell(195, 7, f"Trabajo a Realizar: {datos['solucion']}", border=1)
     pdf.ln()
     pdf.cell(195, 7, f"Observaciones: {datos['observaciones']}", border=1)
-    pdf.ln(8)
-    pdf.set_x(165)
+    pdf.ln(12)
+    pdf.set_x(30)
     valor = datos["valorServicio"]
-    pdf.cell(40, 7, f"Valor: ${valor:,.0f}".replace(",", "."), border=1)
-    pdf.ln()
-    pdf.set_x(165)
+    pdf.cell(60, 7, f"Valor: ${valor:,.0f}".replace(",", "."), border=1)
+
     saldo = datos["valorServicio"] - (datos["monto"] or 0)
     abono = datos["monto"] or 0
     pdf.cell(40, 7, f"Abono:${abono:,.0f}".replace(",", "."), border=1)
-    pdf.ln()
-    pdf.set_x(10)
-    pdf.cell(40, 7, "Firma del Cliente:_______________", border=0)
-    pdf.set_x(85)
-    pdf.cell(40, 7, "Firma del Tècnico:_______________", border=0)
-    pdf.set_x(165)
     pdf.cell(40, 7, f"Saldo: ${saldo:,.0f}".replace(",", "."), border=1)
-    pdf.ln()
+    pdf.ln(13)
+    pdf.set_x(50)
+    pdf.cell(70, 7, "Firma del Cliente:", border=0)
+    pdf.cell(40, 7, "Firma del Tècnico:", border=0)
+    pdf.ln(5)
+    pdf.set_x(43)
+    pdf.cell(70, 7, "___________________", border=0)
+    pdf.cell(70, 7, "___________________", border=0)
+    pdf.set_x(85)
+
     pdf_bytes = pdf.output(dest="S").encode("latin1")  # clásico fpdf
     response = HttpResponse(pdf_bytes, content_type="application/pdf")
     response["Content-Disposition"] = 'inline; filename="ejemplo.pdf"'

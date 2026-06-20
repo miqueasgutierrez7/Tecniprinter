@@ -6,10 +6,6 @@
   {% include "includes/head.html" %}
 </head>
 
-
-
-
-
 <body class="hold-transition skin-blue sidebar-mini">
   <div class="wrapper">
     <!-- Header -->
@@ -57,7 +53,8 @@
     </div>
 
     <!-- Modal Editar Servicio de Impresora-->
-    <div class="modal fade" id="modalEditarServicioImpresora" tabindex="-1" aria-labelledby="modalEditarClienteLabel" aria-hidden="true">
+    <div class="modal fade" id="modalEditarServicioImpresora" tabindex="-1" aria-labelledby="modalEditarClienteLabel"
+      aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -65,12 +62,12 @@
           </div>
           <div class="modal-body">
             <form id="formEditarServicioImpresora">
-              <input type="hidden"  id="edit_id" />
+              <input type="hidden" id="edit_id" />
               <fieldset class="d-none border rounded p-3 mb-3">
                 <legend class="fs-6 text-center">Datos de la Impresora</legend>
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label>Marca de Impresora</label>
-                  <select  id="edit_impr_marca" class="form-control form-select">
+                  <select id="edit_impr_marca" class="form-control form-select">
                     <option value="">Seleccione una marca</option>
                     <option value="Epson">Epson</option>
                     <option value="Canon">Canon</option>
@@ -92,41 +89,44 @@
                 </div>
                 <div class="form-group col-lg-6 col-md-6 col-xs-12">
                   <label>Diagnóstico</label>
-                  <textarea id="edit_imp_diagnostico" class="form-control" rows="2" placeholder="Descripción de la falla"></textarea>
+                  <textarea id="edit_imp_diagnostico" class="form-control" rows="2"
+                    placeholder="Descripción de la falla"></textarea>
                 </div>
                 <div class="form-group col-lg-6 col-md-6 col-xs-12">
                   <label>Trabajo a Realizar</label>
-                  <textarea id="edit_imp_solucion" class="form-control" rows="2" placeholder="Descripción de la solución"></textarea>
+                  <textarea id="edit_imp_solucion" class="form-control" rows="2"
+                    placeholder="Descripción de la solución"></textarea>
                 </div>
 
                 <!-- Observaciones y datos del servicio -->
-              <div class="form-group col-lg-12 col-md-12 col-xs-12">
-                <label for="observaciones" class="form-label">Observaciones</label>
-                <textarea id="edit_observaciones" class="form-control" rows="3" placeholder="Detalles adicionales del servicio"></textarea>
-              </div>
+                <div class="form-group col-lg-12 col-md-12 col-xs-12">
+                  <label for="observaciones" class="form-label">Observaciones</label>
+                  <textarea id="edit_observaciones" class="form-control" rows="3"
+                    placeholder="Detalles adicionales del servicio"></textarea>
+                </div>
 
-              <div class="form-group col-lg-4 col-md-4 col-xs-12">
-                <label for="valorServicio" class="form-label">Valor del Servicio</label>
-                <input type="number" id="edit_valorServicio" class="form-control" placeholder="$" />
-              </div>
-              <div class="form-group col-lg-4 col-md-4 col-xs-12">
-                <label for="abono" class="form-label">Abono</label>
-                <input id="edit_abono" class="form-control" placeholder="$" />
-              </div>
-              <div class="form-group col-lg-4 col-md-4 col-xs-12">
-                <label for="saldo" class="form-label">Saldo Restante</label>
-                <input id="edit_saldo" class="form-control" placeholder="$" readonly />
-              </div>
-              <div class="form-group col-lg-4 col-md-4 col-xs-12">
-                <label for="edit_estado" class="form-label">Estado del Servicio</label>
-                <select class="form-control form-select" id="edit_estado" name="edit_estado">
-                  <option value="REC">📥 Recibido</option>
-                  <option value="PRO">⚙️ En proceso</option>
-                  <option value="TER">✅ Terminado</option>
-                  <option value="ENT">📦 Entregado</option>
-                  <option value="NRE">❌ No realizado</option>
-                </select>
-              </div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label for="valorServicio" class="form-label">Valor del Servicio</label>
+                  <input type="number" id="edit_valorServicio" class="form-control" placeholder="$" />
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label for="abono" class="form-label">Abono</label>
+                  <input id="edit_abono" class="form-control" placeholder="$" />
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label for="saldo" class="form-label">Saldo Restante</label>
+                  <input id="edit_saldo" class="form-control" placeholder="$" readonly />
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label for="edit_estado" class="form-label">Estado del Servicio</label>
+                  <select class="form-control form-select" id="edit_estado" name="edit_estado">
+                    <option value="REC">📥 Recibido</option>
+                    <option value="PRO">⚙️ En proceso</option>
+                    <option value="TER">✅ Terminado</option>
+                    <option value="ENT">📦 Entregado</option>
+                    <option value="NRE">❌ No realizado</option>
+                  </select>
+                </div>
 
               </fieldset>
             </form>
@@ -140,7 +140,8 @@
     </div>
 
     <!-- Modal Agregar Servicios -->
-    <div class="modal fade" id="modalAgregarCliente" tabindex="-1" aria-labelledby="modalAgregarClienteLabel" aria-hidden="true">
+    <div class="modal fade" id="modalAgregarCliente" tabindex="-1" aria-labelledby="modalAgregarClienteLabel"
+      aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -151,6 +152,16 @@
               {% csrf_token %}
               <h4 class="text-center">Datos del Cliente</h4>
               <div class="form-group col-lg-3 col-md-3 col-xs-12">
+
+                <label>Nombre</label>
+                <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre"
+                  list="clientes-sugeridos" autocomplete="off" required />
+                <datalist id="clientes-sugeridos"></datalist>
+
+
+              </div>
+              <div class="form-group col-lg-3 col-md-3 col-xs-12">
+
                 <label>Tipo de Documento</label>
                 <select id="tipoDocumento" name="tipoDocumento" class="form-control" required>
                   <option value="CC" selected>CC</option>
@@ -159,15 +170,13 @@
                   <option value="PS">PS</option>
                   <option value="PPT">PPT</option>
                 </select>
+
+
               </div>
               <div class="form-group col-lg-3 col-md-3 col-xs-12">
                 <label>Número de Documento</label>
                 <input class="form-control" type="number" name="documento" id="documento" placeholder="" required />
-              </div>
-              <div class="form-group col-lg-3 col-md-3 col-xs-12">
-                <label>Nombre</label>
-                <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre" list="clientes-sugeridos" autocomplete="off" required />
-                <datalist id="clientes-sugeridos"></datalist>
+
               </div>
               <div class="form-group col-lg-3 col-md-3 col-xs-12">
                 <label>Teléfono</label>
@@ -239,11 +248,13 @@
                 </div>
                 <div class="form-group col-lg-4 col-md-4 col-xs-12">
                   <label>Diagnóstico</label>
-                  <textarea name="pc_problema" class="form-control" rows="2" placeholder="Descripción del problema"></textarea>
+                  <textarea name="pc_problema" class="form-control" rows="2"
+                    placeholder="Descripción del problema"></textarea>
                 </div>
                 <div class="form-group col-lg-8 col-md-8 col-xs-12">
                   <label>Trabajo a realizar</label>
-                  <textarea name="pc_solucion" class="form-control" rows="2" placeholder="Descripción de la solución"></textarea>
+                  <textarea name="pc_solucion" class="form-control" rows="2"
+                    placeholder="Descripción de la solución"></textarea>
                 </div>
               </div>
 
@@ -274,11 +285,13 @@
                 </div>
                 <div class="form-group col-lg-6 col-md-6 col-xs-12">
                   <label>Diagnóstico</label>
-                  <textarea name="imp_diagnostico" class="form-control" rows="2" placeholder="Descripción de la falla"></textarea>
+                  <textarea name="imp_diagnostico" class="form-control" rows="2"
+                    placeholder="Descripción de la falla"></textarea>
                 </div>
                 <div class="form-group col-lg-6 col-md-6 col-xs-12">
                   <label>Trabajo a Realizar</label>
-                  <textarea name="imp_solucion" class="form-control" rows="2" placeholder="Descripción de la solución"></textarea>
+                  <textarea name="imp_solucion" class="form-control" rows="2"
+                    placeholder="Descripción de la solución"></textarea>
                 </div>
               </fieldset>
 
@@ -295,7 +308,8 @@
               <!-- Observaciones y datos del servicio -->
               <div class="form-group col-lg-12 col-md-12 col-xs-12">
                 <label for="observaciones" class="form-label">Observaciones</label>
-                <textarea id="observaciones" name="observaciones" class="form-control" rows="3" placeholder="Detalles adicionales del servicio"></textarea>
+                <textarea id="observaciones" name="observaciones" class="form-control" rows="3"
+                  placeholder="Detalles adicionales del servicio"></textarea>
               </div>
 
               <div class="form-group col-lg-4 col-md-4 col-xs-12">

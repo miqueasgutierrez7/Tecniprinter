@@ -49,6 +49,11 @@ $(document).ready(function () {
         orderable: false,
         render: function (data, type, row) {
           return `
+           <button class="btn btn-sm btn-primary imprimir"
+              onclick="window.open('/pdf_impresora/${row.id}/', '_blank')">
+        <i class="fa fa-print"></i> Imprimir
+      </button>
+
             <button class="btn btn-sm btn-primary editar" data-id="${row.id}">
               <i class="fa fa-pencil"></i> Editar
             </button>
