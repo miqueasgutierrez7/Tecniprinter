@@ -21,6 +21,7 @@ class Servicio(models.Model):
         ("TER", "Terminado"),
         ("ENT", "Entregado"),
         ("NRE", "No realizado"),
+        ("GAR", "Garantía"),
     ]
 
     idServicio = models.AutoField(primary_key=True)

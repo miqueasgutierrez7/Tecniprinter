@@ -49,16 +49,14 @@ $(document).ready(function () {
         orderable: false,
         render: function (data, type, row) {
           return `
+
            <button class="btn btn-sm btn-primary imprimir"
               onclick="window.open('/pdf_impresora/${row.id}/', '_blank')">
-        <i class="fa fa-print"></i> Imprimir
+         <i class="fa fa-eye"></i> <i class="fa fa-print"></i> Detalles e Imprimir
       </button>
 
             <button class="btn btn-sm btn-primary editar" data-id="${row.id}">
               <i class="fa fa-pencil"></i> Editar
-            </button>
-            <button class="btn btn-sm btn-danger eliminar" data-id="${row.id}">
-              <i class="fa fa-trash"></i> Eliminar
             </button>
           `;
         },
@@ -80,6 +78,10 @@ $(document).ready(function () {
       } else if (data.estado === "No realizado") {
         bgColor = "#dc3545"; // Verde
       }
+        else if (data.estado === "Garantía") {
+          bgColor = "#290b83"; // Azul turquesa (confianza/seguridad)
+          textColor = "white"; // contraste sobre fondo turquesa
+}
 
       // Aplica el color de fondo y texto a TODAS las celdas de la fila
       $("td", row).css({
@@ -530,6 +532,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+
+
+$("#tabla-serviciosimpresoras").on("click", ".detalles", function () {
+  $("#modalDetallesServicio").modal("show");
+
+  });
 
 async function enviarDatos() {
   mensaje.textContent = "";
