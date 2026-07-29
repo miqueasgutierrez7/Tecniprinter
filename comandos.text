@@ -94,3 +94,58 @@ deactivate
 
     pdf.cell(0, 10, f"Orden de Trabajo: {row[0]}", ln=True)
     pdf.cell(0, 10, f"Cliente: {row[1]}", ln=True)
+
+
+
+
+
+
+
+
+
+
+
+    const botonGuardar = document.getElementById("guardarCambiosServicio");
+
+botonGuardar.addEventListener("click", function() {
+      // Aquí va la lógica que quieres ejecutar
+      alert("Botón presionado: Guardar cambios");
+      const id = document.getElementById("edit_id").value;
+      const datos = {
+        modelo: document.getElementById("edit_imp_modelo").value,
+        serial: document.getElementById("edit_imp_serial").value,
+        diagnostico: document.getElementById("edit_imp_diagnostico").value,
+        solucion: document.getElementById("edit_imp_solucion").value,
+        observaciones: document.getElementById("edit_observaciones").value,
+        valorServicio: document.getElementById("edit_valorServicio").value,
+        abono: document.getElementById("edit_abono").value,
+        saldo: document.getElementById("edit_saldo").value,
+        estado: document.getElementById("edit_estado").value
+      };
+
+      try {
+        fetch(`/servicios/editar/${id}/`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(datos),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Error al actualizar el servicio");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Servicio actualizado correctamente:", data);
+            $("#modalEditarServicioImpresora").modal("hide");
+            tabla.ajax.reload();
+          })
+          .catch((error) => {
+            console.error("Error al actualizar el servicio:", error);
+          });
+      } catch (error) {
+        console.error("Error al procesar la solicitud:", error);
+      }
+    });

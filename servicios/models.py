@@ -35,7 +35,7 @@ class Servicio(models.Model):
 
     tipoServicio = models.CharField(max_length=3, choices=TIPO_SERVICIO_CHOICES)
     fechaIngreso = models.DateTimeField(auto_now_add=True)
-    estado = models.CharField(max_length=3, choices=ESTADO_CHOICES, default="REC")
+    estado = models.CharField(max_length=100, choices=ESTADO_CHOICES, default="REC")
     observaciones = models.TextField(blank=True, null=True)
     valorServicio = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
@@ -82,8 +82,8 @@ class ReparacionPC(models.Model):
         max_length=100, blank=True, null=True, help_text="Número de serie del equipo"
     )
 
-    problema = models.TextField()
-    solucion = models.TextField(blank=True, null=True)
+    problema = models.TextField(max_length=100)
+    solucion = models.TextField(max_length=100,blank=True, null=True)
 
     def __str__(self):
         return f"PC {self.marca} - {self.serial or 'Sin serial'}"
@@ -106,7 +106,7 @@ class ReparacionImpresora(models.Model):
         help_text="Número de serie de la impresora",
     )
 
-    falla = models.TextField()
+    falla = models.TextField(max_length=100)
 
     solucion = models.TextField(blank=True, null=True)
 

@@ -31,7 +31,7 @@
 </button>
 
                             <div class="panel-body " id="formularioregistros">
-                              
+
 
                                 <table id="tabla-clientes" class="display" style="width:100%">
         <thead>
@@ -115,14 +115,14 @@
           </div>
 
 
-          
+
           <div class="mb-3">
             <label for="edit-telefono" class="form-label">Teléfono</label>
             <input type="text" id="edit-telefono" class="form-control">
           </div>
 
-          
-          
+
+
 
 
           <div class="mb-3">
@@ -166,28 +166,19 @@
     </div>
   </div>
 </div>
-
-
-
-
-
 <div class="modal fade" id="modalAgregarCliente" tabindex="-1" aria-labelledby="modalAgregarClienteLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
 
       <!-- Header -->
       <div class="modal-header">
-        
+
         <h4 class="modal-title" id="modalEditarClienteLabel">Agregar Cliente</h4>
-    
+
       </div>
 
       <!-- Body -->
       <div class="modal-body">
-        
-
-
-
         <div class="panel-body " id="formularioregistros">
                                 <form action="" name="formulario" id="formulario" method="POST">
                                     {% csrf_token %}
@@ -207,7 +198,7 @@
                                         <label for="">Numero de Documento</label>
                                         <input class="form-control" type="number" name="documento" id="documento"
                                             placeholder="">
-                                        
+
                                     </div>
 
 
@@ -259,7 +250,7 @@
                                     </div>
                                     <div class="form-group col-lg-3 col-md-3 col-xs-12">
 
-                                       
+
                                     </div>
 
 
@@ -275,7 +266,7 @@
       <div class="modal-footer">
         <div class="d-flex justify-content-end">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-                                        
+
                                             <button  id="btnRegistrar" type="submit" class="btn text-center btn-primary">Registrar</button>
                                         </div>
       </div>

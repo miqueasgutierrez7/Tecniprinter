@@ -138,6 +138,7 @@ $('#tabla-clientes').on('click', '.eliminar', function () {
 document.getElementById("guardarCambiosCliente").addEventListener("click", async () => {
 
     const id = document.getElementById("edit-id").value;
+    console.log("ID del cliente a modificar:", id);
 
     // Capturar datos del formulario
     const datos = {

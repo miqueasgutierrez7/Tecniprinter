@@ -1,14 +1,12 @@
-
 let tabla;
-
 const formulario = document.getElementById("formulario");
 const btnRegistrar = document.getElementById("btnRegistrar");
-
 const pc = document.getElementById("camposPC");
 const imp = document.getElementById("camposIMP");
 const ton = document.getElementById("camposTON");
 
 console.log("Archivo servicios.js cargado correctamente");
+
 
 $(document).ready(function () {
 
@@ -19,7 +17,7 @@ $(document).ready(function () {
       dataSrc: "data",
     },
     columns: [
-      { data: "id" },
+      { data: "idservicio" },
       { data: "marca" },
       { data: "modelo" },
       { data: "serial" },
@@ -216,51 +214,45 @@ $("#tabla-clientes").on("click", ".eliminar", function () {
   });
 });
 
-document
-  .getElementById("guardarCambiosCliente")
+
+document.getElementById("guardarCambiosServicioImpresora")
   .addEventListener("click", async () => {
-    const id = document.getElementById("edit-id").value;
+    const id = document.getElementById("edit_id").value;
+    console.log("ID del cliente a actualizar:", id);
 
     // Capturar datos del formulario
     const datos = {
-      tipoDocumento: document.getElementById("edit-tipoDocumento").value,
-      numeroDocumento: document.getElementById("edit-numeroDocumento").value,
-      nombre: document.getElementById("edit-nombre").value,
-      telefono: document.getElementById("edit-telefono").value,
-      correo: document.getElementById("edit-correo").value,
-      ciudad: document.getElementById("edit-ciudad").value,
-      direccion: document.getElementById("edit-direccion").value,
+      marca: document.getElementById("edit_impr_marca").value,
+      modelo: document.getElementById("edit_imp_modelo").value,
+      serial: document.getElementById("edit_imp_serial").value,
+      diagnostico: document.getElementById("edit_imp_diagnostico").value,
+      trabajoarealizar: document.getElementById("edit_imp_solucion").value,
+      observaciones: document.getElementById("edit_observaciones").value,
+      valorServicio: document.getElementById("edit_valorServicio").value,
+      abonos: document.getElementById("edit_abono").value,
+      saldo: document.getElementById("edit_saldo").value,
+      estado: document.getElementById("edit_estado").value,
     };
 
-    try {
-      const response = await fetch(`/api/clientes/modificar/${id}/`, {
+   try {
+      const response = await fetch(`/servicios/editar/${id}/`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
-            .value,
+          "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
         },
         body: JSON.stringify(datos),
       });
-
       const data = await response.json();
-
       if (data.success) {
-        Swal.fire({
-          title: "Actualizado",
-          text: "Cliente actualizado correctamente",
-          icon: "success",
-        });
-
-        $("#modalEditarCliente").modal("hide");
-
-        if (tabla) tabla.ajax.reload(null, false);
+        Swal.fire("Éxito", "Servicio actualizado correctamente", "success");
+        $("#tabla-servicios").DataTable().ajax.reload();
       } else {
         Swal.fire("Error", data.message, "error");
       }
     } catch (error) {
-      console.error("Error al actualizar cliente:", error);
-      Swal.fire("Error", "No se pudo actualizar el cliente", "error");
+      console.error("Error al actualizar servicio:", error);
+      Swal.fire("Error", "No se pudo actualizar el servicio", "error");
     }
   });
 

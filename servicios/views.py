@@ -1,8 +1,9 @@
+import pdb
 from datetime import datetime
 from multiprocessing import connection
 from django.db import connection
 from fpdf import FPDF
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseNotAllowed
 from django.utils.timezone import localtime
 from django.shortcuts import render
 from decimal import Decimal
@@ -16,6 +17,7 @@ from servicios.models import (
 )
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
+
 
 def lista_servicios(request):
     return render(request, "registro.html")
@@ -91,6 +93,7 @@ def ReparacionImpresora_data(request):
         data.append(
             {
                 "id": r.id,
+                "idservicio": r.servicio_id,
                 "marca": r.marca,
                 "modelo": r.modelo,
                 "serial": r.serial,
@@ -280,6 +283,55 @@ def recibo_pdf_computador(request, id):
     response = HttpResponse(pdf_bytes, content_type="application/pdf")
     response["Content-Disposition"] = 'inline; filename="ejemplo.pdf"'
     return response
+
+
+def editar_servicio_impresora(request, id):
+    if request.method in ["PUT", "POST"]:
+        print("Request body:", request.body)
+        try:
+            servicio = ReparacionImpresora.objects.get(pk=id)
+        except ReparacionImpresora.DoesNotExist:
+            return JsonResponse(
+                {"success": False, "message": "❌ Servicio no encontrado"}, status=404
+            )
+
+        if request.body and request.content_type == "application/json":
+            import jsonestado
+            data = json.loads(request.body)
+            servicio.marca = data.get("marca", servicio.marca)
+            servicio.modelo = data.get("modelo", servicio.modelo)
+            servicio.serial = data.get("serial", servicio.serial)
+            servicio.falla = data.get("falla", servicio.falla)
+            servicio.solucion = data.get("solucion", servicio.solucion)
+            servicio.servicio.observaciones = data.get(
+                "observaciones", servicio.servicio.observaciones
+            )
+            servicio.servicio.valorServicio = Decimal(
+                data.get("valorServicio", servicio.servicio.valorServicio)
+            )
+            servicio.servicio.estado = data.get("estado", servicio.servicio.estado)
+        else:  # Si viene como form-data (POST)
+            servicio.marca = request.POST.get("marca", servicio.marca)
+            servicio.modelo = request.POST.get("modelo", servicio.modelo)
+            servicio.serial = request.POST.get("serial", servicio.serial)
+            servicio.falla = request.POST.get("falla", servicio.falla)
+            servicio.solucion = request.POST.get("solucion", servicio.solucion)
+            servicio.servicio.observaciones = request.POST.get(
+                "observaciones", servicio.servicio.observaciones
+            )
+            servicio.servicio.valorServicio = Decimal(
+                request.POST.get("valorServicio", servicio.servicio.valorServicio)
+                or 0
+            )
+            servicio.servicio.estado = request.POST.get("estado", servicio.servicio.estado)
+
+        servicio.save()
+        servicio.servicio.save()
+        return JsonResponse(
+            {"success": True, "message": "✅ Servicio actualizado correctamente"}
+        )
+
+    return HttpResponseNotAllowed(["PUT", "POST"])
 
 def recibo_pdf_toner(request, id):
 
