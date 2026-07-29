@@ -296,7 +296,7 @@ def editar_servicio_impresora(request, id):
             )
 
         if request.body and request.content_type == "application/json":
-            import jsonestado
+            import json
             data = json.loads(request.body)
             servicio.marca = data.get("marca", servicio.marca)
             servicio.modelo = data.get("modelo", servicio.modelo)
