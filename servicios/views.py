@@ -301,8 +301,8 @@ def editar_servicio_impresora(request, id):
             servicio.marca = data.get("marca", servicio.marca)
             servicio.modelo = data.get("modelo", servicio.modelo)
             servicio.serial = data.get("serial", servicio.serial)
-            servicio.falla = data.get("falla", servicio.falla)
-            servicio.solucion = data.get("solucion", servicio.solucion)
+            servicio.falla = data.get("diagnostico", servicio.falla)
+            servicio.solucion = data.get("trabajoarealizar", servicio.solucion)
             servicio.servicio.observaciones = data.get(
                 "observaciones", servicio.servicio.observaciones
             )
