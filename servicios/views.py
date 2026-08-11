@@ -87,7 +87,11 @@ def registrar_servicio(request):
 
 
 def ReparacionImpresora_data(request):
-    reparaciones = ReparacionImpresora.objects.select_related("servicio__cliente")
+    reparaciones = (
+        ReparacionImpresora.objects
+        .select_related("servicio__cliente")
+        .exclude(servicio__estado="ENT")  # excluye entregados
+    )
     data = []
     for r in reparaciones:
         data.append(
@@ -103,7 +107,6 @@ def ReparacionImpresora_data(request):
             }
         )
     return JsonResponse({"data": data})
-
 
 def obtener_servicioimpresora(request, id):
     """
@@ -157,7 +160,7 @@ def recibo_pdf_impresora(request, id):
     with connection.cursor() as cursor:
         cursor.execute(
             """
-        SELECT s."idServicio" AS numero, c.nombre AS cliente, s."fechaIngreso", c.direccion, c.telefono, ri.marca, ri.modelo, ri.serial, ri.falla, ri.solucion, s.observaciones, s."valorServicio" , a.monto FROM servicios_servicio s INNER JOIN clientes_cliente c ON s."idCliente" = c."idCliente" LEFT JOIN servicios_reparacionimpresora ri ON ri."servicio_id" = s."idServicio" LEFT JOIN servicios_abono a ON a."servicio_id" = s."idServicio" WHERE s."idServicio" = %s
+        SELECT s."idServicio" AS numeroingreso, c.nombre AS cliente, s."fechaIngreso", c.direccion, c.telefono, ri.marca, ri.modelo, ri.serial, ri.falla, ri.solucion, s.observaciones, s."valorServicio" , a.monto FROM servicios_servicio s INNER JOIN clientes_cliente c ON s."idCliente" = c."idCliente" LEFT JOIN servicios_reparacionimpresora ri ON ri."servicio_id" = s."idServicio" LEFT JOIN servicios_abono a ON a."servicio_id" = s."idServicio" WHERE s."idServicio" = %s
         GROUP BY s."idServicio", c.nombre, s."fechaIngreso", c.direccion, c.telefono,
                  ri.marca, ri.modelo, ri.serial, ri.falla, ri.solucion, s.observaciones, s."valorServicio", a.monto
         """,
@@ -169,7 +172,7 @@ def recibo_pdf_impresora(request, id):
 
     pdf.ln(8)
     pdf.set_font("Arial", style="B", size=15)
-    pdf.cell(195, 10, txt=f"ORDEN DE TRABAJO N° {datos['numero']}", border=1, ln=True, align="C")
+    pdf.cell(195, 10, txt=f"ORDEN DE TRABAJO N° {datos['numeroingreso']}", border=1, ln=True, align="C")
 
     pdf.set_font("Arial", size=12)
 

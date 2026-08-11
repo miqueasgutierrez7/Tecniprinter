@@ -7,7 +7,6 @@ const ton = document.getElementById("camposTON");
 
 console.log("Archivo servicios.js cargado correctamente");
 
-
 $(document).ready(function () {
 
   console.log("DataTables iniciado correctamente");
@@ -49,7 +48,7 @@ $(document).ready(function () {
           return `
 
            <button class="btn btn-sm btn-primary imprimir"
-              onclick="window.open('/pdf_impresora/${row.id}/', '_blank')">
+              onclick="window.open('/pdf_impresora/${row.idservicio}/', '_blank')">
          <i class="fa fa-eye"></i> <i class="fa fa-print"></i> Detalles e Imprimir
       </button>
 
@@ -247,6 +246,11 @@ document.getElementById("guardarCambiosServicioImpresora")
       if (data.success) {
         Swal.fire("Éxito", "Servicio actualizado correctamente", "success");
         $("#tabla-servicios").DataTable().ajax.reload();
+
+
+        location.reload();
+        formulario.reset();
+
       } else {
         Swal.fire("Error", data.message, "error");
       }
@@ -254,6 +258,8 @@ document.getElementById("guardarCambiosServicioImpresora")
       console.error("Error al actualizar servicio:", error);
       Swal.fire("Error", "No se pudo actualizar el servicio", "error");
     }
+
+
   });
 
 const inputCedula = document.getElementById("documento");
@@ -524,7 +530,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
 
 
 $("#tabla-serviciosimpresoras").on("click", ".detalles", function () {
