@@ -3,13 +3,17 @@
         <ul class="sidebar-menu" data-widget="tree">
             <br />
 
+
+
+
+
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-wrench"></i> <span>Ingreso de Servicios</span>
                     <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-print"></i> Impresora</a></li>
+                    <li><a href="{% url 'lista_servicios' %}"><i class="fa fa-print"></i> Ingresos existentes</a></li>
 
                     <li class="treeview">
                         <a href="#">
@@ -40,17 +44,14 @@
                 </ul>
             </li>
 
-            <li class="treeview">
-                <a href="#"><i class="fa fa-shopping-cart"></i> <span>Ventas</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Ventas</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Artículos</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Categoría</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Listado de V</a></li>
-                </ul>
-            </li>
+
+       <li class="treeview">
+
+
+     <li><a href="{% url 'clientes' %}"><i class="fa fa-users"></i> Clientes</a></li>
+</li>
+
+
 
             <li class="treeview">
                 <a href="#"><i class="fa fa-th"></i> <span>Gastos</span>

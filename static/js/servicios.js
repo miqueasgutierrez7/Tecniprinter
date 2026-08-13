@@ -17,6 +17,8 @@ $(document).ready(function () {
     },
     columns: [
       { data: "idservicio" },
+      { data: "fecha_ingreso" },
+      { data: "dias_en_reparacion" },
       { data: "marca" },
       { data: "modelo" },
       { data: "serial" },

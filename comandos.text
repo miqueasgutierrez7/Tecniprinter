@@ -46,12 +46,6 @@ pip install django
 deactivate
 
 
-
-
-
-
-
-
  const tipoServicio = document.getElementById("tipoServicio").value;
 
     // Campos impresora
@@ -149,3 +143,8 @@ botonGuardar.addEventListener("click", function() {
         console.error("Error al procesar la solicitud:", error);
       }
     });
+
+
+
+
+termina de arreglar el menu

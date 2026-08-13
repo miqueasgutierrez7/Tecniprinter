@@ -86,6 +86,13 @@ def registrar_servicio(request):
     )
 
 
+from django.utils import timezone
+
+
+from django.utils import timezone
+
+from django.utils import timezone
+
 def ReparacionImpresora_data(request):
     reparaciones = (
         ReparacionImpresora.objects
@@ -93,10 +100,20 @@ def ReparacionImpresora_data(request):
         .exclude(servicio__estado="ENT")  # excluye entregados
     )
     data = []
+    hoy = timezone.localtime(timezone.now()).date()  # fecha actual en Colombia
+
     for r in reparaciones:
+        fecha_ingreso = timezone.localtime(r.servicio.fechaIngreso)
+        fecha_colombia = fecha_ingreso.strftime("%d/%m/%Y %I:%M:%S %p")
+
+        # Diferencia en días (solo fechas, sin horas)
+        dias_transcurridos = (hoy - fecha_ingreso.date()).days + 1
+
         data.append(
             {
                 "id": r.id,
+                "fecha_ingreso": fecha_colombia,
+                "dias_en_reparacion": dias_transcurridos,
                 "idservicio": r.servicio_id,
                 "marca": r.marca,
                 "modelo": r.modelo,
