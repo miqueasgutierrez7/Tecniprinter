@@ -35,6 +35,7 @@ class Servicio(models.Model):
 
     tipoServicio = models.CharField(max_length=3, choices=TIPO_SERVICIO_CHOICES)
     fechaIngreso = models.DateTimeField(auto_now_add=True)
+    fechaEntrega = models.DateTimeField(blank=True, null=True)
     estado = models.CharField(max_length=100, choices=ESTADO_CHOICES, default="REC")
     observaciones = models.TextField(blank=True, null=True)
     valorServicio = models.DecimalField(max_digits=10, decimal_places=2, default=0)

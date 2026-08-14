@@ -13,7 +13,7 @@ python -m venv env
 
 activar entorno virtual
 
-.\env\Scripts\activate
+
 .\venv\Scripts\Activate.ps1
 
 Instalacion de django
