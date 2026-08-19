@@ -14,7 +14,7 @@ python -m venv env
 activar entorno virtual
 
 
-.\venv\Scripts\Activate.ps1
+.\env\Scripts\activate = este es el comando que ultimamente a funcionado para activar el entorno virtual.
 
 Instalacion de django
 pip install django
@@ -145,6 +145,7 @@ botonGuardar.addEventListener("click", function() {
     });
 
 
+forma simple de debugear con python
 
-
-termina de arreglar el menu
+print("Valor crudo fechaEntrega:", datos["fechaentrega"])
+    breakpoint()

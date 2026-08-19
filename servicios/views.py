@@ -192,7 +192,7 @@ def recibo_pdf_impresora(request, id):
     with connection.cursor() as cursor:
         cursor.execute(
             """
-        SELECT s."idServicio" AS numeroingreso, s.estado AS estado, c.nombre AS cliente, s."fechaIngreso", c.direccion, c.telefono, ri.marca, ri.modelo, ri.serial, ri.falla, ri.solucion, s.observaciones, s."valorServicio" , a.monto FROM servicios_servicio s INNER JOIN clientes_cliente c ON s."idCliente" = c."idCliente" LEFT JOIN servicios_reparacionimpresora ri ON ri."servicio_id" = s."idServicio" LEFT JOIN servicios_abono a ON a."servicio_id" = s."idServicio" WHERE s."idServicio" = %s
+        SELECT s."idServicio" AS numeroingreso, s."fechaEntrega" AS fechaentrega, s.estado AS estado, c.nombre AS cliente, s."fechaIngreso", c.direccion, c.telefono, ri.marca, ri.modelo, ri.serial, ri.falla, ri.solucion, s.observaciones, s."valorServicio" , a.monto FROM servicios_servicio s INNER JOIN clientes_cliente c ON s."idCliente" = c."idCliente" LEFT JOIN servicios_reparacionimpresora ri ON ri."servicio_id" = s."idServicio" LEFT JOIN servicios_abono a ON a."servicio_id" = s."idServicio" WHERE s."idServicio" = %s
         GROUP BY s."idServicio", c.nombre, s."fechaIngreso", c.direccion, c.telefono,
                  ri.marca, ri.modelo, ri.serial, ri.falla, ri.solucion, s.observaciones, s."valorServicio", a.monto
         """,
@@ -202,13 +202,19 @@ def recibo_pdf_impresora(request, id):
         columns = [col[0] for col in cursor.description]
         datos = dict(zip(columns, row))
 
+    if datos["fechaentrega"] is None:
+        fecha_entrega_formateada = "Entrega pendiente"
+    else:
+        fecha_entrega_formateada = datos["fechaEntrega"].strftime("%d-%m-%Y %I:%M %p")
+
     pdf.ln(8)
     pdf.set_font("Arial", style="B", size=15)
     pdf.cell(195, 10, txt=f"ORDEN DE TRABAJO N° {datos['numeroingreso']}", border=1, ln=True, align="C")
     pdf.set_font("Arial", size=12)
-    pdf.cell(100, 7, f"Cliente: {datos['cliente']}", border=1)
-    fecha_formateada = datos["fechaIngreso"].strftime("%d-%m-%Y %I:%M %p")
-    pdf.cell(95, 7, f"Fecha: {fecha_formateada}", border=1)
+    pdf.cell(90, 7, f"Cliente: {datos['cliente']}", border=1)
+    fecha_ingreso_formateada = datos["fechaIngreso"].strftime("%d-%m-%Y %I:%M %p")
+    pdf.cell(52, 7, f"FI : {fecha_ingreso_formateada}", border=1)
+    pdf.cell(53, 7, f"FE : {fecha_entrega_formateada}", border=1)
     pdf.ln()
     pdf.cell(100, 7, f"Direccion: {datos['direccion']}", border=1)
     pdf.cell(95, 7, f"Telefono: {datos['telefono']}", border=1)
