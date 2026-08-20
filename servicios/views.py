@@ -202,11 +202,13 @@ def recibo_pdf_impresora(request, id):
         columns = [col[0] for col in cursor.description]
         datos = dict(zip(columns, row))
 
+
     if datos["fechaentrega"] is None:
         fecha_entrega_formateada = "Entrega pendiente"
     else:
-        fecha_entrega_formateada = datos["fechaEntrega"].strftime("%d-%m-%Y %I:%M %p")
-
+        fecha = datos["fechaentrega"]  # datetime con tz
+        fecha_local = timezone.localtime(fecha)  # ajusta a TIME_ZONE configurado
+        fecha_entrega_formateada = fecha_local.strftime("%d-%m-%Y %I:%M %p")
     pdf.ln(8)
     pdf.set_font("Arial", style="B", size=15)
     pdf.cell(195, 10, txt=f"ORDEN DE TRABAJO N° {datos['numeroingreso']}", border=1, ln=True, align="C")
@@ -364,6 +366,9 @@ def editar_servicio_impresora(request, id):
                 or 0
             )
             servicio.servicio.estado = request.POST.get("estado", servicio.servicio.estado)
+
+        if servicio.servicio.fechaEntrega is None and servicio.servicio.estado == "ENT":
+            servicio.servicio.fechaEntrega = timezone.now()
 
         servicio.save()
         servicio.servicio.save()
