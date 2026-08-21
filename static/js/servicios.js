@@ -17,6 +17,7 @@ $(document).ready(function () {
     },
     columns: [
       { data: "idservicio" },
+      { data: "dia_semana" },
       { data: "fecha_ingreso" },
       { data: "dias_en_reparacion" },
       { data: "marca" },

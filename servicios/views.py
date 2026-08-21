@@ -1,4 +1,7 @@
 import pdb
+import locale
+import sys
+from django.utils import timezone
 from datetime import datetime
 from multiprocessing import connection
 from django.db import connection
@@ -101,13 +104,6 @@ def registrar_servicio(request):
     )
 
 
-from django.utils import timezone
-
-
-from django.utils import timezone
-
-from django.utils import timezone
-
 def ReparacionImpresora_data(request):
     reparaciones = (
         ReparacionImpresora.objects
@@ -121,13 +117,28 @@ def ReparacionImpresora_data(request):
         fecha_ingreso = timezone.localtime(r.servicio.fechaIngreso)
         fecha_colombia = fecha_ingreso.strftime("%d/%m/%Y %I:%M:%S %p")
 
-        # Diferencia en días (solo fechas, sin horas)
         dias_transcurridos = (hoy - fecha_ingreso.date()).days + 1
+
+        dias_es = {
+            "Monday": "Lunes",
+            "Tuesday": "Martes",
+            "Wednesday": "Miércoles",
+            "Thursday": "Jueves",
+            "Friday": "Viernes",
+            "Saturday": "Sábado",
+            "Sunday": "Domingo"
+        }
+
+
+        dia_semana = fecha_ingreso.strftime("%A")
+        dia_semana_es = dias_es[dia_semana]
+
 
         data.append(
             {
                 "id": r.id,
                 "fecha_ingreso": fecha_colombia,
+                "dia_semana": dia_semana_es,
                 "dias_en_reparacion": dias_transcurridos,
                 "idservicio": r.servicio_id,
                 "marca": r.marca,
