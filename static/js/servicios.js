@@ -1,3 +1,5 @@
+// 1-Declaramos las variables globales que vamos a usar
+
 let tabla;
 const formulario = document.getElementById("formulario");
 const btnRegistrar = document.getElementById("btnRegistrar");
@@ -5,11 +7,10 @@ const pc = document.getElementById("camposPC");
 const imp = document.getElementById("camposIMP");
 const ton = document.getElementById("camposTON");
 
-console.log("Archivo servicios.js cargado correctamente");
+// 2-Funcion para montrar la tabla de los servicios registrados de impresoras.
 
+// - Inicializamos la tabla de servicios de impresoras cuando carga el documento.
 $(document).ready(function () {
-
-  console.log("DataTables iniciado correctamente");
   tabla = $("#tabla-serviciosimpresoras").DataTable({
     ajax: {
       url: "/api/reparacionimpresora/",
@@ -27,6 +28,7 @@ $(document).ready(function () {
       { data: "telefono" },
       {
         data: "estado",
+        // - Mostramos el estado del servicio con un color identificativo.
         render: function (data, type, row) {
           let color = "";
           if (data === "Recibido") {
@@ -47,6 +49,7 @@ $(document).ready(function () {
       {
         data: null,
         orderable: false,
+        // - Generamos las acciones disponibles para cada servicio de impresora.
         render: function (data, type, row) {
           return `
 
@@ -63,6 +66,7 @@ $(document).ready(function () {
       },
     ],
     // 🔑 Pintamos la fila completa según el estado
+    // - Aplicamos a cada fila el color correspondiente al estado del servicio.
     createdRow: function (row, data, dataIndex) {
       let bgColor = "";
       let textColor = "white"; // por defecto
@@ -96,9 +100,103 @@ $(document).ready(function () {
   });
 });
 
+// 3- Funcion para mostrar la tabla de servicios registrados de computadores.
 
-// Definimos la funcion para invocar el modal de edicion y cargar los datos del cliente
+// - Inicializamos la tabla de servicios de computadores cuando carga el documento.
+$(document).ready(function () {
 
+  tabla = $("#tabla-serviciosComputadores").DataTable({
+    ajax: {
+      url: "/api/reparacioncomputadores/",
+      dataSrc: "data",
+    },
+    columns: [
+      { data: "idservicio" },
+      { data: "dia_semana" },
+      { data: "fecha_ingreso" },
+      { data: "dias_en_reparacion" },
+      { data: "marca" },
+      { data: "modelo" },
+      { data: "serial" },
+      { data: "cliente" },
+      { data: "telefono" },
+      {
+        data: "estado",
+        // - Mostramos el estado del servicio con un color identificativo.
+        render: function (data, type, row) {
+          let color = "";
+          if (data === "Recibido") {
+            color = "#2c7bd1"; // Azul claro
+          } else if (data === "En proceso") {
+            color = "#FFC107"; // Amarillo
+          } else if (data === "Terminado") {
+            color = "#4CAF50"; // Verde
+          }
+          return `<span style="background-color:${color};
+                               color:white;
+                               padding:4px 8px;
+                               border-radius:4px;">
+                    ${data}
+                  </span>`;
+        },
+      },
+      {
+        data: null,
+        orderable: false,
+        // - Generamos las acciones disponibles para cada servicio de computador.
+        render: function (data, type, row) {
+          return `
+
+           <button class="btn btn-sm btn-primary imprimir"
+              onclick="window.open('/pdf_computador/${row.idservicio}/', '_blank')">
+         <i class="fa fa-eye"></i> <i class="fa fa-print"></i> Detalles e Imprimir
+      </button>
+
+            <button class="btn btn-sm btn-primary editar" data-id="${row.id}">
+              <i class="fa fa-pencil"></i> Editar
+            </button>
+          `;
+        },
+      },
+    ],
+    // 🔑 Pintamos la fila completa según el estado
+    // - Aplicamos a cada fila el color correspondiente al estado del servicio.
+    createdRow: function (row, data, dataIndex) {
+      let bgColor = "";
+      let textColor = "white"; // por defecto
+
+      if (data.estado === "Recibido") {
+        bgColor = "#007bff"; // Azul
+      } else if (data.estado === "En proceso") {
+        bgColor = "#ffc107"; // Amarillo claro
+        textColor = "black"; // mejor contraste sobre amarillo
+      } else if (data.estado === "Terminado") {
+        bgColor = "#4CAF50"; // Verde
+
+      } else if (data.estado === "No realizado") {
+        bgColor = "#dc3545"; // Verde
+      }
+        else if (data.estado === "Garantía") {
+          bgColor = "#290b83"; // Azul turquesa (confianza/seguridad)
+          textColor = "white"; // contraste sobre fondo turquesa
+}
+
+      // Aplica el color de fondo y texto a TODAS las celdas de la fila
+      $("td", row).css({
+        "background-color": bgColor,
+        "color": textColor
+      });
+    },
+    responsive: true,
+    language: {
+      url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json",
+    },
+  });
+});
+
+// 4- Funcion para mostrar el modal y editar los datos del servicio de impresora.
+
+// - Abrimos el modal y cargamos los datos del servicio de impresora seleccionado.
 $("#tabla-serviciosimpresoras").on("click", ".editar", function () {
   $("#modalEditarServicioImpresora").modal("show");
   const id = $(this).data("id");
@@ -114,7 +212,9 @@ $("#tabla-serviciosimpresoras").on("click", ".editar", function () {
       "X-Requested-With": "XMLHttpRequest",
     },
   })
+    // - Convertimos la respuesta del servidor a JSON.
     .then((response) => response.json())
+    // - Rellenamos el modal con la información recibida del servicio.
     .then((data) => {
       if (data.success) {
 
@@ -175,6 +275,7 @@ $("#tabla-serviciosimpresoras").on("click", ".editar", function () {
         Swal.fire("Error", data.message, "error");
       }
     })
+    // - Mostramos un mensaje cuando no se pueden cargar los datos.
     .catch((error) => {
       console.error("Error al obtener cliente:", error);
       Swal.fire(
@@ -185,38 +286,104 @@ $("#tabla-serviciosimpresoras").on("click", ".editar", function () {
     });
 });
 
-$("#tabla-clientes").on("click", ".eliminar", function () {
+// 5- Funcion para mostrar el modal y editat los datos del servicio de computadores.
+
+// - Abrimos el modal y cargamos los datos del servicio de computador seleccionado.
+$("#tabla-serviciosComputadores").on("click", ".editar", function () {
+  $("#modalEditarServicioComputadora").modal("show");
+
+  console.log("Probando modal de edicion de servicio de computador");
   const id = $(this).data("id");
-  if (!id) {
-    console.error("No se encontró el id para eliminar");
-    return;
-  }
-  Swal.fire({
-    title: "¿Eliminar cliente?",
-    text: "Esta acción no se puede deshacer.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Sí, eliminar",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.ajax({
-        url: `/api/clientes/${id}/`, // Ajústalo a tu URL real
-        type: "DELETE",
-        success: function (response) {
-          Swal.fire("Eliminado", "Cliente eliminado correctamente", "success");
-          $("#tabla-clientes").DataTable().ajax.reload();
-        },
-        error: function (xhr, status, error) {
-          Swal.fire("Error", "No se pudo eliminar el cliente", "error");
-        },
-      });
-    }
-  });
+  console.log("ID del servicio a editar:", id);
+
+  // Hacer fetch a la vista de Django para obtener los datos del servicio por su ID
+
+  fetch(`/serviciocomputadora/${id}/`, {
+    // Asegúrate que la URL coincida con tu urls.py
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
+    },
+  })
+    // - Convertimos la respuesta del servidor a JSON.
+    .then((response) => response.json())
+    // - Rellenamos el modal con la información recibida del servicio.
+    .then((data) => {
+      if (data.success) {
+
+        // Llenar los campos del modal con los datos del cliente
+        $("#edit_id_comp").val(data.servicio.id);
+        $("#edit_comp_modelo").val(data.servicio.modelo);
+        $("#edit_comp_serial").val(data.servicio.serial);
+        $("#edit_comp_diagnostico").val(data.servicio.diagnostico);
+        $("#edit_comp_solucion").val(data.servicio.solucion);
+        $("#edit_observaciones_comp").val(data.servicio.observaciones);
+        $("#edit_valorServicio_comp").val(data.servicio.valorServicio);
+        $("#edit_abono_comp").val(data.servicio.abonos);
+        $("#edit_saldo_comp").val(data.servicio.saldo);
+
+
+        // Manejo especial parameñ campo ""marca de impresora"
+
+        const inputMarcaEditar = document.getElementById('edit_comp_marca');
+        const marcaImpresora = data.servicio.marca;
+
+        if (inputMarcaEditar) {
+          const opcion = Array.from(inputMarcaEditar.options).find(opt => opt.value === marcaImpresora);
+
+          // Si existe el modelo en la lista, seleccionarla
+          if (opcion) {
+            inputMarcaEditar.value = marcaImpresora;
+            if ($(inputMarcaEditar).hasClass('selectpicker')) {
+              $(inputMarcaEditar).selectpicker('refresh');
+            }
+          } else {
+            const nuevaOpcion = new Option(marcaImpresora, marcaImpresora, true, true);
+            inputMarcaEditar.add(nuevaOpcion);
+          }
+        }
+
+        // El estado del servicio
+
+        const inputEstadoEditar = document.getElementById('edit_estado_comp');
+        const estadoServicio = data.servicio.estado;
+
+        if (inputEstadoEditar) {
+          const opcionEstado = Array.from(inputEstadoEditar.options).find(opt => opt.value === estadoServicio);
+
+          if (opcionEstado) {
+            inputEstadoEditar.value = estadoServicio;
+            if ($(inputEstadoEditar).hasClass('selectpicker')) {
+              $(inputEstadoEditar).selectpicker('refresh');
+            }
+          } else {
+            const nuevaOpcionEstado = new Option(estadoServicio, estadoServicio, true, true);
+            inputEstadoEditar.add(nuevaOpcionEstado);
+          }
+        }
+
+        console.log("Estado del servicio:", estadoServicio);
+
+      } else {
+        Swal.fire("Error", data.message, "error");
+      }
+    })
+    // - Mostramos un mensaje cuando no se pueden cargar los datos.
+    .catch((error) => {
+      console.error("Error al obtener cliente:", error);
+      Swal.fire(
+        "Error",
+        "No se pudo cargar la información del cliente",
+        "error",
+      );
+    });
 });
 
 
+// 6- Funcion para guardar los cambios realizados en el modal de ediccion del servicio de impresora.
+
+// - Guardamos mediante una petición PUT los cambios del servicio de impresora.
 document.getElementById("guardarCambiosServicioImpresora")
   .addEventListener("click", async () => {
     const id = document.getElementById("edit_id").value;
@@ -265,6 +432,7 @@ document.getElementById("guardarCambiosServicioImpresora")
 
   });
 
+
 const inputCedula = document.getElementById("documento");
 const mensaje = document.getElementById("mensaje");
 const inputNombre = document.getElementById("nombre");
@@ -274,6 +442,7 @@ const inputCiudad = document.getElementById("ciudad");
 const inputDireccion = document.getElementById("direccion");
 const datalistClientes = document.getElementById("clientes-sugeridos");
 
+// - Buscamos clientes por nombre y cargamos sus coincidencias en el datalist.
 function buscarClientesPorNombre(nombre) {
   if (!nombre || nombre.length < 2) {
     datalistClientes.innerHTML = "";
@@ -281,7 +450,9 @@ function buscarClientesPorNombre(nombre) {
   }
 
   fetch(`/api/clientes/buscar/?q=${encodeURIComponent(nombre)}`)
+    // - Convertimos la respuesta de búsqueda a JSON.
     .then((response) => response.json())
+    // - Construimos las opciones con los datos de cada cliente encontrado.
     .then((data) => {
       datalistClientes.innerHTML = "";
       data.clientes.forEach((cliente) => {
@@ -297,14 +468,17 @@ function buscarClientesPorNombre(nombre) {
         datalistClientes.appendChild(option);
       });
     })
+    // - Informamos en consola si la búsqueda falla.
     .catch((err) => console.error("Error al buscar clientes:", err));
 }
 
 if (inputNombre) {
+  // - Buscamos clientes mientras el usuario escribe su nombre.
   inputNombre.addEventListener("input", () => {
     buscarClientesPorNombre(inputNombre.value.trim());
   });
 
+  // - Completamos los datos del formulario al seleccionar un cliente.
   inputNombre.addEventListener("change", () => {
     const opciones = Array.from(datalistClientes.options);
     const seleccion = opciones.find(
@@ -333,6 +507,7 @@ if (inputNombre) {
 }
 
 if (inputCedula) {
+  // - Validamos la cédula y cargamos los datos del cliente existente.
   inputCedula.addEventListener("input", () => {
     const valor = inputCedula.value.trim();
 
@@ -414,12 +589,14 @@ if (inputCedula) {
   });
 }
 
+// - Configuramos la visibilidad de campos y la validación del formulario.
 document.addEventListener("DOMContentLoaded", () => {
   const pc = document.getElementById("camposPC");
   const imp = document.getElementById("camposIMP");
   const ton = document.getElementById("camposTON");
   const tipoServicio = document.getElementById("tipoServicio");
 
+  // - Ocultamos los campos específicos de cada tipo de servicio.
   function ocultarCampos() {
     pc.style.display = "none";
     imp.style.display = "none";
@@ -428,6 +605,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+  // - Mostramos los campos correspondientes al tipo de servicio seleccionado.
   function mostrarCampos() {
     ocultarCampos();
     if (tipoServicio.value === "PC") {
@@ -456,6 +634,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!formulario) return;
 
+  // - Validamos los campos específicos antes de registrar el servicio.
   formulario.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -535,11 +714,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+// - Abrimos el modal con los detalles del servicio seleccionado.
 $("#tabla-serviciosimpresoras").on("click", ".detalles", function () {
   $("#modalDetallesServicio").modal("show");
 
   });
 
+// - Enviamos al servidor los datos del formulario y gestionamos la respuesta.
 async function enviarDatos() {
   mensaje.textContent = "";
   inputCedula.style.border = "";
@@ -570,6 +751,7 @@ async function enviarDatos() {
         cancelButtonText: "No",
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
+      // - Preguntamos si el usuario desea imprimir el recibo generado.
       }).then((result) => {
         if (result.isConfirmed) {
           let url = "";
@@ -595,7 +777,7 @@ async function enviarDatos() {
         formulario.reset();
 
         $("#tabla-servicios").DataTable().ajax.reload(null, false);
-        $("#modalAgregarCliente").modal("hide");
+        $("#modalAgregarServicio").modal("hide");
       });
     } else {
       Swal.fire("Error", data.message, "error");
@@ -607,7 +789,7 @@ async function enviarDatos() {
     Swal.fire("Error", "No se pudo registrar", "error");
   } finally {
     $("#tabla-servicios").DataTable().ajax.reload(null, false);
-    $("#modalAgregarCliente").modal("hide");
+    $("#modalAgregarServicio").modal("hide");
     formulario.reset();
   }
 }
@@ -616,6 +798,7 @@ const valorServicio = document.getElementById("valorServicio");
 const abono = document.getElementById("abono");
 const saldo = document.getElementById("saldo");
 
+// - Calculamos el saldo restante a partir del valor del servicio y el abono.
 function calcularSaldo() {
   const valor = parseFloat(valorServicio.value) || 0;
   const pago = parseFloat(abono.value) || 0;

@@ -16,6 +16,7 @@ from servicios.models import (
     Abono,
     ReparacionPC,
     ReparacionImpresora,
+    ReparacionPC,
     RecargaToner,
 )
 from django.views.decorators.csrf import csrf_exempt
@@ -103,6 +104,7 @@ def registrar_servicio(request):
         }
     )
 
+# Para Mostrar Tabla de Reparaciones de Impresoras
 
 def ReparacionImpresora_data(request):
     reparaciones = (
@@ -151,6 +153,57 @@ def ReparacionImpresora_data(request):
         )
     return JsonResponse({"data": data})
 
+
+# Para Mostrar Tabla de Reparaciones de Computadores
+
+def ReparacionComputadores_data(request):
+    reparaciones = (
+        ReparacionPC.objects
+        .select_related("servicio__cliente")
+        .exclude(servicio__estado="ENT")  # excluye entregados
+    )
+    data = []
+    hoy = timezone.localtime(timezone.now()).date()  # fecha actual en Colombia
+
+    for r in reparaciones:
+        fecha_ingreso = timezone.localtime(r.servicio.fechaIngreso)
+        fecha_colombia = fecha_ingreso.strftime("%d/%m/%Y %I:%M:%S %p")
+
+        dias_transcurridos = (hoy - fecha_ingreso.date()).days + 1
+
+        dias_es = {
+            "Monday": "Lunes",
+            "Tuesday": "Martes",
+            "Wednesday": "Miércoles",
+            "Thursday": "Jueves",
+            "Friday": "Viernes",
+            "Saturday": "Sábado",
+            "Sunday": "Domingo"
+        }
+
+        dia_semana = fecha_ingreso.strftime("%A")
+        dia_semana_es = dias_es[dia_semana]
+
+        data.append(
+            {
+                "id": r.id,
+                "fecha_ingreso": fecha_colombia,
+                "dia_semana": dia_semana_es,
+                "dias_en_reparacion": dias_transcurridos,
+                "idservicio": r.servicio_id,
+                "marca": r.marca,
+                "modelo": r.modelo,
+                "serial": r.serial,
+                "cliente": r.servicio.cliente.nombre,
+                "telefono": r.servicio.cliente.telefono,
+                "estado": r.servicio.get_estado_display(),
+            }
+        )
+    return JsonResponse({"data": data})
+
+
+# Obtener datos de un servicio de impresora por su ID
+
 def obtener_servicioimpresora(request, id):
     """
     Devuelve los datos de una reparación de impresora en formato JSON.
@@ -185,6 +238,45 @@ def obtener_servicioimpresora(request, id):
         return JsonResponse(
             {"success": False, "message": "Método no permitido"}, status=405
         )
+
+# Obtener datos de un servicio de computador por su ID
+
+def obtener_serviciocomputador(request, id):
+    """
+    Devuelve los datos de una reparación de computador en formato JSON.
+    """
+    if request.method == "GET":
+        try:
+            reparacion = get_object_or_404(ReparacionPC.objects.select_related("servicio__cliente"), pk=id)
+            return JsonResponse(
+                {
+                    "success": True,
+                    "servicio": {
+                        "id": reparacion.id,
+                        "marca": reparacion.marca,
+                        "modelo": reparacion.modelo,
+                        "serial": reparacion.serial,
+                        "cliente": reparacion.servicio.cliente.nombre,
+                        "diagnostico": reparacion.problema,
+                        "solucion": reparacion.solucion,
+                        "observaciones": reparacion.servicio.observaciones,
+                        "valorServicio": str(reparacion.servicio.valorServicio),
+                        "abonos": str(reparacion.servicio.total_abonado()),
+                        "saldo": str(reparacion.servicio.saldo_pendiente()),
+                        "estado": reparacion.servicio.get_estado_display(),
+                    },
+                }
+            )
+        except ReparacionPC.DoesNotExist:
+            return JsonResponse(
+                {"success": False, "message": "Servicio no encontrado"}, status=404
+            )
+    else:
+        return JsonResponse(
+            {"success": False, "message": "Método no permitido"}, status=405
+        )
+
+
 def recibo_pdf_impresora(request, id):
 
     pdf = FPDF(orientation="P", unit="mm", format=(216, 140))
@@ -338,6 +430,8 @@ def recibo_pdf_computador(request, id):
     return response
 
 
+# Editar Servicio de Impresora
+
 def editar_servicio_impresora(request, id):
     if request.method in ["PUT", "POST"]:
         print("Request body:", request.body)
@@ -388,6 +482,61 @@ def editar_servicio_impresora(request, id):
         )
 
     return HttpResponseNotAllowed(["PUT", "POST"])
+
+
+# Editar Servicio de Computador
+
+def editar_servicio_computadora(request, id):
+    if request.method in ["PUT", "POST"]:
+        print("Request body:", request.body)
+        try:
+            servicio = ReparacionPc.objects.get(pk=id)
+        except ReparacionPc.DoesNotExist:
+            return JsonResponse(
+                {"success": False, "message": "❌ Servicio no encontrado"}, status=404
+            )
+
+        if request.body and request.content_type == "application/json":
+            import json
+            data = json.loads(request.body)
+            servicio.marca = data.get("marca", servicio.marca)
+            servicio.modelo = data.get("modelo", servicio.modelo)
+            servicio.serial = data.get("serial", servicio.serial)
+            servicio.falla = data.get("diagnostico", servicio.falla)
+            servicio.solucion = data.get("trabajoarealizar", servicio.solucion)
+            servicio.servicio.observaciones = data.get(
+                "observaciones", servicio.servicio.observaciones
+            )
+            servicio.servicio.valorServicio = Decimal(
+                data.get("valorServicio", servicio.servicio.valorServicio)
+            )
+            servicio.servicio.estado = data.get("estado", servicio.servicio.estado)
+        else:  # Si viene como form-data (POST)
+            servicio.marca = request.POST.get("marca", servicio.marca)
+            servicio.modelo = request.POST.get("modelo", servicio.modelo)
+            servicio.serial = request.POST.get("serial", servicio.serial)
+            servicio.falla = request.POST.get("falla", servicio.falla)
+            servicio.solucion = request.POST.get("solucion", servicio.solucion)
+            servicio.servicio.observaciones = request.POST.get(
+                "observaciones", servicio.servicio.observaciones
+            )
+            servicio.servicio.valorServicio = Decimal(
+                request.POST.get("valorServicio", servicio.servicio.valorServicio)
+                or 0
+            )
+            servicio.servicio.estado = request.POST.get("estado", servicio.servicio.estado)
+
+        if servicio.servicio.fechaEntrega is None and servicio.servicio.estado == "ENT":
+            servicio.servicio.fechaEntrega = timezone.now()
+
+        servicio.save()
+        servicio.servicio.save()
+        return JsonResponse(
+            {"success": True, "message": "✅ Servicio actualizado correctamente"}
+        )
+
+    return HttpResponseNotAllowed(["PUT", "POST"])
+
 
 def recibo_pdf_toner(request, id):
 

@@ -22,7 +22,7 @@
                 <h1 class="box-title text-center text-dark">Orden de Servicios</h1>
               </div>
 
-              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalAgregarCliente">
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalAgregarServicio">
                 <i class="fa fa-plus-square" aria-hidden="true"></i>
                 Agregar Ingreso
               </button>
@@ -50,6 +50,32 @@
                   <tbody></tbody>
                 </table>
               </div>
+
+
+<h3 class="box-title text-center text-dark">Computadores</h3>
+
+              <table id="tabla-serviciosComputadores" class="display table table-bordered">
+                  <thead>
+                    <tr>
+                    <th>N.º</th>
+      <th>Día de ingreso</th>
+<th>Fecha y hora de ingreso</th>
+<th>Días rep</th>
+<th>Marca</th>
+<th>Modelo</th>
+<th>N.º de serie</th>
+<th>Nombre del cliente</th>
+<th>Teléfono</th>
+<th>Estado</th>
+<th>Opciones</th>
+
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+
+
             </div>
           </div>
         </div>
@@ -144,13 +170,115 @@
       </div>
     </div>
 
-    <!-- Modal Agregar Servicios -->
-    <div class="modal fade" id="modalAgregarCliente" tabindex="-1" aria-labelledby="modalAgregarClienteLabel"
+
+
+
+
+
+    <!-- Modal Editar Servicio de Computadora -->
+    <div class="modal fade" id="modalEditarServicioComputadora" tabindex="-1" aria-labelledby="modalEditarClienteLabel"
       aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title" id="modalAgregarClienteLabel">Nuevo Ingreso</h4>
+            <h5 class="modal-title" id="modalEditarClienteLabel">Editar Servicio de Impresora</h5>
+          </div>
+          <div class="modal-body">
+            <form id="formEditarServicioComputadora">
+              <input type="hidden" id="edit_id_comp" />
+              <fieldset class="d-none border rounded p-3 mb-3">
+                <legend class="fs-6 text-center">Datos de la Computadora</legend>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label>Marca de Computadora</label>
+                  <select id="edit_comp_marca" class="form-control form-select">
+                    <option value="">Seleccione una marca</option>
+                    <option value="Acer">Acer</option>
+                    <option value="ASUS">ASUS</option>
+                    <option value="Dell">Dell</option>
+                    <option value="HP" selected>HP</option>
+                    <option value="Lenovo">Lenovo</option>
+                    <option value="Apple">Apple</option>
+                    <option value="MSI">MSI</option>
+                    <option value="Samsung">Samsung</option>
+                    <option value="Sony">Sony</option>
+                    <option value="Toshiba">Toshiba</option>
+                    <option value="Huawei">Huawei</option>
+                    <option value="LG">LG</option>
+                    <option value="Razer">Razer</option>
+                    <option value="Microsoft">Microsoft</option>
+                    <option value="Otro">Otro</option>
+                  </select>
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label>Modelo</label>
+                  <input type="text" id="edit_comp_modelo" class="form-control mb-2" placeholder="Modelo" />
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label>Serial</label>
+                  <input type="text" id="edit_comp_serial" class="form-control mb-2" placeholder="Serial" />
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-xs-12">
+                  <label>Diagnóstico</label>
+                  <textarea id="edit_comp_diagnostico" class="form-control" rows="2"
+                    placeholder="Descripción de la falla"></textarea>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-xs-12">
+                  <label>Trabajo a Realizar</label>
+                  <textarea id="edit_comp_solucion" class="form-control" rows="2"
+                    placeholder="Descripción de la solución"></textarea>
+                </div>
+
+                <!-- Observaciones y datos del servicio -->
+                <div class="form-group col-lg-12 col-md-12 col-xs-12">
+                  <label for="observaciones" class="form-label">Observaciones</label>
+                  <textarea id="edit_observaciones_comp" class="form-control" rows="3"
+                    placeholder="Detalles adicionales del servicio"></textarea>
+                </div>
+
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label for="valorServicio" class="form-label">Valor del Servicio</label>
+                  <input type="number" id="edit_valorServicio_comp" class="form-control" placeholder="$" />
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label for="abono" class="form-label">Abono</label>
+                  <input id="edit_abono_comp" class="form-control" placeholder="$" />
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label for="saldo" class="form-label">Saldo Restante</label>
+                  <input id="edit_saldo_comp" class="form-control" placeholder="$" readonly />
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                  <label for="edit_estado" class="form-label">Estado del Servicio</label>
+                  <select class="form-control form-select" id="edit_estado_comp" name="edit_estado">
+                    <option value="REC">📥 Recibido</option>
+                    <option value="PRO">⚙️ En proceso</option>
+                    <option value="TER">✅ Terminado</option>
+                    <option value="ENT">📦 Entregado</option>
+                    <option value="NRE">❌ No realizado</option>
+                    <option value="GAR">🛡️ Garantía</option>
+                  </select>
+                </div>
+
+              </fieldset>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="guardarCambiosServicioImpresora">Guardar cambios</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Modal Agregar Servicios -->
+    <div class="modal fade" id="modalAgregarServicio" tabindex="-1" aria-labelledby="modalAgregarServicioLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modalAgregarServicioLabel">Nuevo Ingreso</h4>
           </div>
           <div class="modal-body">
             <form action="{% url 'registrar_servicio' %}" method="POST" id="formulario">
