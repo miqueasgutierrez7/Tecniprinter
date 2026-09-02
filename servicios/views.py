@@ -429,7 +429,6 @@ def recibo_pdf_computador(request, id):
     response["Content-Disposition"] = 'inline; filename="ejemplo.pdf"'
     return response
 
-
 # Editar Servicio de Impresora
 
 def editar_servicio_impresora(request, id):
@@ -486,12 +485,12 @@ def editar_servicio_impresora(request, id):
 
 # Editar Servicio de Computador
 
-def editar_servicio_computadora(request, id):
+def editar_servicio_computador(request, id):
     if request.method in ["PUT", "POST"]:
         print("Request body:", request.body)
         try:
-            servicio = ReparacionPc.objects.get(pk=id)
-        except ReparacionPc.DoesNotExist:
+            servicio = ReparacionPC.objects.get(pk=id)
+        except ReparacionPC.DoesNotExist:
             return JsonResponse(
                 {"success": False, "message": "❌ Servicio no encontrado"}, status=404
             )
@@ -502,7 +501,7 @@ def editar_servicio_computadora(request, id):
             servicio.marca = data.get("marca", servicio.marca)
             servicio.modelo = data.get("modelo", servicio.modelo)
             servicio.serial = data.get("serial", servicio.serial)
-            servicio.falla = data.get("diagnostico", servicio.falla)
+            servicio.problema = data.get("diagnostico", servicio.problema)
             servicio.solucion = data.get("trabajoarealizar", servicio.solucion)
             servicio.servicio.observaciones = data.get(
                 "observaciones", servicio.servicio.observaciones
@@ -515,11 +514,12 @@ def editar_servicio_computadora(request, id):
             servicio.marca = request.POST.get("marca", servicio.marca)
             servicio.modelo = request.POST.get("modelo", servicio.modelo)
             servicio.serial = request.POST.get("serial", servicio.serial)
-            servicio.falla = request.POST.get("falla", servicio.falla)
-            servicio.solucion = request.POST.get("solucion", servicio.solucion)
+            servicio.problema = request.POST.get("diagnostico", servicio.problema)
+            servicio.solucion = request.POST.get("trabajoarealizar", servicio.solucion)
             servicio.servicio.observaciones = request.POST.get(
                 "observaciones", servicio.servicio.observaciones
             )
+
             servicio.servicio.valorServicio = Decimal(
                 request.POST.get("valorServicio", servicio.servicio.valorServicio)
                 or 0

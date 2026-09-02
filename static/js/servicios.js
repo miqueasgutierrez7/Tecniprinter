@@ -433,6 +433,64 @@ document.getElementById("guardarCambiosServicioImpresora")
   });
 
 
+
+// 7- Funcion para guardar los cambios realizados en el modal de ediccion del servicio de computador.
+
+// - Guardamos mediante una petición PUT los cambios del servicio de computador.
+document.getElementById("guardarCambiosServicioComputadora")
+  .addEventListener("click", async () => {
+    const id = document.getElementById("edit_id_comp").value;
+    console.log("ID del cliente a actualizar:", id);
+
+    // Capturar datos del formulario
+    const datos = {
+      marca: document.getElementById("edit_comp_marca").value,
+      modelo: document.getElementById("edit_comp_modelo").value,
+      serial: document.getElementById("edit_comp_serial").value,
+      diagnostico: document.getElementById("edit_comp_diagnostico").value,
+      trabajoarealizar: document.getElementById("edit_comp_solucion").value,
+      observaciones: document.getElementById("edit_observaciones_comp").value,
+      valorServicio: document.getElementById("edit_valorServicio_comp").value,
+      abonos: document.getElementById("edit_abono_comp").value,
+      saldo: document.getElementById("edit_saldo_comp").value,
+      estado: document.getElementById("edit_estado_comp").value,
+    };
+
+   try {
+      const response = await fetch(`/servicioscomputador/editar/${id}/`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+        },
+        body: JSON.stringify(datos),
+      });
+      const data = await response.json();
+      if (data.success) {
+        Swal.fire("Éxito", "Servicio actualizado correctamente", "success");
+        $("#tabla-servicios").DataTable().ajax.reload();
+
+
+        location.reload();
+        formulario.reset();
+
+      } else {
+        Swal.fire("Error", data.message, "error");
+      }
+    } catch (error) {
+      console.error("Error al actualizar servicio:", error);
+      Swal.fire("Error", "No se pudo actualizar el servicio", "error");
+    }
+
+
+  });
+
+
+
+
+
+
+
 const inputCedula = document.getElementById("documento");
 const mensaje = document.getElementById("mensaje");
 const inputNombre = document.getElementById("nombre");
