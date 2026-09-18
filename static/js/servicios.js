@@ -867,3 +867,17 @@ function calcularSaldo() {
 
 valorServicio.addEventListener("input", calcularSaldo);
 abono.addEventListener("input", calcularSaldo);
+
+
+// -8 Esta funcion permite seleccion el tipo de servicio por categoria
+
+
+ $('#tablaserviciosComputadores').on('show.bs.collapse', function () {
+    $('#tablaserviciosimpresoras').collapse('hide');
+  });
+
+// Cuando se abre Impresoras, cerramos Computadores
+
+  $('#tablaserviciosimpresoras').on('show.bs.collapse', function () {
+    $('#tablaserviciosComputadores').collapse('hide');
+  });
