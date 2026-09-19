@@ -22,6 +22,11 @@ urlpatterns = [
         name="recibo_pdf_impresora",
     ),
     path(
+        "api/recargatoner/",
+        views.RecargaToner_data,
+        name="recargatoner_data",
+    ),
+    path(
         "pdf_computador/<int:id>/",
         views.recibo_pdf_computador,
         name="recibo_pdf_computador",

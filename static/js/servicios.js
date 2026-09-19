@@ -194,6 +194,121 @@ $(document).ready(function () {
   });
 });
 
+// 4- Funcion para mostrar el registro de toner recargados en la tabla de servicios de toner.
+
+$(document).ready(function () {
+
+    console.log("Cargando tabla de servicios de toner...");
+
+    tabla = $("#tabla-serviciosToner").DataTable({
+        ajax: {
+            url: "/api/recargatoner/",
+            dataSrc: "data",
+        },
+
+        columns: [
+            { data: "idservicio" },
+            { data: "dia_semana" },
+            { data: "fecha_ingreso" },
+            { data: "dias_en_reparacion" },
+            { data: "modelo_toner" },
+            { data: "cliente" },
+            { data: "telefono" },
+
+            {
+                data: "estado",
+
+                render: function (data, type, row) {
+
+                    let color = "";
+
+                    if (data === "Recibido") {
+                        color = "#2c7bd1";
+                    } else if (data === "En proceso") {
+                        color = "#FFC107";
+                    } else if (data === "Terminado") {
+                        color = "#4CAF50";
+                    } else if (data === "No realizado") {
+                        color = "#dc3545";
+                    } else if (data === "Garantía") {
+                        color = "#290b83";
+                    }
+
+                    return `
+                        <span style="
+                            background-color:${color};
+                            color:white;
+                            padding:4px 8px;
+                            border-radius:4px;
+                        ">
+                            ${data}
+                        </span>
+                    `;
+                },
+            },
+
+            {
+                data: null,
+                orderable: false,
+
+                render: function (data, type, row) {
+
+                    return `
+                        <button class="btn btn-sm btn-primary imprimir"
+                            onclick="window.open('/pdf_toner/${row.idservicio}/', '_blank')">
+                            <i class="fa fa-eye"></i>
+                            <i class="fa fa-print"></i>
+                            Detalles e Imprimir
+                        </button>
+
+                        <button class="btn btn-sm btn-primary editar"
+                            data-id="${row.idservicio}">
+                            <i class="fa fa-pencil"></i>
+                            Editar
+                        </button>
+                    `;
+                },
+            },
+        ],
+
+        createdRow: function (row, data, dataIndex) {
+
+            let bgColor = "";
+            let textColor = "white";
+
+            if (data.estado === "Recibido") {
+                bgColor = "#007bff";
+
+            } else if (data.estado === "En proceso") {
+                bgColor = "#ffc107";
+                textColor = "black";
+
+            } else if (data.estado === "Terminado") {
+                bgColor = "#4CAF50";
+
+            } else if (data.estado === "No realizado") {
+                bgColor = "#dc3545";
+
+            } else if (data.estado === "Garantía") {
+                bgColor = "#290b83";
+                textColor = "white";
+            }
+
+            $("td", row).css({
+                "background-color": bgColor,
+                "color": textColor
+            });
+        },
+
+        responsive: true,
+
+        language: {
+            url: "https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json",
+        },
+    });
+});
+
+
 // 4- Funcion para mostrar el modal y editar los datos del servicio de impresora.
 
 // - Abrimos el modal y cargamos los datos del servicio de impresora seleccionado.
@@ -380,6 +495,15 @@ $("#tabla-serviciosComputadores").on("click", ".editar", function () {
     });
 });
 
+// Funcion para mostrar el modal y editat los datos del servicio de toner.
+
+$("#tabla-serviciosToner").on("click", ".editar", function () {
+  $("#modalEditarServicioToner").modal("show");
+  const id = $(this).data("id");
+  console.log("ID del servicio a editar:", id);
+
+});
+
 
 // 6- Funcion para guardar los cambios realizados en el modal de ediccion del servicio de impresora.
 
@@ -484,12 +608,6 @@ document.getElementById("guardarCambiosServicioComputadora")
 
 
   });
-
-
-
-
-
-
 
 const inputCedula = document.getElementById("documento");
 const mensaje = document.getElementById("mensaje");
@@ -880,4 +998,9 @@ abono.addEventListener("input", calcularSaldo);
 
   $('#tablaserviciosimpresoras').on('show.bs.collapse', function () {
     $('#tablaserviciosComputadores').collapse('hide');
+  });
+
+  $('#tablaserviciosToner').on('show.bs.collapse', function () {
+    $('#tablaserviciosComputadores').collapse('hide');
+    $('#tablaserviciosimpresoras').collapse('hide');
   });

@@ -202,6 +202,51 @@ def ReparacionComputadores_data(request):
     return JsonResponse({"data": data})
 
 
+# Para Mostrar Tabla de Recargas de Toner
+
+def RecargaToner_data(request):
+    recargas = (
+        RecargaToner.objects
+        .select_related("servicio__cliente")
+        .exclude(servicio__estado="ENT")  # excluye entregados
+    )
+    data = []
+    hoy = timezone.localtime(timezone.now()).date()  # fecha actual en Colombia
+
+    for r in recargas:
+        fecha_ingreso = timezone.localtime(r.servicio.fechaIngreso)
+        fecha_colombia = fecha_ingreso.strftime("%d/%m/%Y %I:%M:%S %p")
+
+        dias_transcurridos = (hoy - fecha_ingreso.date()).days + 1
+
+        dias_es = {
+            "Monday": "Lunes",
+            "Tuesday": "Martes",
+            "Wednesday": "Miércoles",
+            "Thursday": "Jueves",
+            "Friday": "Viernes",
+            "Saturday": "Sábado",
+            "Sunday": "Domingo"
+        }
+
+        dia_semana = fecha_ingreso.strftime("%A")
+        dia_semana_es = dias_es[dia_semana]
+
+        data.append(
+            {
+                "id": r.id,
+                "fecha_ingreso": fecha_colombia,
+                "dia_semana": dia_semana_es,
+                "dias_en_reparacion": dias_transcurridos,
+                "idservicio": r.servicio_id,
+                "modelo_toner": r.modelo_toner,
+                "cliente": r.servicio.cliente.nombre,
+                "telefono": r.servicio.cliente.telefono,
+                "estado": r.servicio.get_estado_display(),
+            }
+        )
+    return JsonResponse({"data": data})
+
 # Obtener datos de un servicio de impresora por su ID
 
 def obtener_servicioimpresora(request, id):

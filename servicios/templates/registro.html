@@ -51,6 +51,10 @@
           Computadores
         </button>
 
+        <!-- Botón Toner -->
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#tablaserviciosToner" aria-expanded="false" aria-controls="tablaserviciosToner">
+          Recarga de Tóner
+        </button>
 
         <!-- Muestra el orden de servicios de impresoras -->
 
@@ -99,6 +103,26 @@
           </table>
         </div>
 
+        <!-- Muestra el orden de servicio de toner -->
+
+        <div id="tablaserviciosToner" class="collapse in" data-parent="#accordionServicios" tabindex="-1">
+          <h3 class="box-title text-center text-dark">Recarga de Tóner</h3>
+          <table id="tabla-serviciosToner" class="display table table-bordered">
+            <thead>
+              <tr>
+                <th>N.º</th>
+                <th>Día de ingreso</th>
+                <th>Fecha y hora de ingreso</th>
+                <th>Días rep</th>
+                <th>Modelo del tóner</th>
+                <th>Nombre del cliente</th>
+                <th>Teléfono</th>
+                <th>Estado</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
 
         <!-- Modal Editar Servicio de Impresora-->
 
@@ -286,6 +310,67 @@
             </div>
           </div>
         </div>
+
+        <!-- Modal Editar Servicio de Tóner -->
+
+        <div class="modal fade" id="modalEditarServicioToner" tabindex="-1"
+          aria-labelledby="modalEditarClienteLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarClienteLabel">Editar Servicio de Tóner</h5>
+              </div>
+              <div class="modal-body">
+                <form id="formEditarServicioToner">
+                  <input type="hidden" id="edit_id_toner" />
+                  <fieldset class="d-none border rounded p-3 mb-3">
+                    <legend class="fs-6 text-center">Datos del Tóner</legend>
+                    <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                      <label>Modelo del Tóner</label>
+                      <input type="text" id="edit_toner_modelo" class="form-control mb-2"
+                        placeholder="Modelo del tóner" />
+                    </div>
+
+                    <!-- Observaciones y datos del servicio -->
+                    <div class="form-group col-lg-12 col-md-12 col-xs-12">
+                      <label for="observaciones" class="form-label">Observaciones</label>
+                      <textarea id="edit_observaciones_toner" class="form-control" rows="3"
+                        placeholder="Detalles adicionales del servicio"></textarea>
+                    </div>
+
+                    <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                      <label for="valorServicio" class="form-label">Valor del Servicio</label>
+                      <input type="number" id="edit_valorServicio_toner" class="form-control" placeholder="$" />
+                    </div>
+                    <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                      <label for="abono" class="form-label">Abono</label>
+                      <input id="edit_abono_toner" class="form-control" placeholder="$" />
+                    </div>
+                    <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                      <label for="saldo" class="form-label">Saldo Restante</label>
+                      <input id="edit_saldo_toner" class="form-control" placeholder="$" readonly />
+                    </div>
+
+                      <div class="form-group col-lg-4 col-md-4 col-xs-12">
+                      <label for="edit_estado_comp" class="form-label">Estado del Servicio</label>
+                      <select class="form-control form-select" id="edit_estado_comp" name="edit_estado">
+                        <option value="REC">📥 Recibido</option>
+                        <option value="PRO">⚙️ En proceso</option>
+                        <option value="TER">✅ Terminado</option>
+                        <option value="ENT">📦 Entregado</option>
+                        <option value="NRE">❌ No realizado</option>
+                        <option value="GAR">🛡️ Garantía</option>
+                      </select>
+                    </div>
+  </div>
+                     <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="guardarCambiosServicioComputadora">Guardar
+                  cambios</button>
+
+
+                </form>
+              </div>
 
         <!-- Modal Agregar Servicios -->
 
