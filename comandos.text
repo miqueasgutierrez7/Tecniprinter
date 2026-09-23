@@ -23,12 +23,7 @@ pip install django
 iniciar servidor
 python manage.py runserver
 
-
-
-
 comando para modificar los css del login
-
-c
 
 INSTALLED_APPS = [
     ...

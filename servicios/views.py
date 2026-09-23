@@ -293,6 +293,7 @@ def obtener_serviciocomputador(request, id):
     if request.method == "GET":
         try:
             reparacion = get_object_or_404(ReparacionPC.objects.select_related("servicio__cliente"), pk=id)
+
             return JsonResponse(
                 {
                     "success": True,
@@ -321,6 +322,44 @@ def obtener_serviciocomputador(request, id):
             {"success": False, "message": "Método no permitido"}, status=405
         )
 
+# Obtener datos de un servicio de recarga de toner por su ID
+
+def obtener_serviciotoner(request, id):
+
+
+
+    """
+    Devuelve los datos de una recarga de toner en formato JSON.
+    """
+    if request.method == "GET":
+        try:
+            recarga = get_object_or_404(RecargaToner.objects.select_related("servicio__cliente"), pk=id)
+            print("Modelo de toner:", recarga.modelo_toner)
+            breakpoint()
+
+            return JsonResponse(
+                {
+                    "success": True,
+                    "servicio": {
+                        "id": recarga.id,
+                        "modelo_toner": recarga.modelo_toner,
+                        "cliente": recarga.servicio.cliente.nombre,
+                        "observaciones": recarga.servicio.observaciones,
+                        "valorServicio": str(recarga.servicio.valorServicio),
+                        "abonos": str(recarga.servicio.total_abonado()),
+                        "saldo": str(recarga.servicio.saldo_pendiente()),
+                        "estado": recarga.servicio.get_estado_display(),
+                    },
+                }
+            )
+        except RecargaToner.DoesNotExist:
+            return JsonResponse(
+                {"success": False, "message": "Servicio no encontrado"}, status=404
+            )
+    else:
+        return JsonResponse(
+            {"success": False, "message": "Método no permitido"}, status=405
+        )
 
 def recibo_pdf_impresora(request, id):
 

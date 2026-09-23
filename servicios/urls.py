@@ -3,8 +3,8 @@ from . import views
 
 urlpatterns = [
     path("servicios/", views.lista_servicios, name="lista_servicios"),
-    path("servicios/editar/<int:id>/", views.editar_servicio_impresora, name="editar_servicio"),
-     path("servicioscomputador/editar/<int:id>/", views.editar_servicio_computador, name="editar_servicio"),
+    path("servicios/editar/<int:id>/", views.editar_servicio_impresora, name="editar_servicio_impresora"),
+    path("servicioscomputador/editar/<int:id>/", views.editar_servicio_computador, name="editar_servicio_computador"),
     path("servicios/registrar/", views.registrar_servicio, name="registrar_servicio"),
     path(
         "api/reparacionimpresora/",
@@ -34,4 +34,5 @@ urlpatterns = [
     path("pdf_toner/<int:id>/", views.recibo_pdf_toner, name="recibo_pdf_toner"),
     path("servicioimpresora/<int:id>/", views.obtener_servicioimpresora, name="obtener_servicioimpresora"),
     path("serviciocomputadora/<int:id>/", views.obtener_serviciocomputador, name="obtener_serviciocomputador"),
+    path("serviciotoner/<int:id>/", views.obtener_serviciotoner, name="obtener_serviciotoner"),
 ]

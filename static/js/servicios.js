@@ -262,7 +262,7 @@ $(document).ready(function () {
                         </button>
 
                         <button class="btn btn-sm btn-primary editar"
-                            data-id="${row.idservicio}">
+                            data-id="${row.id}">
                             <i class="fa fa-pencil"></i>
                             Editar
                         </button>
@@ -502,7 +502,11 @@ $("#tabla-serviciosToner").on("click", ".editar", function () {
   const id = $(this).data("id");
   console.log("ID del servicio a editar:", id);
 
+  // Hacer fetch a la vista de Django para obtener los datos del servicio por su ID
+
 });
+
+
 
 
 // 6- Funcion para guardar los cambios realizados en el modal de ediccion del servicio de impresora.
