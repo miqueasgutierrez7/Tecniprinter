@@ -427,8 +427,10 @@ $("#tabla-serviciosComputadores").on("click", ".editar", function () {
     .then((data) => {
       if (data.success) {
 
+        console.log("Datos del servicio de computadora:", data.servicio);
+
         // Llenar los campos del modal con los datos del cliente
-        $("#edit_id_comp").val(data.servicio.id);
+        $("#edit_").val(data.servicio.id);
         $("#edit_comp_modelo").val(data.servicio.modelo);
         $("#edit_comp_serial").val(data.servicio.serial);
         $("#edit_comp_diagnostico").val(data.servicio.diagnostico);
@@ -497,17 +499,74 @@ $("#tabla-serviciosComputadores").on("click", ".editar", function () {
 
 // Funcion para mostrar el modal y editat los datos del servicio de toner.
 
-$("#tabla-serviciosToner").on("click", ".editar", function () {
-  $("#modalEditarServicioToner").modal("show");
-  const id = $(this).data("id");
-  console.log("ID del servicio a editar:", id);
 
-  // Hacer fetch a la vista de Django para obtener los datos del servicio por su ID
+$("#tabla-serviciosToner").on("click", ".editar", function () {
+
+  $("#modalEditarServicioToner").modal("show");
+
+  const id = $(this).data("id");
+
+  fetch(`/serviciotoner/${id}/`, {
+    // Asegúrate que la URL coincida con tu urls.py
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
+    },
+  })
+
+
+   // - Convertimos la respuesta del servidor a JSON.
+    .then((response) => response.json())
+    // - Rellenamos el modal con la información recibida del servicio.
+    .then((data) => {
+      if (data.success) {
+
+        console.log("Datos del servicio de computadora:", data.servicio);
+
+        // Llenar los campos del modal con los datos del cliente
+        $("#edit_toner_modelo").val(data.servicio.modelo_toner);
+        $("#edit_observaciones_toner").val(data.servicio.observaciones);
+        $("#edit_valorServicio_toner").val(data.servicio.valorServicio);
+        $("#edit_abono_toner").val(data.servicio.abonos);
+        $("#edit_saldo_toner").val(data.servicio.saldo);
+
+        // El estado del servicio
+
+        const inputEstadoEditar = document.getElementById('edit_estado_toner');
+        const estadoServicio = data.servicio.estado;
+
+        if (inputEstadoEditar) {
+          const opcionEstado = Array.from(inputEstadoEditar.options).find(opt => opt.value === estadoServicio);
+
+          if (opcionEstado) {
+            inputEstadoEditar.value = estadoServicio;
+            if ($(inputEstadoEditar).hasClass('selectpicker')) {
+              $(inputEstadoEditar).selectpicker('refresh');
+            }
+          } else {
+            const nuevaOpcionEstado = new Option(estadoServicio, estadoServicio, true, true);
+            inputEstadoEditar.add(nuevaOpcionEstado);
+          }
+        }
+
+        console.log("Estado del servicio:", estadoServicio);
+
+      } else {
+        Swal.fire("Error", data.message, "error");
+      }
+    })
+    // - Mostramos un mensaje cuando no se pueden cargar los datos.
+    .catch((error) => {
+      console.error("Error al obtener cliente:", error);
+      Swal.fire(
+        "Error",
+        "No se pudo cargar la información del cliente",
+        "error",
+      );
+    });
 
 });
-
-
-
 
 // 6- Funcion para guardar los cambios realizados en el modal de ediccion del servicio de impresora.
 

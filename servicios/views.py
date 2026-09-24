@@ -335,7 +335,6 @@ def obtener_serviciotoner(request, id):
         try:
             recarga = get_object_or_404(RecargaToner.objects.select_related("servicio__cliente"), pk=id)
             print("Modelo de toner:", recarga.modelo_toner)
-            breakpoint()
 
             return JsonResponse(
                 {
