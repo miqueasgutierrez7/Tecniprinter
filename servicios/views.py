@@ -620,6 +620,51 @@ def editar_servicio_computador(request, id):
 
     return HttpResponseNotAllowed(["PUT", "POST"])
 
+# Editar Servicio de Recarga de Toner
+
+def editar_servicio_toner(request, id):
+    if request.method in ["PUT", "POST"]:
+        print("Request body:", request.body)
+        try:
+            servicio = RecargaToner.objects.get(pk=id)
+        except RecargaToner.DoesNotExist:
+            return JsonResponse(
+                {"success": False, "message": "❌ Servicio no encontrado"}, status=404
+            )
+
+        if request.body and request.content_type == "application/json":
+            import json
+            data = json.loads(request.body)
+            servicio.modelo_toner = data.get("modelo_toner", servicio.modelo_toner)
+            servicio.servicio.observaciones = data.get(
+                "observaciones", servicio.servicio.observaciones
+            )
+            servicio.servicio.valorServicio = Decimal(
+                data.get("valorServicio", servicio.servicio.valorServicio)
+            )
+            servicio.servicio.estado = data.get("estado", servicio.servicio.estado)
+        else:  # Si viene como form-data (POST)
+            servicio.modelo_toner = request.POST.get("modelo_toner", servicio.modelo_toner)
+            servicio.servicio.observaciones = request.POST.get(
+                "observaciones", servicio.servicio.observaciones
+            )
+            servicio.servicio.valorServicio = Decimal(
+                request.POST.get("valorServicio", servicio.servicio.valorServicio)
+                or 0
+            )
+            servicio.servicio.estado = request.POST.get("estado", servicio.servicio.estado)
+
+        if servicio.servicio.fechaEntrega is None and servicio.servicio.estado == "ENT":
+            servicio.servicio.fechaEntrega = timezone.now()
+
+        servicio.save()
+        servicio.servicio.save()
+        return JsonResponse(
+            {"success": True, "message": "✅ Servicio actualizado correctamente"}
+        )
+
+    return HttpResponseNotAllowed(["PUT", "POST"])
+
 
 def recibo_pdf_toner(request, id):
 

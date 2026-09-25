@@ -430,7 +430,7 @@ $("#tabla-serviciosComputadores").on("click", ".editar", function () {
         console.log("Datos del servicio de computadora:", data.servicio);
 
         // Llenar los campos del modal con los datos del cliente
-        $("#edit_").val(data.servicio.id);
+        $("#edit_id_comp").val(data.servicio.id);
         $("#edit_comp_modelo").val(data.servicio.modelo);
         $("#edit_comp_serial").val(data.servicio.serial);
         $("#edit_comp_diagnostico").val(data.servicio.diagnostico);
@@ -525,6 +525,7 @@ $("#tabla-serviciosToner").on("click", ".editar", function () {
         console.log("Datos del servicio de computadora:", data.servicio);
 
         // Llenar los campos del modal con los datos del cliente
+        $("#edit_id_toner").val(data.servicio.id);
         $("#edit_toner_modelo").val(data.servicio.modelo_toner);
         $("#edit_observaciones_toner").val(data.servicio.observaciones);
         $("#edit_valorServicio_toner").val(data.servicio.valorServicio);
@@ -616,7 +617,6 @@ document.getElementById("guardarCambiosServicioImpresora")
       Swal.fire("Error", "No se pudo actualizar el servicio", "error");
     }
 
-
   });
 
 
@@ -668,9 +668,57 @@ document.getElementById("guardarCambiosServicioComputadora")
       console.error("Error al actualizar servicio:", error);
       Swal.fire("Error", "No se pudo actualizar el servicio", "error");
     }
-
-
   });
+
+
+
+  // -8 - Función para guardar los cambios realizados en el modal de edición del servicio de toner.
+
+document.getElementById("guardarCambiosServicioToner")
+  .addEventListener("click", async () => {
+    const id = document.getElementById("edit_id_toner").value;
+    console.log("ID a actualizar:", id);
+
+    // Capturar datos del formulario
+    const datos = {
+      modelo: document.getElementById("edit_toner_modelo").value,
+      observaciones: document.getElementById("edit_observaciones_toner").value,
+      valorServicio: document.getElementById("edit_valorServicio_toner").value,
+      abonos: document.getElementById("edit_abono_toner").value,
+      saldo: document.getElementById("edit_saldo_toner").value,
+      estado: document.getElementById("edit_estado_toner").value,
+    };
+
+   try {
+      const response = await fetch(`/serviciostoner/editar/${id}/`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+        },
+        body: JSON.stringify(datos),
+      });
+      const data = await response.json();
+      if (data.success) {
+        Swal.fire("Éxito", "Servicio actualizado correctamente", "success");
+        $("#tabla-servicios").DataTable().ajax.reload();
+
+
+        location.reload();
+        formulario.reset();
+
+      } else {
+        Swal.fire("Error", data.message, "error");
+      }
+    } catch (error) {
+      console.error("Error al actualizar servicio:", error);
+      Swal.fire("Error", "No se pudo actualizar el servicio", "error");
+    }
+  });
+
+
+
+
 
 const inputCedula = document.getElementById("documento");
 const mensaje = document.getElementById("mensaje");
@@ -1053,17 +1101,29 @@ abono.addEventListener("input", calcularSaldo);
 // -8 Esta funcion permite seleccion el tipo de servicio por categoria
 
 
- $('#tablaserviciosComputadores').on('show.bs.collapse', function () {
-    $('#tablaserviciosimpresoras').collapse('hide');
-  });
+ // Mostrar Computadores
+$('#botonComputadores').on('click', function () {
 
-// Cuando se abre Impresoras, cerramos Computadores
+    $('#tablaserviciosComputadores').show();
+    $('#tablaserviciosimpresoras').hide();
+    $('#tablaserviciosToner').hide();
 
-  $('#tablaserviciosimpresoras').on('show.bs.collapse', function () {
-    $('#tablaserviciosComputadores').collapse('hide');
-  });
+});
 
-  $('#tablaserviciosToner').on('show.bs.collapse', function () {
-    $('#tablaserviciosComputadores').collapse('hide');
-    $('#tablaserviciosimpresoras').collapse('hide');
-  });
+// Mostrar Impresoras
+$('#botonImpresoras').on('click', function () {
+
+    $('#tablaserviciosComputadores').hide();
+    $('#tablaserviciosimpresoras').show();
+    $('#tablaserviciosToner').hide();
+
+});
+
+// Mostrar Toner
+$('#botonToner').on('click', function () {
+
+    $('#tablaserviciosComputadores').hide();
+    $('#tablaserviciosimpresoras').hide();
+    $('#tablaserviciosToner').show();
+
+});

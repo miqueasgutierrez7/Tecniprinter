@@ -5,6 +5,7 @@ urlpatterns = [
     path("servicios/", views.lista_servicios, name="lista_servicios"),
     path("servicios/editar/<int:id>/", views.editar_servicio_impresora, name="editar_servicio_impresora"),
     path("servicioscomputador/editar/<int:id>/", views.editar_servicio_computador, name="editar_servicio_computador"),
+    path("serviciostoner/editar/<int:id>/", views.editar_servicio_toner, name="editar_servicio_toner"),
     path("servicios/registrar/", views.registrar_servicio, name="registrar_servicio"),
     path(
         "api/reparacionimpresora/",
