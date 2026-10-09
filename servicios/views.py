@@ -445,13 +445,13 @@ def recibo_pdf_computador(request, id):
 
     pdf = FPDF(orientation="P", unit="mm", format=(216, 140))
     pdf.add_page()
-    pdf.image("static/images/logo.jpg", x=65, y=5, w=85)
+    pdf.image("static/images/logo.jpg", x=20, y=7, w=92)
 
     pdf.set_font("Arial", style="I", size=13)
-    pdf.ln(18)
-    pdf.cell(195, 10, txt="Carrera 30 #28-43", ln=True, align="C")
+    pdf.ln(5)
+    pdf.cell(170, 10, txt="Carrera 30 #28-43", ln=True, align="R")
     pdf.ln(-4)
-    pdf.cell(195, 10, txt="Cels : 318-553 9043 / 318-873 3880", ln=True, align="C")
+    pdf.cell(190, 10, txt="Cels : 318-553 9043 / 318-873 3880", ln=True, align="R")
     pdf.ln(-2)
 
     id_servicio = id  # variable externa
@@ -459,7 +459,7 @@ def recibo_pdf_computador(request, id):
     with connection.cursor() as cursor:
         cursor.execute(
             """
-        SELECT s."idServicio" AS numero, c.nombre AS cliente, s."fechaIngreso", c.direccion, c.telefono, rpc.marca, rpc.modelo, rpc.serial, rpc.problema, rpc.solucion, s.observaciones, s."valorServicio" , a.monto FROM servicios_servicio s INNER JOIN clientes_cliente c ON s."idCliente" = c."idCliente" LEFT JOIN servicios_reparacionpc rpc ON rpc."servicio_id" = s."idServicio" LEFT JOIN servicios_abono a ON a."servicio_id" = s."idServicio" WHERE s."idServicio" = %s
+        SELECT s."idServicio" AS numeroingreso, s."fechaEntrega" AS fechaentrega , s.estado AS estado, c.nombre AS cliente, s."fechaIngreso", c.direccion, c.telefono, rpc.marca, rpc.modelo, rpc.serial, rpc.problema, rpc.solucion, s.observaciones, s."valorServicio" , a.monto FROM servicios_servicio s INNER JOIN clientes_cliente c ON s."idCliente" = c."idCliente" LEFT JOIN servicios_reparacionpc rpc ON rpc."servicio_id" = s."idServicio" LEFT JOIN servicios_abono a ON a."servicio_id" = s."idServicio" WHERE s."idServicio" = %s
         GROUP BY s."idServicio", c.nombre, s."fechaIngreso", c.direccion, c.telefono,
                  rpc.marca, rpc.modelo, rpc.serial, rpc.problema, rpc.solucion, s.observaciones, s."valorServicio", a.monto
         """,
@@ -468,45 +468,51 @@ def recibo_pdf_computador(request, id):
         row = cursor.fetchone()
         columns = [col[0] for col in cursor.description]
         datos = dict(zip(columns, row))
-    pdf.cell(150, 10, txt="Orden de Trabajo:", ln=True, align="C")
-    pdf.ln(-9)
-    pdf.set_x(110)
-    pdf.set_font("Arial", style="B", size=14)
-    pdf.cell(30, 8, txt=f"N {datos['numero']}", border=3, ln=True, align="C")
+
+    if datos["fechaentrega"] is None:
+        fecha_entrega_formateada = "Entrega pendiente"
+    else:
+        fecha = datos["fechaentrega"]  # datetime con tz
+        fecha_local = timezone.localtime(fecha)  # ajusta a TIME_ZONE configurado
+        fecha_entrega_formateada = fecha_local.strftime("%d-%m-%Y %I:%M %p")
+    pdf.ln(8)
+    pdf.set_font("Arial", style="B", size=15)
+    pdf.cell(195, 10, txt=f"ORDEN DE TRABAJO N° {datos['numeroingreso']} ", border=1, ln=True, align="C")
     pdf.set_font("Arial", size=12)
-    pdf.ln(4)
-    pdf.cell(100, 7, f"Cliente: {datos['cliente']}", border=1)
-    fecha_formateada = datos["fechaIngreso"].strftime("%d-%m-%Y %I:%M")
-    pdf.cell(95, 7, f"Fecha: {fecha_formateada}", border=1)
+    pdf.cell(90, 7, f"Cliente: {datos['cliente']}", border=1)
+    fecha_ingreso_formateada = datos["fechaIngreso"].strftime("%d-%m-%Y %I:%M %p")
+    pdf.cell(52, 7, f"FI : {fecha_ingreso_formateada}", border=1)
+    pdf.cell(53, 7, f"FE : {fecha_entrega_formateada}", border=1)
     pdf.ln()
     pdf.cell(100, 7, f"Direccion: {datos['direccion']}", border=1)
     pdf.cell(95, 7, f"Telefono: {datos['telefono']}", border=1)
     pdf.ln()
-    pdf.cell(100, 7, f"Computador: {datos['marca']} {datos['modelo']}", border=1)
-    pdf.cell(95, 7, f"Serial: {datos['serial']}", border=1)
+    pdf.cell(65, 7, f"Computador: {datos['marca']} {datos['modelo']}", border=1)
+    pdf.cell(65, 7, f"Serial: {datos['serial']}", border=1)
+    pdf.cell(65, 7, f"Estado: {obtener_estado_completo(datos['estado'])}", border=1)
     pdf.ln()
     pdf.cell(195, 7, f"Diagnostico: {datos['problema']}", border=1)
     pdf.ln()
     pdf.cell(195, 7, f"Trabajo a Realizar: {datos['solucion']}", border=1)
     pdf.ln()
     pdf.cell(195, 7, f"Observaciones: {datos['observaciones']}", border=1)
-    pdf.ln(8)
-    pdf.set_x(165)
-    valor = datos["valorServicio"] or 0
-    pdf.cell(40, 7, f"Valor: ${valor:,.0f}".replace(",", "."), border=1)
-    pdf.ln()
-    pdf.set_x(165)
+    pdf.ln(12)
+    pdf.set_x(30)
+    valor = datos["valorServicio"]
+    pdf.cell(60, 7, f"Valor: ${valor:,.0f}".replace(",", "."), border=1)
     saldo = datos["valorServicio"] - (datos["monto"] or 0)
     abono = datos["monto"] or 0
     pdf.cell(40, 7, f"Abono:${abono:,.0f}".replace(",", "."), border=1)
-    pdf.ln()
-    pdf.set_x(10)
-    pdf.cell(40, 7, "Firma del Cliente:_______________", border=0)
-    pdf.set_x(85)
-    pdf.cell(40, 7, "Firma del Tècnico:_______________", border=0)
-    pdf.set_x(165)
     pdf.cell(40, 7, f"Saldo: ${saldo:,.0f}".replace(",", "."), border=1)
-    pdf.ln()
+    pdf.ln(13)
+    pdf.set_x(50)
+    pdf.cell(70, 7, "Firma del Cliente:", border=0)
+    pdf.cell(40, 7, "Firma del Tècnico:", border=0)
+    pdf.ln(5)
+    pdf.set_x(43)
+    pdf.cell(70, 7, "___________________", border=0)
+    pdf.cell(70, 7, "___________________", border=0)
+    pdf.set_x(85)
     pdf_bytes = pdf.output(dest="S").encode("latin1")  # clásico fpdf
     response = HttpResponse(pdf_bytes, content_type="application/pdf")
     response["Content-Disposition"] = 'inline; filename="ejemplo.pdf"'
@@ -670,13 +676,13 @@ def recibo_pdf_toner(request, id):
 
     pdf = FPDF(orientation="P", unit="mm", format=(216, 140))
     pdf.add_page()
-    pdf.image("static/images/logo.jpg", x=65, y=5, w=85)
+    pdf.image("static/images/logo.jpg", x=20, y=7, w=92)
 
     pdf.set_font("Arial", style="I", size=13)
-    pdf.ln(18)
-    pdf.cell(195, 10, txt="Carrera 30 #28-43", ln=True, align="C")
+    pdf.ln(5)
+    pdf.cell(170, 10, txt="Carrera 30 #28-43", ln=True, align="R")
     pdf.ln(-4)
-    pdf.cell(195, 10, txt="Cels : 318-553 9043 / 318-873 3880", ln=True, align="C")
+    pdf.cell(190, 10, txt="Cels : 318-553 9043 / 318-873 3880", ln=True, align="R")
     pdf.ln(-2)
 
     id_servicio = id  # variable externa
@@ -684,7 +690,7 @@ def recibo_pdf_toner(request, id):
     with connection.cursor() as cursor:
         cursor.execute(
             """
-        SELECT s."idServicio" AS numero, c.nombre AS cliente, s."fechaIngreso", c.direccion, c.telefono, rt.modelo_toner, s.observaciones, s."valorServicio" , a.monto FROM servicios_servicio s INNER JOIN clientes_cliente c ON s."idCliente" = c."idCliente" LEFT JOIN servicios_recargatoner rt ON rt."servicio_id" = s."idServicio" LEFT JOIN servicios_abono a ON a."servicio_id" = s."idServicio" WHERE s."idServicio" = %s
+        SELECT  s."idServicio" AS numeroingreso, s."fechaEntrega" AS fechaentrega , c.nombre AS cliente, s."fechaIngreso", c.direccion, c.telefono, rt.modelo_toner, s.observaciones, s."valorServicio" , a.monto FROM servicios_servicio s INNER JOIN clientes_cliente c ON s."idCliente" = c."idCliente" LEFT JOIN servicios_recargatoner rt ON rt."servicio_id" = s."idServicio" LEFT JOIN servicios_abono a ON a."servicio_id" = s."idServicio" WHERE s."idServicio" = %s
         GROUP BY s."idServicio", c.nombre, s."fechaIngreso", c.direccion, c.telefono,
                  rt.modelo_toner, s.observaciones, s."valorServicio", a.monto
         """,
@@ -693,37 +699,46 @@ def recibo_pdf_toner(request, id):
         row = cursor.fetchone()
         columns = [col[0] for col in cursor.description]
         datos = dict(zip(columns, row))
-    pdf.cell(150, 10, txt="Orden de Trabajo:", ln=True, align="C")
-    pdf.ln(-9)
-    pdf.set_x(110)
-    pdf.set_font("Arial", style="B", size=14)
-    pdf.cell(30, 8, txt=f"N {datos['numero']}", border=3, ln=True, align="C")
+
+    if datos["fechaentrega"] is None:
+        fecha_entrega_formateada = "Entrega pendiente"
+    else:
+        fecha = datos["fechaentrega"]  # datetime con tz
+        fecha_local = timezone.localtime(fecha)  # ajusta a TIME_ZONE configurado
+        fecha_entrega_formateada = fecha_local.strftime("%d-%m-%Y %I:%M %p")
+    pdf.ln(8)
+    pdf.set_font("Arial", style="B", size=15)
+    pdf.cell(195, 10, txt=f"ORDEN DE TRABAJO N° {datos['numeroingreso']}", border=1, ln=True, align="C")
     pdf.set_font("Arial", size=12)
-    pdf.ln(4)
-    pdf.cell(100, 7, f"Cliente: {datos['cliente']}", border=1)
-    fecha_formateada = datos["fechaIngreso"].strftime("%d-%m-%Y %I:%M")
-    pdf.cell(95, 7, f"Fecha: {fecha_formateada}", border=1)
+    pdf.cell(90, 7, f"Cliente: {datos['cliente']}", border=1)
+    fecha_ingreso_formateada = datos["fechaIngreso"].strftime("%d-%m-%Y %I:%M %p")
+    pdf.cell(52, 7, f"FI : {fecha_ingreso_formateada}", border=1)
+    pdf.cell(53, 7, f"FE : {fecha_entrega_formateada}", border=1)
     pdf.ln()
     pdf.cell(100, 7, f"Direccion: {datos['direccion']}", border=1)
     pdf.cell(95, 7, f"Telefono: {datos['telefono']}", border=1)
     pdf.ln()
     pdf.cell(195, 7, f"Modelo del Toner: {datos['modelo_toner']}", border=1)
     pdf.ln()
-
-    pdf.ln(8)
-    pdf.set_x(165)
-    valor = datos["valorServicio"] or 0
-    pdf.cell(40, 7, f"Valor: ${valor:,.0f}".replace(",", "."), border=1)
-    pdf.ln()
-    pdf.set_x(165)
+    pdf.cell(195, 7, f"Observaciones: {datos['observaciones']}", border=1)
+    pdf.ln(12)
+    pdf.set_x(30)
+    valor = datos["valorServicio"]
+    pdf.cell(60, 7, f"Valor: ${valor:,.0f}".replace(",", "."), border=1)
     saldo = datos["valorServicio"] - (datos["monto"] or 0)
     abono = datos["monto"] or 0
     pdf.cell(40, 7, f"Abono:${abono:,.0f}".replace(",", "."), border=1)
-    pdf.ln()
-    pdf.set_x(10)
-    pdf.set_x(165)
     pdf.cell(40, 7, f"Saldo: ${saldo:,.0f}".replace(",", "."), border=1)
-    pdf.ln()
+    pdf.ln(13)
+    pdf.set_x(50)
+    pdf.cell(70, 7, "Firma del Cliente:", border=0)
+    pdf.cell(40, 7, "Firma del Tècnico:", border=0)
+    pdf.ln(5)
+    pdf.set_x(43)
+    pdf.cell(70, 7, "___________________", border=0)
+    pdf.cell(70, 7, "___________________", border=0)
+    pdf.set_x(85)
+
     pdf_bytes = pdf.output(dest="S").encode("latin1")  # clásico fpdf
     response = HttpResponse(pdf_bytes, content_type="application/pdf")
     response["Content-Disposition"] = 'inline; filename="ejemplo.pdf"'
