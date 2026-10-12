@@ -1,0 +1,63 @@
+<!-- Mostramos los stilos css con el tag static -->
+{% load static %}
+<!-- Inicimos la Vista de ingres de Servicios-->
+<!DOCTYPE html>
+
+<!-- Indicamos el idioma del contenido-->
+<html lang="es">
+
+<!-- Incluimos el head con los estilos css y meta etiquetas -->
+
+<head>
+  {% include "includes/head.html" %}
+</head>
+
+<!-- Iniciamos el body con la clase hold-transition skin-blue sidebar-mini -->
+
+<body class="hold-transition skin-blue sidebar-mini">
+  <div class="wrapper">
+
+    <!-- Incluimos el header y el sidebar con los menús de navegación -->
+
+    {% include "includes/header.html" %}
+    {% include "includes/sidebar.html" %}
+
+    <!-- Contenido principal -->
+    <div class="content-wrapper">
+      <section class="content">
+
+        <!-- Mostramos el título de la página -->
+        <h1 class="box-header with-border text-center">Historial de Computadoras</h1>
+
+
+        <!-- Muestra el orden de servicios de impresoras -->
+
+        <div id="tablaserviciosimpresoras" class="collapse in" data-parent="#accordionServicios" tabindex="-1">
+          <table id="tabla-historial-impresoras" class="display table table-bordered">
+            <thead>
+              <tr>
+                <th>N.º</th>
+                <th>Fecha de ingreso</th>
+                <th>Fecha de entrega</th>
+                <th>Días rep</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>N.º de serie</th>
+                <th>Nombre del cliente</th>
+                <th>Teléfono</th>
+                <th>Estado</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+
+
+      </section>
+
+   {% include "includes/scripts.html" %}
+   <script src="{% static 'js/historial-impresoras.js' %}"></script>
+
+</body>
+
+</html>
