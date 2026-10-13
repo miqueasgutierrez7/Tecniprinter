@@ -34,7 +34,7 @@ $(document).ready(function () {
     ],
 
     // Fecha de entrega: más reciente a más antigua
-    order: [[2, "asc"]],
+    order: [[2, "desc"]],
 
     responsive: true,
 

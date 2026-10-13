@@ -35,6 +35,7 @@ urlpatterns = [
         name="recibo_pdf_computador",
     ),
     path("api/historialimpresoras/", views.HistorialImpresoras_data, name="historial_impresoras_data"),
+    path("api/historialcomputadoras/", views.HistorialComputadoras_data, name="historial_computadoras_data"),
     path("pdf_toner/<int:id>/", views.recibo_pdf_toner, name="recibo_pdf_toner"),
     path("servicioimpresora/<int:id>/", views.obtener_servicioimpresora, name="obtener_servicioimpresora"),
     path("serviciocomputadora/<int:id>/", views.obtener_serviciocomputador, name="obtener_serviciocomputador"),

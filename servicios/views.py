@@ -187,19 +187,47 @@ def HistorialImpresoras_data(request):
 
         dias_transcurridos = (hoy - fecha_ingreso.date()).days + 1
 
-        dias_es = {
-            "Monday": "Lunes",
-            "Tuesday": "Martes",
-            "Wednesday": "Miércoles",
-            "Thursday": "Jueves",
-            "Friday": "Viernes",
-            "Saturday": "Sábado",
-            "Sunday": "Domingo"
-        }
+
+        data.append(
+            {
+                "id": r.id,
+                "fecha_ingreso": fecha_colombia,
+                "fecha_entrega": fecha_colombia_entrega,
+                "dias_en_reparacion": dias_transcurridos,
+                "idservicio": r.servicio_id,
+                "marca": r.marca,
+                "modelo": r.modelo,
+                "serial": r.serial,
+                "cliente": r.servicio.cliente.nombre,
+                "telefono": r.servicio.cliente.telefono,
+                "estado": r.servicio.get_estado_display(),
+            }
+        )
+    return JsonResponse({"data": data})
 
 
-        dia_semana = fecha_ingreso.strftime("%A")
-        dia_semana_es = dias_es[dia_semana]
+ #Historial de servicios de computadores
+
+def HistorialComputadoras_data(request):
+    reparaciones = (
+        ReparacionPC.objects
+        .select_related("servicio__cliente")
+        .filter(servicio__estado="ENT")
+        .order_by("-servicio__fechaEntrega")  # excluye entregados
+    )
+    data = []
+    hoy = timezone.localtime(timezone.now()).date()  # fecha actual en Colombia
+
+    for r in reparaciones:
+        fecha_ingreso = timezone.localtime(r.servicio.fechaIngreso)
+        fecha_colombia = fecha_ingreso.strftime("%d/%m/%Y %I:%M:%S %p")
+
+
+        fecha_entrega = timezone.localtime(r.servicio.fechaEntrega)
+        fecha_colombia_entrega = fecha_entrega.strftime("%d/%m/%Y %I:%M:%S %p")
+
+
+        dias_transcurridos = (hoy - fecha_ingreso.date()).days + 1
 
 
         data.append(
@@ -218,6 +246,7 @@ def HistorialImpresoras_data(request):
             }
         )
     return JsonResponse({"data": data})
+
 
 # Para Mostrar Tabla de Reparaciones de Computadores
 
