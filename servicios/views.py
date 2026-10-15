@@ -52,6 +52,11 @@ def historial_impresoras(request):
 def historial_computadoras(request):
     return render(request, "historial_computadoras.html")
 
+# Mostramos el historial de servicios de recarga de toners.
+
+def historial_toners(request):
+    return render(request, "historial_toners.html")
+
 def registrar_servicio(request):
     documento = request.POST.get("documento")
     cliente, creado = Cliente.objects.get_or_create(
@@ -240,6 +245,46 @@ def HistorialComputadoras_data(request):
                 "marca": r.marca,
                 "modelo": r.modelo,
                 "serial": r.serial,
+                "cliente": r.servicio.cliente.nombre,
+                "telefono": r.servicio.cliente.telefono,
+                "estado": r.servicio.get_estado_display(),
+            }
+        )
+    return JsonResponse({"data": data})
+
+
+# Historial de servicios de recarga de toners
+
+def HistorialToners_data(request):
+    recargas = (
+        RecargaToner.objects
+        .select_related("servicio__cliente")
+        .filter(servicio__estado="ENT")
+        .order_by("-servicio__fechaEntrega")  # excluye entregados
+    )
+    data = []
+    hoy = timezone.localtime(timezone.now()).date()  # fecha actual en Colombia
+
+    for r in recargas:
+        fecha_ingreso = timezone.localtime(r.servicio.fechaIngreso)
+        fecha_colombia = fecha_ingreso.strftime("%d/%m/%Y %I:%M:%S %p")
+
+
+        fecha_entrega = timezone.localtime(r.servicio.fechaEntrega)
+        fecha_colombia_entrega = fecha_entrega.strftime("%d/%m/%Y %I:%M:%S %p")
+
+
+        dias_transcurridos = (hoy - fecha_ingreso.date()).days + 1
+
+
+        data.append(
+            {
+                "id": r.id,
+                "fecha_ingreso": fecha_colombia,
+                "fecha_entrega": fecha_colombia_entrega,
+                "dias_en_reparacion": dias_transcurridos,
+                "idservicio": r.servicio_id,
+                "modelo_toner": r.modelo_toner,
                 "cliente": r.servicio.cliente.nombre,
                 "telefono": r.servicio.cliente.telefono,
                 "estado": r.servicio.get_estado_display(),

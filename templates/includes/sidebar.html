@@ -3,10 +3,6 @@
         <ul class="sidebar-menu" data-widget="tree">
             <br />
 
-
-
-
-
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-wrench"></i> <span>Ingreso de Servicios</span>
@@ -14,46 +10,19 @@
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="{% url 'lista_servicios' %}"><i class="fa fa-print"></i> Ingresos existentes</a></li>
-                    <li><a href="{% url 'historial_impresoras' %}"><i class="fa fa-circle-o"></i> Historial-Impresoras</a></li>
-                    <li><a href="{% url 'historial_computadoras' %}"><i class="fa fa-circle-o"></i> Historial-Computadoras</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Historial-Toners</a></li>
-                </ul>
-            </li>
-
-       <li class="treeview">
-
-
-     <li><a href="{% url 'clientes' %}"><i class="fa fa-users"></i> Clientes</a></li>
-</li>
-
-
-
-            <li class="treeview">
-                <a href="#"><i class="fa fa-th"></i> <span>Gastos</span>
-                    <i class="fa fa-angle-left pull-right"></i></a>
-                <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Ingresos</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Categoría</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Listado de G</a></li>
+                    <li><a href="{% url 'historial_impresoras' %}"><i class="fa fa-circle-o"></i>
+                            Historial-Impresoras</a></li>
+                    <li><a href="{% url 'historial_computadoras' %}"><i class="fa fa-circle-o"></i>
+                            Historial-Computadoras</a></li>
+                    <li><a href="{% url 'historial_toners' %}"><i class="fa fa-circle-o"></i> Historial-Toners</a></li>
                 </ul>
             </li>
 
             <li class="treeview">
-                <a href="#"><i class="fa fa-users"></i> <span>Usuarios y Estacionamiento</span>
-                    <i class="fa fa-angle-left pull-right"></i></a>
-                <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Usuarios</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Estacionamiento</a></li>
-                </ul>
-            </li>
 
-            <li class="treeview">
-                <a href="#"><i class="fa fa-bar-chart"></i> <span>Consultas</span>
-                    <i class="fa fa-angle-left pull-right"></i></a>
-                <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Informe de Caja</a></li>
-                </ul>
+            <li><a href="{% url 'clientes' %}"><i class="fa fa-users"></i> Clientes</a></li>
             </li>
+            <li class="treeview">
 
         </ul>
     </section>
