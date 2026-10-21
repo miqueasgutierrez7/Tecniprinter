@@ -5,14 +5,15 @@ from django.http import JsonResponse
 from django.http import HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.decorators import login_required
 
 # Realizamos el Registro
 
-
+@login_required
 def clientes_view(request):
     return render(request, "clientes.html")
 
-
+@login_required
 def clientes_data(request):
     clientes = Cliente.objects.all().values(
         "idCliente",
@@ -27,7 +28,7 @@ def clientes_data(request):
     data = list(clientes)
     return JsonResponse({"data": data})
 
-
+@login_required
 def buscar_clientes(request):
     q = request.GET.get("q", "").strip()
     clientes = Cliente.objects.none()
@@ -44,7 +45,7 @@ def buscar_clientes(request):
         )[:20]
     return JsonResponse({"clientes": list(clientes)})
 
-
+@login_required
 def registrar_cliente(request):
     if request.method == "POST":
         tipoDocumento = request.POST.get("tipoDocumento")
@@ -86,6 +87,7 @@ def registrar_cliente(request):
 # ==============================
 # Modificar un cliente existente
 # ==============================
+@login_required
 @csrf_exempt
 def modificar_cliente(request, id):
     if request.method in ["PUT", "POST"]:
@@ -132,6 +134,7 @@ def modificar_cliente(request, id):
     return HttpResponseNotAllowed(["PUT", "POST"])
 
 
+@login_required
 @csrf_exempt
 def obtener_cliente(request, id):
     """
@@ -164,7 +167,7 @@ def obtener_cliente(request, id):
             {"success": False, "message": "Método no permitido"}, status=405
         )
 
-
+@login_required
 @csrf_exempt
 def eliminar_cliente(request, id):
     if request.method == "DELETE":
@@ -179,7 +182,7 @@ def eliminar_cliente(request, id):
 
     # Validamos cedula en tiempo real
 
-
+@login_required
 def validar_cedula(request):
     numeroDocumento = request.GET.get("documento", None)
 

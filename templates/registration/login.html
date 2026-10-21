@@ -33,7 +33,7 @@
 
         <div class="form-group position-relative mb-3">
           <label for="{{ form.username.id_for_label }}">Usuario</label>
-          {{ form.username|add_class:"form-control" }} 
+          {{ form.username|add_class:"form-control" }}
           <i class="fas fa-user fa-lg position-absolute" style="right: 15px; top: 38px; pointer-events:none; color: #aaa;"></i>
           {% for error in form.username.errors %}
             <div class="text-danger small mt-1">{{ error }}</div>
@@ -42,7 +42,7 @@
 
         <div class="form-group position-relative mb-3">
           <label for="{{ form.password.id_for_label }}">Contraseña</label>
-          {{ form.password|add_class:"form-control" }} 
+          {{ form.password|add_class:"form-control" }}
           <i class="fas fa-lock fa-lg position-absolute" style="right: 15px; top: 38px; pointer-events:none; color: #aaa;"></i>
           {% for error in form.password.errors %}
             <div class="text-danger small mt-1">{{ error }}</div>

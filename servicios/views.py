@@ -21,6 +21,7 @@ from servicios.models import (
 )
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 
 def obtener_estado_completo(abreviatura):
@@ -37,26 +38,27 @@ def obtener_estado_completo(abreviatura):
     }
     return estados_mapa.get(abreviatura, abreviatura)
 
-
+@login_required
 def lista_servicios(request):
     return render(request, "registro.html")
 
 
 #Mostramos el historial de servicios de impresoras.
-
+@login_required
 def historial_impresoras(request):
     return render(request, "historial_impresoras.html")
 
 # Mostramos el historial de servicios de computadores.
-
+@login_required
 def historial_computadoras(request):
     return render(request, "historial_computadoras.html")
 
 # Mostramos el historial de servicios de recarga de toners.
-
+@login_required
 def historial_toners(request):
     return render(request, "historial_toners.html")
 
+@login_required
 def registrar_servicio(request):
     documento = request.POST.get("documento")
     cliente, creado = Cliente.objects.get_or_create(
@@ -122,6 +124,7 @@ def registrar_servicio(request):
 
 # Para Mostrar Tabla de Reparaciones de Impresoras
 
+@login_required
 def ReparacionImpresora_data(request):
     reparaciones = (
         ReparacionImpresora.objects
@@ -172,6 +175,7 @@ def ReparacionImpresora_data(request):
 
 #Historial de servicios de impresoras
 
+@login_required
 def HistorialImpresoras_data(request):
     reparaciones = (
         ReparacionImpresora.objects
@@ -213,6 +217,7 @@ def HistorialImpresoras_data(request):
 
  #Historial de servicios de computadores
 
+@login_required
 def HistorialComputadoras_data(request):
     reparaciones = (
         ReparacionPC.objects
@@ -255,6 +260,7 @@ def HistorialComputadoras_data(request):
 
 # Historial de servicios de recarga de toners
 
+@login_required
 def HistorialToners_data(request):
     recargas = (
         RecargaToner.objects
@@ -295,6 +301,7 @@ def HistorialToners_data(request):
 
 # Para Mostrar Tabla de Reparaciones de Computadores
 
+@login_required
 def ReparacionComputadores_data(request):
     reparaciones = (
         ReparacionPC.objects
@@ -343,6 +350,7 @@ def ReparacionComputadores_data(request):
 
 # Para Mostrar Tabla de Recargas de Toner
 
+@login_required
 def RecargaToner_data(request):
     recargas = (
         RecargaToner.objects
@@ -388,6 +396,7 @@ def RecargaToner_data(request):
 
 # Obtener datos de un servicio de impresora por su ID
 
+@login_required
 def obtener_servicioimpresora(request, id):
     """
     Devuelve los datos de una reparación de impresora en formato JSON.
@@ -425,6 +434,7 @@ def obtener_servicioimpresora(request, id):
 
 # Obtener datos de un servicio de computador por su ID
 
+@login_required
 def obtener_serviciocomputador(request, id):
     """
     Devuelve los datos de una reparación de computador en formato JSON.
@@ -463,6 +473,7 @@ def obtener_serviciocomputador(request, id):
 
 # Obtener datos de un servicio de recarga de toner por su ID
 
+@login_required
 def obtener_serviciotoner(request, id):
 
 
@@ -499,6 +510,7 @@ def obtener_serviciotoner(request, id):
             {"success": False, "message": "Método no permitido"}, status=405
         )
 
+@login_required
 def recibo_pdf_impresora(request, id):
 
     pdf = FPDF(orientation="P", unit="mm", format=(216, 140))
@@ -580,6 +592,7 @@ def recibo_pdf_impresora(request, id):
     return response
 
 
+@login_required
 def recibo_pdf_computador(request, id):
 
     pdf = FPDF(orientation="P", unit="mm", format=(216, 140))
@@ -659,6 +672,7 @@ def recibo_pdf_computador(request, id):
 
 # Editar Servicio de Impresora
 
+@login_required
 def editar_servicio_impresora(request, id):
     if request.method in ["PUT", "POST"]:
         print("Request body:", request.body)
@@ -713,6 +727,7 @@ def editar_servicio_impresora(request, id):
 
 # Editar Servicio de Computador
 
+@login_required
 def editar_servicio_computador(request, id):
     if request.method in ["PUT", "POST"]:
         print("Request body:", request.body)
@@ -767,6 +782,7 @@ def editar_servicio_computador(request, id):
 
 # Editar Servicio de Recarga de Toner
 
+@login_required
 def editar_servicio_toner(request, id):
     if request.method in ["PUT", "POST"]:
         print("Request body:", request.body)
@@ -810,7 +826,7 @@ def editar_servicio_toner(request, id):
 
     return HttpResponseNotAllowed(["PUT", "POST"])
 
-
+@login_required
 def recibo_pdf_toner(request, id):
 
     pdf = FPDF(orientation="P", unit="mm", format=(216, 140))
