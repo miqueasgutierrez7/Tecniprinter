@@ -1,3 +1,12 @@
+requerimientos:
+ Python 3.13.0
+
+django --version
+6.0.5
+
+
+pgAdmin4 version 9.15
+
 Comando usados para crear este proyecto
 
 activar entorno virtual en viaul estudio code
